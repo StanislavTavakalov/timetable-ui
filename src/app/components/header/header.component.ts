@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog, private localStorageService: LocalStorageService) {
   }
 
-  isAuthorized = this.localStorageService.observableCurrentUser;
+  isAuthorized = this.localStorageService.subscribableCurrentUser;
 
   ngOnDestroy(): void {
 
@@ -35,5 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openSignUpForm(): void {
     this.dialog.open(SignupComponent);
+  }
+
+  openOrCloseNavBar(): void {
+    if (this.isAuthorized.getValue() != null) {
+      this.localStorageService.subscribableIsNavBarOpened.next(!this.localStorageService.subscribableIsNavBarOpened.getValue());
+    }
   }
 }

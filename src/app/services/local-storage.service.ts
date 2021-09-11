@@ -12,10 +12,12 @@ export class LocalStorageService {
   private CURRENT_USER = 'currentUser';
   private SECRET_KEY = 'superSecretKeyBNTU';
 
-  observableCurrentUser: BehaviorSubject<User>;
+  subscribableCurrentUser: BehaviorSubject<User>;
+  subscribableIsNavBarOpened: BehaviorSubject<boolean>;
 
   constructor() {
-    this.observableCurrentUser = new BehaviorSubject<User>(null);
+    this.subscribableCurrentUser = new BehaviorSubject<User>(this.getCurrentUser());
+    this.subscribableIsNavBarOpened = new BehaviorSubject<boolean>(false);
   }
 
   public setCurrentUserToken(authToken: string): void {
@@ -30,7 +32,7 @@ export class LocalStorageService {
   }
 
   public setCurrentUser(user: User): void {
-    this.observableCurrentUser.next(user);
+    this.subscribableCurrentUser.next(user);
     localStorage.setItem(this.CURRENT_USER, CryptoJS.AES.encrypt(JSON.stringify(user), this.SECRET_KEY.trim()).toString());
   }
 
@@ -43,6 +45,8 @@ export class LocalStorageService {
 
   public clearUser(): void {
     localStorage.clear();
-    this.observableCurrentUser.next(null);
+    this.subscribableCurrentUser.next(null);
+    this.subscribableIsNavBarOpened.next(false);
   }
+
 }
