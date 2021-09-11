@@ -1,0 +1,20 @@
+<mat-sidenav-container class="example-container" i>
+  <!--<mat-sidenav #sidenav mode="side" *ngIf="currentUser|async" [(opened)]="opened">-->
+  <mat-sidenav #sidenav mode="side" *ngIf="currentUser" [opened]="isNavBarOpened.getValue()">
+
+      working
+<!--      <p></p>-->
+<!--      <p><a routerLink="/account/{{(currentUser|async)?.account.id}}"> Personal cabinet </a></p>-->
+<!--      <p><a routerLink="/conversations"> Conversations </a></p>-->
+<!--      <p><a routerLink="/my-startups"> My Startups </a></p>-->
+<!--      <p><a routerLink="/contacts/{{(currentUser|async)?.account.id}}"> Contacts </a></p>-->
+<!--      <p><a routerLink="/favorites/{{(currentUser|async)?.account.id}}"> Favorites </a></p>-->
+<!--      <p><a routerLink="/startup-edit"> Create startup </a></p>-->
+<!--      <mat-divider></mat-divider>-->
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <ng-content>
+    </ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
