@@ -1,0 +1,20 @@
+footer {
+  width: 100%;
+  background: #1dae17;
+  min-height: 35px;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+p {
+  color: white;
+  font-size: 100%;
+  text-align: end;
+  padding-right: 4%;
+  margin: 0;
+}
+
+.mat-toolbar {
+  height: 30px;
+}

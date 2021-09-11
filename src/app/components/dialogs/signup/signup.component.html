@@ -1,0 +1,37 @@
+<h1 mat-dialog-title> Sign Up </h1>
+<form [formGroup]="signUpForm">
+  <mat-form-field>
+    <input matInput placeholder="Email" [formControlName]="'email'"  required/>
+    <mat-error *ngIf="email.invalid">{{getErrorText('email')}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Firstname" [formControlName]="'firstname'" required>
+    <mat-error *ngIf="firstname.invalid">{{getErrorText('firstname')}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Lastname" [formControlName]="'lastname'" required>
+    <mat-error *ngIf="lastname.invalid">{{getErrorText('lastname')}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Patronymic" [formControlName]="'patronymic'" required>
+    <mat-error *ngIf="patronymic.invalid">{{getErrorText('patronymic')}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" placeholder="Password" [formControlName]="'password'" required>
+    <mat-error *ngIf="password.invalid">{{getErrorText('password')}}</mat-error>
+  </mat-form-field>
+
+</form>
+
+<div class="edit-user-controls">
+  <button mat-button color="warn" (click)=onCancelClick()> Cancel </button>
+  <button mat-button color="primary" [disabled]="signUpForm.invalid" (click)="onCreateClick()" cdkFocus>
+    Create
+  </button>
+  <mat-spinner *ngIf="isLoading" diameter="40" color="primary">
+  </mat-spinner>
+</div>

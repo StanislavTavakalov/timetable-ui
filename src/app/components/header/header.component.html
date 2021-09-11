@@ -1,0 +1,28 @@
+<!-- Toolbar -->
+<mat-toolbar class="toolbar" role="banner" color="primary">
+
+
+  <mat-icon>menu</mat-icon>
+  <span style="padding-left: 1%"> БНТУ </span>
+
+  <span class="example-spacer"></span>
+  <mat-icon class="example-icon">home</mat-icon>
+
+  <div *ngIf="!isAuthorized.getValue(); else logout">
+    <button mat-button (click)="openSignInForm()" >Sign in</button>
+    /
+    <button mat-button (click)="openSignUpForm()" >Sign up</button>
+  </div>
+
+  <ng-template #logout>
+    <button mat-button style="padding-left: 1%" (click)="singOut()">Sign out</button>
+  </ng-template>
+  <!--  <div style="display:flex; flex-direction: row; text-align: center">-->
+  <!--    <div style="display: flex; justify-items: center; align-items: center">-->
+  <!--      <span>БНТУ</span>-->
+  <!--    </div>-->
+
+  <!--  </div>-->
+</mat-toolbar>
+
+
