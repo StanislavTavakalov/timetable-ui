@@ -1,0 +1,24 @@
+<h1 mat-dialog-title> Sign In </h1>
+<form [formGroup]="credentialForm">
+  <mat-form-field>
+    <input matInput placeholder="Email" [formControlName]="'email'"  required/>
+    <mat-error *ngIf="email.invalid">{{getErrorText('email')}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" placeholder="Password" [formControlName]="'password'" required>
+    <mat-error *ngIf="password.invalid">{{getErrorText('password')}}</mat-error>
+  </mat-form-field>
+
+</form>
+
+<div class="edit-user-controls">
+  <button mat-button color="warn" (click)=onCancelClick()> Cancel </button>
+  <button mat-button color="primary" [disabled]="credentialForm.invalid" (click)="onSubmit()" cdkFocus>
+    Login
+  </button>
+  <mat-spinner *ngIf="isLoading" diameter="40" color="primary">
+  </mat-spinner>
+</div>
+
+
