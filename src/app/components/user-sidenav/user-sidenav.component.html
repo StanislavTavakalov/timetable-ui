@@ -1,16 +1,47 @@
 <mat-sidenav-container class="example-container" i>
-  <!--<mat-sidenav #sidenav mode="side" *ngIf="currentUser|async" [(opened)]="opened">-->
   <mat-sidenav #sidenav mode="side" *ngIf="currentUser" [opened]="isNavBarOpened.getValue()">
+    <mat-nav-list>
+      <mat-list-item class="parent">
+        <span class="full-width">Деканаты</span>
+      </mat-list-item>
+      <mat-list-item class="parent">
+        <span class="full-width">Кафедры</span>
+      </mat-list-item>
+      <mat-list-item class="parent">
+        <!--        <span class="full-width">Пользователи</span>-->
 
-      working
-<!--      <p></p>-->
-<!--      <p><a routerLink="/account/{{(currentUser|async)?.account.id}}"> Personal cabinet </a></p>-->
-<!--      <p><a routerLink="/conversations"> Conversations </a></p>-->
-<!--      <p><a routerLink="/my-startups"> My Startups </a></p>-->
-<!--      <p><a routerLink="/contacts/{{(currentUser|async)?.account.id}}"> Contacts </a></p>-->
-<!--      <p><a routerLink="/favorites/{{(currentUser|async)?.account.id}}"> Favorites </a></p>-->
-<!--      <p><a routerLink="/startup-edit"> Create startup </a></p>-->
-<!--      <mat-divider></mat-divider>-->
+        <nav mat-tab-nav-bar>
+          <a mat-tab-link
+             [routerLink]="'/users'"
+             routerLinkActive #rla="routerLinkActive"
+             [active]="rla.isActive"
+             class="full-width">Пользователи </a>
+        </nav>
+
+
+      </mat-list-item>
+      <mat-list-item class="parent">
+        <span class="full-width">Роли</span>
+      </mat-list-item>
+      <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+        <span class="full-width" *ngIf="isExpanded || isShowing">Дополнительно</span>
+        <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">
+          expand_more
+        </mat-icon>
+      </mat-list-item>
+      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+        <a mat-list-item href="...">Направления</a>
+        <a mat-list-item href="...">Специализации</a>
+      </div>
+    </mat-nav-list>
+    <!--      <p></p>-->
+    <!--      <p><a routerLink="/account/{{(currentUser|async)?.account.id}}"> Personal cabinet </a></p>-->
+    <!--      <p><a routerLink="/conversations"> Conversations </a></p>-->
+    <!--      <p><a routerLink="/my-startups"> My Startups </a></p>-->
+    <!--      <p><a routerLink="/contacts/{{(currentUser|async)?.account.id}}"> Contacts </a></p>-->
+    <!--      <p><a routerLink="/favorites/{{(currentUser|async)?.account.id}}"> Favorites </a></p>-->
+    <!--      <p><a routerLink="/startup-edit"> Create startup </a></p>-->
+    <!--      <mat-divider></mat-divider>-->
 
   </mat-sidenav>
   <mat-sidenav-content>

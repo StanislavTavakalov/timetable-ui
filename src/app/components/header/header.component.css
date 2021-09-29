@@ -2,3 +2,20 @@
   flex: 1 1 auto;
 }
 
+mat-icon {
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.mat-tab-link {
+  height: 60px;
+  color: white;
+}
+.mat-tab-label, .mat-tab-link {
+  font-size: 17px;
+  opacity: 1;
+}
+
+a:visited {
+  color: white;
+}

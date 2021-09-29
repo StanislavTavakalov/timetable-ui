@@ -6,18 +6,26 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from './material.module';
 import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
-import {DialogsModule} from './components/dialogs.module';
+import {DialogsModule} from './components/dialogs/dialogs.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotifierModule} from 'angular-notifier';
 import {customNotifierOptions} from './notifier-options';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
+import {UsersComponent} from './components/users/users.component';
+import {UsersDatatableComponent} from './components/users/users-datatable/users-datatable.component';
+import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.component';
+import {MainPageComponent} from './components/main-page/main-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UsersComponent,
+    UsersDatatableComponent,
+    UserSidenavComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

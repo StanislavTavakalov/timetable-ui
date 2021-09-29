@@ -15,7 +15,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog, private localStorageService: LocalStorageService) {
   }
 
-  isAuthorized = this.localStorageService.subscribableCurrentUser;
+  currentUser = this.localStorageService.subscribableCurrentUser;
+  links = ['Расписание занятий', 'Расписания преподавателей'];
+  activeLink = this.links[0];
 
   ngOnDestroy(): void {
 
@@ -31,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   singOut(): void {
     this.localStorageService.clearUser();
+    window.location.href = 'http://localhost:4200/';
   }
 
   openSignUpForm(): void {
@@ -38,7 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openOrCloseNavBar(): void {
-    if (this.isAuthorized.getValue() != null) {
+    if (this.currentUser.getValue() != null) {
       this.localStorageService.subscribableIsNavBarOpened.next(!this.localStorageService.subscribableIsNavBarOpened.getValue());
     }
   }

@@ -1,0 +1,74 @@
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по пользователям...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #usersTable mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Firstname Column -->
+    <ng-container matColumnDef="firstName">
+      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Имя</th>
+      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+    </ng-container>
+
+    <!-- Lastname Column -->
+    <ng-container matColumnDef="lastName">
+      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Фамилия</th>
+      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+    </ng-container>
+
+    <!-- Patronymic Column -->
+    <ng-container matColumnDef="patronymic">
+      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Отчество</th>
+      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.patronymic}} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Почта </th>
+      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.email}} </td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Роль </th>
+      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.role.name}} </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Статус </th>
+      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <span class="material-icons"  (click)="addNewUser()" style="cursor: pointer"
+              matTooltip="Добавить пользователя">
+              add_circle
+         </span>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let user">
+         <span class="material-icons"  (click)="editUser(user)" style="cursor: pointer"
+               matTooltip="Редактировать пользователя">
+             edit
+         </span>
+        <span class="material-icons" (click)="deleteUser(user)" style="cursor: pointer"
+              matTooltip="Удалить пользователя">
+             delete
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+
+

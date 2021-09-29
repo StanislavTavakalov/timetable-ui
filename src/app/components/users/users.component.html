@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isUserLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="userTableVisible" class="table-content">
+      <app-users-datatable [users]="users"></app-users-datatable>
+    </div>
+  </div>
+</ng-template>
