@@ -3,12 +3,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../material.module';
 import {NgModule} from '@angular/core';
 import {SinginComponent} from './signin/singin.component';
-import {SignupComponent} from './signup/signup.component';
-import { UserSidenavComponent } from '../user-sidenav/user-sidenav.component';
-import { MainPageComponent } from '../main-page/main-page.component';
-import { UsersComponent } from '../users/users.component';
-import { UsersDatatableComponent } from '../users/users-datatable/users-datatable.component';
-import {AppRoutingModule} from '../../app-routing.module';
+import { UsersDeleteComponent } from './users/users-delete/users-delete.component';
+import { UserAddEditComponent } from './users/users-add-edit/user-add-edit.component';
 
 @NgModule({
   imports: [
@@ -19,10 +15,11 @@ import {AppRoutingModule} from '../../app-routing.module';
   ],
   declarations: [
     SinginComponent,
-    SignupComponent,
+    UsersDeleteComponent,
+    UserAddEditComponent,
   ],
-  exports: [SinginComponent, SignupComponent],
-  entryComponents: [SinginComponent, SignupComponent]
+  exports: [SinginComponent , UsersDeleteComponent, UserAddEditComponent],
+  entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent]
 })
 export class DialogsModule {
 

@@ -15,10 +15,7 @@
   <mat-icon>account_circle</mat-icon>
 
   <div *ngIf="!currentUser.getValue(); else logout">
-
     <button mat-button (click)="openSignInForm()">Войти</button>
-    /
-    <button mat-button (click)="openSignUpForm()">Зарегистрироваться</button>
   </div>
 
   <ng-template #logout>

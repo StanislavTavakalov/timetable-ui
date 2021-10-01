@@ -1,35 +1,36 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {User} from '../model/user';
 import {catchError} from 'rxjs/operators';
+import {BasicHttpService} from './basic-http.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends BasicHttpService {
 
-  constructor(private http: HttpClient) {
-  }
-
-  private authApiUrl = 'api/v1/users';
-  private fullAuthApiUrl = environment.domain + this.authApiUrl;
+  private userApiUrl = 'api/v1/users';
+  private fullUserEndpoint = environment.domain + this.userApiUrl;
 
   public getUsers(): Observable<User[]> {
-    return this.http.get<User[]>( this.fullAuthApiUrl)
+    return this.http.get<User[]>(this.fullUserEndpoint)
       .pipe(catchError(this.handleError));
   }
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    return throwError(error.error);
+  public deleteUser(userId: string): Observable<User[]> {
+    return this.http.delete<User[]>(this.fullUserEndpoint + '/' + userId)
+      .pipe(catchError(this.handleError));
+  }
+
+  public updateUser(user: User): Observable<User> {
+    return this.http.put<User>(this.fullUserEndpoint, user)
+      .pipe(catchError(this.handleError));
+  }
+
+  public changeUserStatus(id: string, isNeedToBlock: boolean): Observable<User> {
+    return this.http.put<User>(this.fullUserEndpoint + '/block/' + id, isNeedToBlock)
+      .pipe(catchError(this.handleError));
   }
 }

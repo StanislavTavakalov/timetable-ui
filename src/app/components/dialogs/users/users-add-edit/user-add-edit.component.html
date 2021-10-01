@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="userForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Почта:" [formControlName]="'email'" required>
+      <mat-error *ngIf="email.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="email.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Фамилия: " [formControlName]="'lastName'" required>
+      <mat-error *ngIf="lastName.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="lastName.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Имя:" [formControlName]="'firstName'" required>
+      <mat-error *ngIf="firstName.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="firstName.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Отчество: " [formControlName]="'patronymic'" required>
+      <mat-error *ngIf="patronymic.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="patronymic.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Роль: " [formControlName]="'role'" required>
+        <mat-option *ngFor="let role of roleList" [value]="role">
+          {{getRoleName(role)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="userForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+

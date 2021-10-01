@@ -1,5 +1,4 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {LocalStorageService} from '../../../services/local-storage.service';
 import {NotifierService} from 'angular-notifier';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -7,6 +6,14 @@ import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {User} from '../../../model/user';
 import {Subscription} from 'rxjs';
+import {UsersDeleteComponent} from '../../dialogs/users/users-delete/users-delete.component';
+import {OperationResult} from '../../../model/operation-result';
+import {UserAddEditComponent} from '../../dialogs/users/users-add-edit/user-add-edit.component';
+import {RoleService} from '../../../services/role.service';
+import {Role} from '../../../model/role';
+import {Constants} from '../../../constants';
+import {Status} from '../../../model/status';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-users-datatable',
@@ -17,7 +24,8 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
-              private localStorageService: LocalStorageService) {
+              private userService: UserService,
+              private roleService: RoleService) {
 
   }
 
@@ -52,53 +60,64 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   }
 
   public editUser(user: User): void {
-    // const dialogRef = this.dialog.open(TeacherAddEditComponent, {
-    //   data: {title: 'Редактировать преподавателя', teacher: user}
-    // });
 
-    // this.editUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResponse) => {
-    //   if (operationResponse.isOperationCompleted && operationResponse.errorMessage === null) {
-    //     this.notifierService.notify('success', 'Преподаватель был добавлен успешно');
-    //   } else if (operationResponse.isOperationCompleted && operationResponse.errorMessage !== null) {
-    //     this.notifierService.notify('error', operationResponse.errorMessage);
-    //   }
-    // });
+    this.roleService.getRoles().subscribe((roleList: Role[]) => {
+      const dialogRef = this.dialog.open(UserAddEditComponent, {
+        data: {title: 'Редактировать пользователя', user, roleList}
+      });
+
+      this.editUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+        if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+          this.notifierService.notify('success', 'Пользователь был успешно изменен');
+        } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+          this.notifierService.notify('error', operationResponse.errorMessage);
+        }
+      });
+    }, (er: any) => {
+      this.notifierService.notify('error', er);
+    });
+
   }
 
   public deleteUser(user: User): void {
-    // const dialogRef = this.dialog.open(TeacherDeleteComponent, {
-    //   data: {teacherId: teacher.id},
-    //   disableClose: true
-    // });
-    //
-    // this.deleteUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResponse) => {
-    //   if (operationResponse && operationResponse.errorMessage === null && operationResponse.isOperationCompleted) {
-    //     const index = this.teachers.indexOf(teacher, 0);
-    //     if (index > -1) {
-    //       this.teachers.splice(index, 1);
-    //     }
-    //     this.refreshDataTableContent();
-    //     this.notifierService.notify('success', 'Преподаватель был удален');
-    //   } else if (operationResponse && operationResponse.errorMessage !== null) {
-    //     this.notifierService.notify('error', operationResponse.errorMessage);
-    //   }
-    // });
+    const dialogRef = this.dialog.open(UsersDeleteComponent, {
+      data: user.id,
+      disableClose: true
+    });
+
+    this.deleteUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.users.indexOf(user, 0);
+        if (index > -1) {
+          this.users.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Пользователь был удален');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
   public addNewUser(): void {
-    // const dialogRef = this.dialog.open(TeacherAddEditComponent, {
-    //   data: {title: 'Добавить преподавателя'}
-    // });
-    //
-    // this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResponse) => {
-    //   if (operationResponse.isOperationCompleted && operationResponse.errorMessage === null) {
-    //     this.teachers.unshift(operationResponse.operationResult);
-    //     this.refreshDataTableContent();
-    //     this.notifierService.notify('success', 'Новая специальность была успешно создана.');
-    //   } else if (operationResponse.isOperationCompleted && operationResponse.errorMessage !== null) {
-    //     this.notifierService.notify('error', operationResponse.errorMessage);
-    //   }
-    // });
+
+    this.roleService.getRoles().subscribe((roleList: Role[]) => {
+      const dialogRef = this.dialog.open(UserAddEditComponent, {
+        data: {title: 'Зарегистрировать пользователя ', roleList}
+      });
+
+      this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+        if (operationResult.isCompleted && operationResult.errorMessage === null) {
+          this.users.unshift(operationResult.object);
+          this.refreshDataTableContent();
+          this.notifierService.notify('success', 'Пользователь был успешно зарегистрирован.');
+        } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+          this.notifierService.notify('error', operationResult.errorMessage);
+        }
+      });
+    }, (er: any) => {
+      this.notifierService.notify('error', er);
+    });
   }
 
   public refreshDataTableContent(): void {
@@ -115,4 +134,32 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
     }
   }
 
+  public isAllowed(user: User): boolean {
+    return user.role.id !== Constants.ADMIN_ID;
+  }
+
+  isUserActive(user: User): boolean {
+    return user.status === Status.ACTIVE;
+  }
+
+  blockUser(user): void {
+    this.userService.changeUserStatus(user.id, true).subscribe(() => user.status = Status.BLOCKED);
+  }
+
+  unblockUser(user): void {
+    this.userService.changeUserStatus(user.id, false).subscribe(() => user.status = Status.ACTIVE);
+  }
+
+  isUserBlocked(user: User): boolean {
+    return user.status === Status.BLOCKED;
+  }
+
+  localizeStatus(status: string): string {
+    if (status === Status.BLOCKED) {
+      return 'Заблокирован';
+    } else if (status === Status.NOT_ACTIVE) {
+      return 'Неактивный';
+    }
+    return 'Активный';
+  }
 }

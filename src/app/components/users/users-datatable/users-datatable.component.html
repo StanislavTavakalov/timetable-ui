@@ -8,58 +8,67 @@
 
     <!-- Firstname Column -->
     <ng-container matColumnDef="firstName">
-      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Имя</th>
-      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Имя</th>
+      <td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
     </ng-container>
 
     <!-- Lastname Column -->
     <ng-container matColumnDef="lastName">
-      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Фамилия</th>
-      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Фамилия</th>
+      <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
     </ng-container>
 
     <!-- Patronymic Column -->
     <ng-container matColumnDef="patronymic">
-      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Отчество</th>
-      <td style="width: 15%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.patronymic}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Отчество</th>
+      <td mat-cell *matCellDef="let row"> {{row.patronymic}} </td>
     </ng-container>
 
     <!-- Email Column -->
     <ng-container matColumnDef="email">
-      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Почта </th>
-      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.email}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Почта</th>
+      <td mat-cell *matCellDef="let row"> {{row.email}} </td>
     </ng-container>
 
     <!-- Role Column -->
     <ng-container matColumnDef="role">
-      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Роль </th>
-      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.role.name}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Роль</th>
+      <td mat-cell *matCellDef="let row"> {{row.role.name}} </td>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <th style="width: 12.5%" mat-header-cell *matHeaderCellDef mat-sort-header> Статус </th>
-      <td style="width: 12.5%; overflow: hidden;" mat-cell *matCellDef="let row"> {{row.status}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Статус</th>
+      <td mat-cell *matCellDef="let row"> {{localizeStatus(row.status)}} </td>
     </ng-container>
 
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons"  (click)="addNewUser()" style="cursor: pointer"
+        <span class="material-icons" (click)="addNewUser()" style="cursor: pointer"
               matTooltip="Добавить пользователя">
               add_circle
          </span>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let user">
-         <span class="material-icons"  (click)="editUser(user)" style="cursor: pointer"
-               matTooltip="Редактировать пользователя">
+         <span class="material-icons" (click)="editUser(user)" style="cursor: pointer"
+               matTooltip="Редактировать пользователя" *ngIf="isAllowed(user)">
              edit
          </span>
+        <span class="material-icons" (click)="blockUser(user)" style="cursor: pointer"
+              matTooltip="Заблокировать пользователя" *ngIf="isAllowed(user) && isUserActive(user)">
+             lock
+         </span>
+        <span class="material-icons" (click)="unblockUser(user)" style="cursor: pointer"
+              matTooltip="Разблокировать пользователя" *ngIf="isAllowed(user) && isUserBlocked(user)">
+             lock_open
+         </span>
         <span class="material-icons" (click)="deleteUser(user)" style="cursor: pointer"
-              matTooltip="Удалить пользователя">
+              matTooltip="Удалить пользователя" *ngIf="isAllowed(user)">
              delete
         </span>
+
       </td>
     </ng-container>
 

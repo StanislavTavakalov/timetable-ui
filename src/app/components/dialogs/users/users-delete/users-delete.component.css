@@ -1,0 +1,18 @@
+
+.teacher-delete-dialog-controls {
+  margin-top: 1%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+button {
+  font-size: 17px;
+}
+
+span:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}

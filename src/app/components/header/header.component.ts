@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SinginComponent} from '../dialogs/signin/singin.component';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {SignupComponent} from '../dialogs/signup/signup.component';
 
 
 @Component({
@@ -34,10 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   singOut(): void {
     this.localStorageService.clearUser();
     window.location.href = 'http://localhost:4200/';
-  }
-
-  openSignUpForm(): void {
-    this.dialog.open(SignupComponent);
   }
 
   openOrCloseNavBar(): void {
