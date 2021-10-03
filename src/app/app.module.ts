@@ -16,6 +16,8 @@ import {UsersComponent} from './components/users/users.component';
 import {UsersDatatableComponent} from './components/users/users-datatable/users-datatable.component';
 import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.component';
 import {MainPageComponent} from './components/main-page/main-page.component';
+import { RolesComponent } from './components/roles/roles.component';
+import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import {MainPageComponent} from './components/main-page/main-page.component';
     UsersComponent,
     UsersDatatableComponent,
     UserSidenavComponent,
-    MainPageComponent
+    MainPageComponent,
+    RolesComponent,
+    RolesDatatableComponent
   ],
   imports: [
     BrowserModule,

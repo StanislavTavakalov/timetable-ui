@@ -1,0 +1,49 @@
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по пользователям...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #rolesTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="permissions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Права </th>
+      <td mat-cell *matCellDef="let row"> {{printPermissions(row.permissions)}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <span class="material-icons" (click)="addRole()" style="cursor: pointer"
+              matTooltip="Добавить роль">
+              add_circle
+         </span>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let role">
+         <span class="material-icons" (click)="editRole(role)" style="cursor: pointer"
+               matTooltip="Редактировать роль">
+             edit
+         </span>
+        <span class="material-icons" (click)="deleteRole(role)" style="cursor: pointer"
+              matTooltip="Удалить роль">
+             delete
+        </span>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+
+

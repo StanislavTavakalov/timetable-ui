@@ -17,4 +17,9 @@ export class RoleService extends BasicHttpService {
     return this.http.get<Role[]>(this.fullRoleEndpoint)
       .pipe(catchError(this.handleError));
   }
+
+  public getPermissions(): Observable<Role[]> {
+    return this.http.get<Role[]>(this.fullRoleEndpoint)
+      .pipe(catchError(this.handleError));
+  }
 }

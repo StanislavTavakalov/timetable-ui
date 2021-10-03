@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isRoleLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="roleTableVisible" class="table-content">
+      <app-roles-datatable [roles]="roles" [permissions]="permissions"></app-roles-datatable>
+    </div>
+  </div>
+</ng-template>
