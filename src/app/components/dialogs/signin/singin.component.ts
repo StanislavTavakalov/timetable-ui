@@ -82,7 +82,7 @@ export class SinginComponent implements OnInit {
         this.dialogRef.close(),
         this.localStorageService.setCurrentUserToken(result.token),
         this.localStorageService.setCurrentUser(result.user),
-        this.notifierService.notify('success', 'Successful login');
+        this.notifierService.notify('success', 'Успешно вошли в систему');
     }, errorMessage => {
         this.isLoading = false,
         this.notifierService.notify('error', errorMessage);
