@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isDeaneriesLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="deaneryTableVisible" class="table-content">
+      <app-deaneries-table [deaneries]="deaneries"></app-deaneries-table>
+    </div>
+  </div>
+</ng-template>

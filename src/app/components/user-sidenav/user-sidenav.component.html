@@ -1,10 +1,10 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav #sidenav mode="side" *ngIf="currentUser" [opened]="isNavBarOpened.getValue()">
     <mat-nav-list>
-      <mat-list-item class="parent" [routerLink]="'/'">
+      <mat-list-item class="parent" [routerLink]="'/deaneries'">
         <span class="full-width">Деканаты</span>
       </mat-list-item>
-      <mat-list-item class="parent" [routerLink]="'/'">
+      <mat-list-item class="parent" [routerLink]="'/departments'">
         <span class="full-width">Кафедры</span>
       </mat-list-item>
       <mat-list-item class="parent" [routerLink]="'/users'">

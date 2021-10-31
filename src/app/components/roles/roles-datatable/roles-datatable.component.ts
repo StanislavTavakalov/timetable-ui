@@ -6,7 +6,6 @@ import {RoleService} from '../../../services/role.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {User} from '../../../model/user';
 import {Subscription} from 'rxjs';
 import {Permission} from '../../../model/permission';
 import {Role} from '../../../model/role';
@@ -28,11 +27,11 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild('rolesTable', {static: false}) rolesTable: MatTable<User>;
+  @ViewChild('rolesTable', {static: false}) rolesTable: MatTable<Role>;
 
   @Input() roles: Role[];
   @Input() permissions: Permission[];
-  displayedColumns: string[] = ['name', 'permissions', 'icons'];
+  displayedColumns: string[] = ['name', 'role-category', 'permissions', 'icons'];
   dataSource: MatTableDataSource<Role>;
 
   editRoleDialogSubscription: Subscription;

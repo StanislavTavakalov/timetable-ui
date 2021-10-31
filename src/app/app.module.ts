@@ -20,6 +20,13 @@ import { RolesComponent } from './components/roles/roles.component';
 import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
 import { DirectionsComponent } from './components/directions/directions.component';
 import { DirectionsDatatableComponent } from './components/directions/directions-datatable/directions-datatable.component';
+import { DeaneriesComponent } from './components/deaneries/deaneries.component';
+import { DepartmentsComponent } from './components/departments/departments.component';
+import { DepartmentsTableComponent } from './components/departments/departments-table/departments-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/deaneries-table.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +40,11 @@ import { DirectionsDatatableComponent } from './components/directions/directions
     RolesComponent,
     RolesDatatableComponent,
     DirectionsComponent,
-    DirectionsDatatableComponent
+    DirectionsDatatableComponent,
+    DeaneriesComponent,
+    DepartmentsComponent,
+    DepartmentsTableComponent,
+    DeaneriesTableComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +55,10 @@ import { DirectionsDatatableComponent } from './components/directions/directions
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NotifierModule.withConfig(customNotifierOptions)
+    NotifierModule.withConfig(customNotifierOptions),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

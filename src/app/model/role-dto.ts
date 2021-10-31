@@ -1,6 +1,6 @@
 import {Permission} from './permission';
 
-export interface Role {
+export interface RoleDto {
   id: string;
   name: string;
   permissions: Permission[];
