@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isDirectionLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="directionTableVisible" class="table-content">
+      <app-directions-datatable [directions]="directions"></app-directions-datatable>
+    </div>
+  </div>
+</ng-template>

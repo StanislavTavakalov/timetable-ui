@@ -18,6 +18,8 @@ import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.compo
 import {MainPageComponent} from './components/main-page/main-page.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
+import { DirectionsComponent } from './components/directions/directions.component';
+import { DirectionsDatatableComponent } from './components/directions/directions-datatable/directions-datatable.component';
 import { DeaneriesComponent } from './components/deaneries/deaneries.component';
 import { DepartmentsComponent } from './components/departments/departments.component';
 import { DepartmentsTableComponent } from './components/departments/departments-table/departments-table.component';
@@ -37,6 +39,8 @@ import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/
     MainPageComponent,
     RolesComponent,
     RolesDatatableComponent,
+    DirectionsComponent,
+    DirectionsDatatableComponent,
     DeaneriesComponent,
     DepartmentsComponent,
     DepartmentsTableComponent,
