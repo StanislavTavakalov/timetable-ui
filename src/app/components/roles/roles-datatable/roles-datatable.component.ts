@@ -32,7 +32,7 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
 
   @Input() roles: Role[];
   @Input() permissions: Permission[];
-  displayedColumns: string[] = ['name', 'permissions', 'icons'];
+  displayedColumns: string[] = ['name', 'role-category', 'permissions', 'icons'];
   dataSource: MatTableDataSource<Role>;
 
   editRoleDialogSubscription: Subscription;

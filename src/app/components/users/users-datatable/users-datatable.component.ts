@@ -36,7 +36,7 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
 
   @Input() users: User[];
   displayedColumns: string[] = ['firstName', 'lastName', 'patronymic', 'email', 'role',
-    'status', 'icons'];
+    'status', 'deanery', 'department', 'icons'];
   dataSource: MatTableDataSource<User>;
 
   editUserDialogSubscription: Subscription;

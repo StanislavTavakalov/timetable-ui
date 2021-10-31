@@ -1,0 +1,16 @@
+@import "~@angular/material/theming";
+//@use '~@angular/material' as mat;
+
+@include mat-core();
+
+$bntu-theme-primary: mat-palette($mat-green, 700);
+$bntu-theme-accent: mat-palette($mat-pink, 800);
+$bntu-theme-warn: mat-palette($mat-red, 500);
+
+$bntu-theme: mat-light-theme(
+$bntu-theme-primary,
+$bntu-theme-accent,
+$bntu-theme-warn
+);
+
+@include angular-material-theme($bntu-theme);
