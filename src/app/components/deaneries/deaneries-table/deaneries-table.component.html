@@ -1,0 +1,55 @@
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по деканатам...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #deaneriesTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <td mat-cell *matCellDef="let row"> {{row.fullName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="shortName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Аббревиатура </th>
+      <td mat-cell *matCellDef="let row"> {{row.shortName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="facultyCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Код деканата </th>
+      <td mat-cell *matCellDef="let row"> {{row.facultyCode}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание </th>
+      <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <mat-icon class="material-icons table-mat-icon-element" (click)="addDeanery()" style="cursor: pointer"
+                  matTooltip="Добавить деканат">
+          add_circle
+        </mat-icon>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let deanery">
+        <mat-icon class="material-icons" (click)="editDeanery(deanery)" style="cursor: pointer"
+                  matTooltip="Редактировать деканат">
+          edit
+        </mat-icon>
+        <mat-icon class="material-icons" (click)="deleteDeanery(deanery)" style="cursor: pointer"
+                  matTooltip="Удалить деканат">
+          delete
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

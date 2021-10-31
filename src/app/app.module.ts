@@ -18,6 +18,13 @@ import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.compo
 import {MainPageComponent} from './components/main-page/main-page.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
+import { DeaneriesComponent } from './components/deaneries/deaneries.component';
+import { DepartmentsComponent } from './components/departments/departments.component';
+import { DepartmentsTableComponent } from './components/departments/departments-table/departments-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/deaneries-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +36,11 @@ import { RolesDatatableComponent } from './components/roles/roles-datatable/role
     UserSidenavComponent,
     MainPageComponent,
     RolesComponent,
-    RolesDatatableComponent
+    RolesDatatableComponent,
+    DeaneriesComponent,
+    DepartmentsComponent,
+    DepartmentsTableComponent,
+    DeaneriesTableComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +51,10 @@ import { RolesDatatableComponent } from './components/roles/roles-datatable/role
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NotifierModule.withConfig(customNotifierOptions)
+    NotifierModule.withConfig(customNotifierOptions),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

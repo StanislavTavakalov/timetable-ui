@@ -3,4 +3,5 @@ export class Department {
   fullName: string;
   shortName: string;
   code: string;
+  description: string;
 }
