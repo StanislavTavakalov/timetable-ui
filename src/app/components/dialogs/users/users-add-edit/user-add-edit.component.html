@@ -38,6 +38,26 @@
       </mat-select>
     </mat-form-field>
 
+    <ng-container *ngIf="showDeaneryField(role.value)">
+      <mat-form-field>
+        <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'" [required]="showDeaneryField(role.value)">
+          <mat-option *ngFor="let deanery of deaneryList" [value]="deanery">
+            {{getDeaneryOrDepartmentName(deanery)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </ng-container>
+    <ng-container *ngIf="showDepartmentField(role.value)">
+      <mat-form-field>
+        <mat-select [compareWith]="compareObjects" placeholder="Кафедра: " [formControlName]="'department'" [required]="showDepartmentField(role.value)">
+          <mat-option *ngFor="let department of departmentList" [value]="department">
+            {{getDeaneryOrDepartmentName(department)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions class="controls">

@@ -1,4 +1,4 @@
-enum RoleCategory {
+export enum RoleCategory {
   ADMIN = 'ADMIN',
   DISPATCHER = 'DISPATCHER',
   DEANERY = 'DEANERY',

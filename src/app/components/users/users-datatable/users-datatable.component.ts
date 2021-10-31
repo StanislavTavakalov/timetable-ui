@@ -14,6 +14,10 @@ import {Role} from '../../../model/role';
 import {Constants} from '../../../constants';
 import {Status} from '../../../model/status';
 import {UserService} from '../../../services/user.service';
+import {Department} from '../../../model/department';
+import {Deanery} from '../../../model/deanery';
+import {DeaneryService} from '../../../services/deanery.service';
+import {DepartmentService} from '../../../services/department.service';
 
 @Component({
   selector: 'app-users-datatable',
@@ -25,7 +29,9 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
               private userService: UserService,
-              private roleService: RoleService) {
+              private roleService: RoleService,
+              private deaneryService: DeaneryService,
+              private departmentService: DepartmentService) {
 
   }
 
@@ -42,6 +48,10 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   editUserDialogSubscription: Subscription;
   deleteUserDialogSubscription: Subscription;
   addUserDialogSubscription: Subscription;
+
+  roleList: Role[];
+  deaneryList: Deanery[];
+  departmentList: Department[];
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.users);
@@ -60,23 +70,46 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   }
 
   public editUser(user: User): void {
+    this.openUserDialog(true, user);
+  }
 
+  private openUserDialog(isEdit: boolean, user: User): void {
     this.roleService.getRoles().subscribe((roleList: Role[]) => {
-      const dialogRef = this.dialog.open(UserAddEditComponent, {
-        data: {title: 'Редактировать пользователя', user, roleList}
-      });
-
-      this.editUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
-        if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
-          this.notifierService.notify('success', 'Пользователь был успешно изменен');
-        } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
-          this.notifierService.notify('error', operationResponse.errorMessage);
+      this.roleList = roleList;
+      this.departmentService.getDepartments().subscribe
+      ((departmentsList: Department[]) => {
+          this.departmentList = departmentsList;
+          this.deaneryService.getDeaneries().subscribe((deaneries: Deanery[]) => {
+            this.deaneryList = deaneries;
+            if (isEdit) {
+              this.openEditUserDialog(user, this.roleList, this.deaneryList, this.departmentList);
+            } else {
+              this.openAddUserDialog(this.roleList, this.deaneryList, this.departmentList);
+            }
+          }, (er: any) => {
+            this.notifierService.notify('error', er);
+          });
         }
-      });
+        , (er: any) => {
+          this.notifierService.notify('error', er);
+        });
     }, (er: any) => {
       this.notifierService.notify('error', er);
     });
+  }
 
+  private openEditUserDialog(user: User, roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
+    const dialogRef = this.dialog.open(UserAddEditComponent, {
+      data: {title: 'Редактировать пользователя', user, roleList, deaneryList, departmentList}
+    });
+
+    this.editUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+      if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+        this.notifierService.notify('success', 'Пользователь был успешно изменен');
+      } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+        this.notifierService.notify('error', operationResponse.errorMessage);
+      }
+    });
   }
 
   public deleteUser(user: User): void {
@@ -100,23 +133,22 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   }
 
   public addNewUser(): void {
+    this.openUserDialog(false, new User());
+  }
 
-    this.roleService.getRoles().subscribe((roleList: Role[]) => {
-      const dialogRef = this.dialog.open(UserAddEditComponent, {
-        data: {title: 'Зарегистрировать пользователя ', roleList}
-      });
+  private openAddUserDialog(roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
+    const dialogRef = this.dialog.open(UserAddEditComponent, {
+      data: {title: 'Зарегистрировать пользователя', roleList, deaneryList, departmentList}
+    });
 
-      this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
-        if (operationResult.isCompleted && operationResult.errorMessage === null) {
-          this.users.unshift(operationResult.object);
-          this.refreshDataTableContent();
-          this.notifierService.notify('success', 'Пользователь был успешно зарегистрирован.');
-        } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
-          this.notifierService.notify('error', operationResult.errorMessage);
-        }
-      });
-    }, (er: any) => {
-      this.notifierService.notify('error', er);
+    this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.users.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Пользователь был успешно зарегистрирован.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
     });
   }
 

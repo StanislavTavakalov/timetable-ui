@@ -7,6 +7,9 @@ import {User} from '../../../../model/user';
 import {Subscription} from 'rxjs';
 import {Role} from '../../../../model/role';
 import {AuthenticationService} from '../../../../services/authentication.service';
+import {Department} from '../../../../model/department';
+import {Deanery} from '../../../../model/deanery';
+import {RoleCategory} from '../../../../model/role-category';
 
 @Component({
   selector: 'app-users-add-edit',
@@ -30,11 +33,15 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
   authServiceSubscription: Subscription;
   editMode: boolean;
   roleList: Role[];
+  departmentList: Department[];
+  deaneryList: Deanery[];
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.user = this.data.user;
     this.roleList = this.data.roleList;
+    this.departmentList = this.data.departmentList;
+    this.deaneryList = this.data.deaneryList;
 
     if (this.user != null) {
       this.editMode = true;
@@ -52,7 +59,9 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
       firstName: [user.firstName, [Validators.required, Validators.maxLength(1000)]],
       lastName: [user.lastName, [Validators.required, Validators.maxLength(1000)]],
       patronymic: [user.patronymic, [Validators.required, Validators.maxLength(1000)]],
-      role: [user.role]
+      role: [user.role],
+      deanery: [user.deanery],
+      department: [user.department]
     });
   }
 
@@ -74,6 +83,14 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
 
   get role(): FormControl {
     return this.userForm.get('role') as FormControl;
+  }
+
+  get deanery(): FormControl {
+    return this.userForm.get('deanery') as FormControl;
+  }
+
+  get department(): FormControl {
+    return this.userForm.get('department') as FormControl;
   }
 
   onCancelClick(): void {
@@ -128,6 +145,11 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
     user.patronymic = this.userForm.controls.patronymic.value;
     user.email = this.userForm.controls.email.value;
     user.role = this.userForm.controls.role.value;
+    if (RoleCategory.DEPARTMENT === user.role.roleCategory) {
+      user.department = this.userForm.controls.department.value;
+    } else if (RoleCategory.DEANERY === user.role.roleCategory) {
+      user.deanery = this.userForm.controls.deanery.value;
+    }
   }
 
   private createUserCopy(user: User): User {
@@ -140,12 +162,24 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
     return role.name;
   }
 
+  getDeaneryOrDepartmentName(object: any): string {
+    return object.fullName;
+  }
+
+
   compareObjects(o1: any, o2: any): boolean {
     if (!o2) {
       return false;
     }
-    return o1.name === o2.name && o1.id === o2.id;
+    return o1.id === o2.id;
   }
+
+  // compareDepartmentOrDeaneries(o1: any, o2: any): boolean {
+  //   if (!o2) {
+  //     return false;
+  //   }
+  //   return o1.fullName === o2.fullName && o1.id === o2.id;
+  // }
 
   ngOnDestroy(): void {
     if (this.userServiceSubscription) {
@@ -157,4 +191,17 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
   }
 
 
+  showDeaneryField(role: Role): boolean {
+    if (role === null) {
+      return false;
+    }
+    return RoleCategory.DEANERY === role.roleCategory;
+  }
+
+  showDepartmentField(role: Role): boolean {
+    if (role === null) {
+      return false;
+    }
+    return RoleCategory.DEPARTMENT === role.roleCategory;
+  }
 }
