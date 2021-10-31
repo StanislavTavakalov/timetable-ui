@@ -18,6 +18,8 @@ import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.compo
 import {MainPageComponent} from './components/main-page/main-page.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
+import { DirectionsComponent } from './components/directions/directions.component';
+import { DirectionsDatatableComponent } from './components/directions/directions-datatable/directions-datatable.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { RolesDatatableComponent } from './components/roles/roles-datatable/role
     UserSidenavComponent,
     MainPageComponent,
     RolesComponent,
-    RolesDatatableComponent
+    RolesDatatableComponent,
+    DirectionsComponent,
+    DirectionsDatatableComponent
   ],
   imports: [
     BrowserModule,
