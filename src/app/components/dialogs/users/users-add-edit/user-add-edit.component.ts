@@ -2,7 +2,6 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from '../../../../services/user.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {LocalStorageService} from '../../../../services/local-storage.service';
 import {User} from '../../../../model/user';
 import {Subscription} from 'rxjs';
 import {Role} from '../../../../model/role';
@@ -53,7 +52,6 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
   }
 
   private initializeForm(user: User): void {
-    console.log(user);
     this.userForm = this.fb.group({
       email: [user.email, [Validators.required, Validators.maxLength(1000)]],
       firstName: [user.firstName, [Validators.required, Validators.maxLength(1000)]],

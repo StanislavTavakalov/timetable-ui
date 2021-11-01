@@ -21,9 +21,6 @@
       <td mat-cell *matCellDef="let row"> {{printPermissions(row.permissions)}} </td>
     </ng-container>
 
-
-
-
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
         <mat-icon class="material-icons table-mat-icon-element" (click)="addRole()" style="cursor: pointer"

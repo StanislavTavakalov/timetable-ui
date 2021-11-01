@@ -98,6 +98,25 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
     });
   }
 
+  public addNewUser(): void {
+    this.openUserDialog(false, new User());
+  }
+
+  private openAddUserDialog(roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
+    const dialogRef = this.dialog.open(UserAddEditComponent, {
+      data: {title: 'Зарегистрировать пользователя', roleList, deaneryList, departmentList}
+    });
+
+    this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.users.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Пользователь был успешно зарегистрирован.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
   private openEditUserDialog(user: User, roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
     const dialogRef = this.dialog.open(UserAddEditComponent, {
       data: {title: 'Редактировать пользователя', user, roleList, deaneryList, departmentList}
@@ -132,25 +151,7 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addNewUser(): void {
-    this.openUserDialog(false, new User());
-  }
 
-  private openAddUserDialog(roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
-    const dialogRef = this.dialog.open(UserAddEditComponent, {
-      data: {title: 'Зарегистрировать пользователя', roleList, deaneryList, departmentList}
-    });
-
-    this.addUserDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
-      if (operationResult.isCompleted && operationResult.errorMessage === null) {
-        this.users.unshift(operationResult.object);
-        this.refreshDataTableContent();
-        this.notifierService.notify('success', 'Пользователь был успешно зарегистрирован.');
-      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
-        this.notifierService.notify('error', operationResult.errorMessage);
-      }
-    });
-  }
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.users;

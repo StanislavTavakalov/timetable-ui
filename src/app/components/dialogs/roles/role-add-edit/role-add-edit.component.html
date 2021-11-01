@@ -1,0 +1,59 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="roleForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'name'" required>
+      <mat-error *ngIf="name.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Категория роли: " [formControlName]="'roleCategory'"
+                  required>
+        <mat-option *ngFor="let roleCategory of roleCategories" [value]="roleCategory">
+          {{roleCategory}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="example-chip-list" appearance="fill">
+      <mat-label>Права</mat-label>
+      <mat-chip-list #permissionsList aria-label="Fruit selection">
+        <mat-chip
+          *ngFor="let permission of addedPermissions"
+          [removable]="removable"
+          (removed)="remove(permission)">
+          {{permission.name}}
+          <button matChipRemove *ngIf="removable">
+            <mat-icon *ngIf="removable" class="chip-icon">cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input
+          placeholder="Введите название права..."
+          #permissionInput
+          [formControl]="permissionCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="permissionsList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let permission of filteredPermissions | async" [value]="permission">
+          {{permission?.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="roleForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+

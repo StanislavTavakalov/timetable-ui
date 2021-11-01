@@ -13,3 +13,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .table-mat-icon-element {
   color: black;
 }
+
+.delete-dialog-controls {
+  margin-top: 1%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.text-center {
+  text-align: center;
+}

@@ -9,6 +9,9 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Permission} from '../../../model/permission';
 import {Role} from '../../../model/role';
+import {OperationResult} from '../../../model/operation-result';
+import {RoleDeleteComponent} from '../../dialogs/roles/role-delete/role-delete.component';
+import {RoleAddEditComponent} from '../../dialogs/roles/role-add-edit/role-add-edit.component';
 
 @Component({
   selector: 'app-roles-datatable',
@@ -31,6 +34,7 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
 
   @Input() roles: Role[];
   @Input() permissions: Permission[];
+  roleAddedPermissions: Permission[];
   displayedColumns: string[] = ['name', 'role-category', 'permissions', 'icons'];
   dataSource: MatTableDataSource<Role>;
 
@@ -54,20 +58,88 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public editRole(role: Role): void {
+  public deleteRole(role: Role): void {
+    const dialogRef = this.dialog.open(RoleDeleteComponent, {
+      data: role.id,
+      disableClose: true
+    });
+
+    this.deleteRoleDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.roles.indexOf(role, 0);
+        if (index > -1) {
+          this.roles.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Роль была удалена');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
-  public deleteRole(role: Role): void {
+  public editRole(role: Role): void {
+    this.openRoleDialog(true, role);
+  }
 
+  private openRoleDialog(isEdit: boolean, role: Role): void {
+    this.roleService.getPermissions().subscribe((permissions: Role[]) => {
+      if (isEdit) {
+        this.openEditRoleDialog(role, permissions);
+      } else {
+        this.openAddRoleDialog(permissions);
+      }
+    }, (er: any) => {
+      this.notifierService.notify('error', er);
+    });
   }
 
   public addRole(): void {
+    this.openRoleDialog(false, new Role());
+  }
 
+  private openAddRoleDialog(permissions: Permission[]): void {
+    const dialogRef = this.dialog.open(RoleAddEditComponent, {
+      data: {title: 'Создать роль', permissions}
+    });
+
+    this.addRoleDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.roles.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Роль была успешно создана.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
+
+  private openEditRoleDialog(role: Role, permissions: Permission[]): void {
+    const dialogRef = this.dialog.open(RoleAddEditComponent, {
+      data: {title: 'Редактировать роль', role, permissions}
+    });
+
+    this.editRoleDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+      if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+        this.notifierService.notify('success', 'Роль была успешно изменена');
+      } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+        this.notifierService.notify('error', operationResponse.errorMessage);
+      }
+    });
   }
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.roles;
   }
+
+  printPermissions(permissions: Permission[]): string {
+    let allPermissions = '';
+    for (const permission of permissions) {
+      allPermissions = allPermissions + permission.name + ', ';
+    }
+    return allPermissions.slice(0, -2);
+  }
+
 
   ngOnDestroy(): void {
     if (this.editRoleDialogSubscription) {
@@ -79,11 +151,5 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
     }
   }
 
-  printPermissions(permissions: Permission[]): string {
-    let allPermissions = '';
-    for (const permission of permissions){
-      allPermissions = allPermissions + permission.name + ', ';
-    }
-    return allPermissions.slice(0, -2);
-  }
+
 }
