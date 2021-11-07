@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="departmentForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'fullName'" required>
+      <mat-error *ngIf="fullName.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="fullName.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Аббревиатура: " [formControlName]="'shortName'" required>
+      <mat-error *ngIf="shortName.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="shortName.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Код:" [formControlName]="'code'" required>
+      <mat-error *ngIf="code.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="code.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Описание: " [formControlName]="'description'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'" required>
+        <mat-option *ngFor="let deanery of deaneries" [value]="deanery">
+          {{getDeaneryName(deanery)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="departmentForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

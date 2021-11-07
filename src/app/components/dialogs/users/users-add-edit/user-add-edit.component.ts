@@ -145,8 +145,10 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
     user.role = this.userForm.controls.role.value;
     if (RoleCategory.DEPARTMENT === user.role.roleCategory) {
       user.department = this.userForm.controls.department.value;
+      user.deanery = null;
     } else if (RoleCategory.DEANERY === user.role.roleCategory) {
       user.deanery = this.userForm.controls.deanery.value;
+      user.department = null;
     }
   }
 
@@ -161,7 +163,7 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
   }
 
   getDeaneryOrDepartmentName(object: any): string {
-    return object.fullName;
+    return object.shortName;
   }
 
 

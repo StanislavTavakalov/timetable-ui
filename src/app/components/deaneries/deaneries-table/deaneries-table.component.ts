@@ -7,6 +7,9 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {DeaneryService} from '../../../services/deanery.service';
 import {Deanery} from '../../../model/deanery';
+import {OperationResult} from '../../../model/operation-result';
+import {DeaneryDeleteComponent} from '../../dialogs/deaneries/deanery-delete/deanery-delete.component';
+import {DeaneryAddEditComponent} from '../../dialogs/deaneries/deanery-add-edit/deanery-add-edit.component';
 
 @Component({
   selector: 'app-deaneries-table',
@@ -26,7 +29,7 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
   @ViewChild('deaneriesTable', {static: false}) deaneriesTable: MatTable<Deanery>;
 
   @Input() deaneries: Deanery[];
-  displayedColumns: string[] = ['fullName', 'shortName', 'facultyCode', 'description', 'icons'];
+  displayedColumns: string[] = ['fullName', 'shortName', 'description', 'icons'];
   dataSource: MatTableDataSource<Deanery>;
 
   editDeaneryDialogSubscription: Subscription;
@@ -49,15 +52,70 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public editDeanery(deanery: Deanery): void {
+  public deleteDeanery(deanery: Deanery): void {
+    const dialogRef = this.dialog.open(DeaneryDeleteComponent, {
+      data: deanery.id,
+      disableClose: true
+    });
+
+    this.deleteDeaneryDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.deaneries.indexOf(deanery, 0);
+        if (index > -1) {
+          this.deaneries.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Деканат был удалена');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
-  public deleteDeanery(deanery: Deanery): void {
+  public editDeanery(deanery: Deanery): void {
+    this.openDeaneryDialog(true, deanery);
+  }
 
+  private openDeaneryDialog(isEdit: boolean, deanery: Deanery): void {
+    if (isEdit) {
+      this.openEditDeaneryDialog(deanery);
+    } else {
+      this.openAddDeaneryDialog();
+    }
   }
 
   public addDeanery(): void {
+    this.openDeaneryDialog(false, new Deanery());
+  }
 
+  private openAddDeaneryDialog(): void {
+    const dialogRef = this.dialog.open(DeaneryAddEditComponent, {
+      data: {title: 'Создать деканат'}
+    });
+
+    this.addDeaneryDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.deaneries.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Деканат был успешно создан.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
+
+  private openEditDeaneryDialog(deanery: Deanery): void {
+    const dialogRef = this.dialog.open(DeaneryAddEditComponent, {
+      data: {title: 'Редактировать деканат', deanery}
+    });
+
+    this.editDeaneryDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+      if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+        this.notifierService.notify('success', 'Деканат был успешно изменен');
+      } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+        this.notifierService.notify('error', operationResponse.errorMessage);
+      }
+    });
   }
 
   public refreshDataTableContent(): void {
@@ -71,6 +129,10 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
 
     if (this.deleteDeaneryDialogSubscription) {
       this.deleteDeaneryDialogSubscription.unsubscribe();
+    }
+
+    if (this.addDeaneryDialogSubscription) {
+      this.addDeaneryDialogSubscription.unsubscribe();
     }
   }
 

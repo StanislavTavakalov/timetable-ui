@@ -1,12 +1,17 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {DepartmentService} from '../../../services/department.service';
 import {Subscription} from 'rxjs';
 import {Department} from '../../../model/department';
+import {DepartmentDeleteComponent} from '../../dialogs/departments/department-delete/department-delete.component';
+import {OperationResult} from '../../../model/operation-result';
+import {DeaneryService} from '../../../services/deanery.service';
+import {Deanery} from '../../../model/deanery';
+import {DepartmentAddEditComponent} from '../../dialogs/departments/department-add-edit/department-add-edit.component';
 
 @Component({
   selector: 'app-departments-table',
@@ -17,7 +22,8 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
-              private departmentService: DepartmentService) {
+              private departmentService: DepartmentService,
+              private deaneryService: DeaneryService) {
 
   }
 
@@ -27,7 +33,7 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
   @ViewChild('departmentsTable', {static: false}) departmentsTable: MatTable<Department>;
 
   @Input() departments: Department[];
-  displayedColumns: string[] = ['fullName', 'shortName', 'code', 'description', 'icons'];
+  displayedColumns: string[] = ['fullName', 'shortName', 'code', 'deanery', 'description' , 'icons'];
   dataSource: MatTableDataSource<Department>;
 
   editDepartmentDialogSubscription: Subscription;
@@ -50,16 +56,76 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public editDepartment(department: Department): void {
+  public deleteDepartment(department: Department): void {
+    const dialogRef = this.dialog.open(DepartmentDeleteComponent, {
+      data: department.id,
+      disableClose: true
+    });
+
+    this.deleteDepartmentDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.departments.indexOf(department, 0);
+        if (index > -1) {
+          this.departments.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Кафедра была удалена');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
-  public deleteDepartment(department: Department): void {
+  public editDepartment(department: Department): void {
+    this.openDepartmentDialog(true, department);
+  }
 
+  private openDepartmentDialog(isEdit: boolean, department: Department): void {
+    this.deaneryService.getDeaneries().subscribe((deaneries: Deanery[]) => {
+      if (isEdit) {
+        this.openEditDepartmentDialog(department, deaneries);
+      } else {
+        this.openAddDepartmentDialog(deaneries);
+      }
+    }, (er: any) => {
+      this.notifierService.notify('error', er);
+    });
   }
 
   public addDepartment(): void {
-
+    this.openDepartmentDialog(false, new Department());
   }
+
+  private openAddDepartmentDialog(deaneries: Deanery[]): void {
+    const dialogRef = this.dialog.open(DepartmentAddEditComponent, {
+      data: {title: 'Создать кафедру', deaneries}
+    });
+
+    this.addDepartmentDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.departments.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Кафедра была успешно создана.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
+
+  private openEditDepartmentDialog(department: Department, deaneries: Deanery[]): void {
+    const dialogRef = this.dialog.open(DepartmentAddEditComponent, {
+      data: {title: 'Редактировать кафедру', department, deaneries}
+    });
+
+    this.editDepartmentDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+      if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+        this.notifierService.notify('success', 'Кафедра была успешно изменена');
+      } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+        this.notifierService.notify('error', operationResponse.errorMessage);
+      }
+    });
+  }
+
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.departments;
@@ -72,6 +138,10 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
 
     if (this.deleteDepartmentDialogSubscription) {
       this.deleteDepartmentDialogSubscription.unsubscribe();
+    }
+
+    if (this.addDepartmentDialogSubscription) {
+      this.addDepartmentDialogSubscription.unsubscribe();
     }
   }
 

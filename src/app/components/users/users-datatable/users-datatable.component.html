@@ -45,13 +45,13 @@
     <!-- Deanery Column -->
     <ng-container matColumnDef="deanery">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Деканат</th>
-      <td mat-cell *matCellDef="let row"> {{row.deanery?.fullName}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.deanery?.shortName}} </td>
     </ng-container>
 
     <!-- Department Column -->
     <ng-container matColumnDef="department">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Кафедра </th>
-      <td mat-cell *matCellDef="let row"> {{row.department?.fullName}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.department?.shortName}} </td>
     </ng-container>
 
 

@@ -117,6 +117,7 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   private openEditUserDialog(user: User, roleList: Role[], deaneryList: Deanery[], departmentList: Department[]): void {
     const dialogRef = this.dialog.open(UserAddEditComponent, {
       data: {title: 'Редактировать пользователя', user, roleList, deaneryList, departmentList}
@@ -152,7 +153,6 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   }
 
 
-
   public refreshDataTableContent(): void {
     this.dataSource.data = this.users;
   }
@@ -164,6 +164,10 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
 
     if (this.deleteUserDialogSubscription) {
       this.deleteUserDialogSubscription.unsubscribe();
+    }
+
+    if (this.addUserDialogSubscription) {
+      this.addUserDialogSubscription.unsubscribe();
     }
   }
 

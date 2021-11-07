@@ -10,6 +10,7 @@ import {map, startWith} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
+
 @Component({
   selector: 'app-role-add-edit',
   templateUrl: './role-add-edit.component.html',
@@ -111,8 +112,16 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     });
 
     if (role.permissions) {
-      role.permissions.forEach(perm => this.addedPermissions.push(perm));
+      role.permissions.forEach(perm => {
+        this.addedPermissions.push(perm);
+        const index = this.allPermissions.map(per => per.name).indexOf(perm.name);
+        if (index >= 0) {
+          this.allPermissions.splice(index, 1);
+        }
+      });
+      this.refilter();
     }
+
   }
 
   get name(): FormControl {
@@ -195,4 +204,14 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  localizeRoleCategory(roleCategory: RoleCategory): string {
+    if (roleCategory === RoleCategory.ADMIN) {
+      return 'Администратор';
+    } else if (roleCategory === RoleCategory.DEANERY) {
+      return 'Деканат';
+    } else if (roleCategory === RoleCategory.DEPARTMENT) {
+      return 'Кафедра';
+    }
+    return 'Диспетчер';
+  }
 }

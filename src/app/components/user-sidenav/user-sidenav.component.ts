@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {BehaviorSubject} from 'rxjs';
+import {PermissionCheckService} from '../../services/permission-check.service';
 
 @Component({
   selector: 'app-user-sidenav',
@@ -19,7 +19,8 @@ export class UserSidenavComponent implements OnInit {
   currentUser = this.localStorageService.subscribableCurrentUser;
   isNavBarOpened = this.localStorageService.subscribableIsNavBarOpened;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private localStorageService: LocalStorageService,
+              public permissionCheckService: PermissionCheckService) {
   }
 
   ngOnInit(): void {

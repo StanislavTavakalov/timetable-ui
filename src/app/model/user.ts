@@ -18,7 +18,6 @@ class DeaneryShort {
   id: string;
   fullName: string;
   shortName: string;
-  code: string;
 }
 
 class DepartmentShort {

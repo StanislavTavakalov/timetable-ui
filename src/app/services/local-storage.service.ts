@@ -32,6 +32,7 @@ export class LocalStorageService {
   }
 
   public setCurrentUser(user: User): void {
+    console.log(user);
     this.subscribableCurrentUser.next(user);
     localStorage.setItem(this.CURRENT_USER, CryptoJS.AES.encrypt(JSON.stringify(user), this.SECRET_KEY.trim()).toString());
   }

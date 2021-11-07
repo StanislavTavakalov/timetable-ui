@@ -14,7 +14,22 @@ export class DeaneryService extends BasicHttpService{
   private fullDeaneryEndpoint = environment.domain + this.deaneryApiUrl;
 
   public getDeaneries(): Observable<Deanery[]> {
-    return this.http.get<Deanery[]>(this.fullDeaneryEndpoint)
+    return this.http.get<Deanery[]>(`${this.fullDeaneryEndpoint}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  public createDeanery(deanery: Deanery): Observable<Deanery> {
+    return this.http.post<Deanery>(`${this.fullDeaneryEndpoint}`, deanery)
+      .pipe(catchError(this.handleError));
+  }
+
+  public updateDeanery(deanery: Deanery): Observable<Deanery> {
+    return this.http.put<Deanery>(`${this.fullDeaneryEndpoint}`, deanery)
+      .pipe(catchError(this.handleError));
+  }
+
+  public deleteDeanery(deaneryId: string): Observable<any> {
+    return this.http.delete<any>(`${this.fullDeaneryEndpoint}/${deaneryId}`)
       .pipe(catchError(this.handleError));
   }
 }

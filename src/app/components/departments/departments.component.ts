@@ -42,4 +42,6 @@ export class DepartmentsComponent implements OnInit, OnDestroy {
       this.departmentServiceSubscription.unsubscribe();
     }
   }
+
+
 }

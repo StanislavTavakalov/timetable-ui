@@ -1,16 +1,22 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav #sidenav mode="side" *ngIf="currentUser" [opened]="isNavBarOpened.getValue()">
     <mat-nav-list>
+      <mat-list-item class="parent" [routerLink]="'/'" *ngIf="currentUser.getValue()?.deanery !== null">
+        <span class="full-width">Мой деканат</span>
+      </mat-list-item>
+      <mat-list-item class="parent" [routerLink]="'/'" *ngIf="currentUser.getValue()?.department !== null">
+        <span class="full-width">Моя кафедра</span>
+      </mat-list-item>
       <mat-list-item class="parent" [routerLink]="'/deaneries'">
         <span class="full-width">Деканаты</span>
       </mat-list-item>
       <mat-list-item class="parent" [routerLink]="'/departments'">
         <span class="full-width">Кафедры</span>
       </mat-list-item>
-      <mat-list-item class="parent" [routerLink]="'/users'">
+      <mat-list-item class="parent" [routerLink]="'/users'" *ngIf="currentUser.getValue() !== null && this.permissionCheckService.isAdmin(currentUser.getValue().role)">
         <span class="full-width">Пользователи</span>
       </mat-list-item>
-      <mat-list-item class="parent" [routerLink]="'/roles'">
+      <mat-list-item class="parent" [routerLink]="'/roles'" *ngIf="currentUser.getValue() !== null && this.permissionCheckService.isAdmin(currentUser.getValue().role)">
         <span class="full-width" >Роли</span>
       </mat-list-item>
       <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
