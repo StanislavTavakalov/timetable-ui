@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="classroomForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'number'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" placeholder="Вместимость: " [formControlName]="'capacity'" required>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Тип: " [formControlName]="'classroomType'" required>
+        <mat-option *ngFor="let type of classroomTypes" [value]="type">
+          {{type.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Специализация: "
+                  [formControlName]="'classroomSpecialization'" required>
+        <mat-option *ngFor="let spec of classroomSpecializations" [value]="spec">
+          {{spec.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="classroomForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

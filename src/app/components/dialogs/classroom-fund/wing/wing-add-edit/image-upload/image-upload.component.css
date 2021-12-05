@@ -1,0 +1,15 @@
+.image-loader{
+  width: fit-content;
+  height: auto;
+  text-align: center;
+}
+img{
+  cursor: pointer;
+}
+
+div.plan-background {
+  /*background-image: url('src/assets/plan.jpg');*/
+  /*width: 600px;*/
+  /*height: 450px;*/
+  /*outline: 5px solid black;*/
+}

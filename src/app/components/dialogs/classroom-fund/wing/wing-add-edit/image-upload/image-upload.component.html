@@ -1,0 +1,25 @@
+<div style="display: flex; flex-direction: column; justify-items: center; align-items: center">
+  <!--<mat-card class="image-loader">-->
+  <mat-spinner *ngIf="ishiddenImage" mode="determinate"></mat-spinner>
+  <div class="plan-background" [style.width.px]="imageWidth" [style.height.px]="imageHeight"
+       [style.background-image]="'url(' + backgroundImageUrl + ')'">
+    <img *ngIf="!ishiddenImage">
+    <ng-template #container>
+
+    </ng-template>
+
+  </div>
+  <input type="file" id="selectedFile" (change)="selectFile($event)" style="display: none;">
+
+  <!--  <br/>-->
+  <!--</mat-card>-->
+  <div style="display: flex; flex-direction: row; margin-top: 2%">
+    <button mat-raised-button onclick="document.getElementById('selectedFile').click()">Загрузить эвакуационный план
+    </button>
+    <button mat-raised-button (click)="addClassroom()" style="margin-left: 1%">Добавить аудиторию</button>
+    <button mat-raised-button (click)="removeClassroom(this.resizeableClassroom)" style="margin-left: 1%">Удалить аудиторию</button>
+  </div>
+
+
+
+</div>

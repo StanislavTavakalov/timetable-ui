@@ -2,8 +2,9 @@
 <mat-dialog-content>
   <form [formGroup]="floorsForm" class="column">
     <mat-form-field>
-      <input matInput placeholder="Количество этажей:" [formControlName]="'newFloorsCount'" required>
+      <input type="number" matInput placeholder="Количество этажей:" [formControlName]="'newFloorsCount'" required>
       <mat-error *ngIf="newFloorsCount.hasError('required')"> Поле должно быть заполнено</mat-error>
+      <mat-error *ngIf="newFloorsCount.hasError('min')"> Количество этажей не может быть меньше 1</mat-error>
     </mat-form-field>
   </form>
 </mat-dialog-content>

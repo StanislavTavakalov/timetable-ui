@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="wingForm" class="column">
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'name'" required>
+      <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+    <app-image-upload (valueChange)='getImageAsString($event)' [defaultImage]=""
+                      [imageHeight]="650" [imageWidth]="800"
+                      [onErrorImage]="'assets/bntu.png'" ></app-image-upload>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="wingForm.invalid">
+    Создать
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

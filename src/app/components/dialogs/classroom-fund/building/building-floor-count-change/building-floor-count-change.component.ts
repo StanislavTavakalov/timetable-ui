@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
@@ -26,7 +26,7 @@ export class BuildingFloorCountChangeComponent implements OnInit {
 
   private initializeForm(): void {
     this.floorsForm = this.fb.group({
-      newFloorsCount: [this.currentFloorsNumber, [Validators.required]],
+      newFloorsCount: [this.currentFloorsNumber, [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -39,7 +39,15 @@ export class BuildingFloorCountChangeComponent implements OnInit {
   }
 
   onConfirmClick(): void {
-    this.dialogRef.close({isCompleted: true, object: this.newFloorsCount.value, errorMessage: null});
+    if (this.newFloorsCount.value >= this.safeFloorDeleteTreshold) {
+      this.dialogRef.close({isCompleted: true, object: this.newFloorsCount.value, errorMessage: null});
+    } else {
+      this.dialogRef.close({
+        isCompleted: true, object: null,
+        errorMessage: 'Невозможно изменить количество этажей на ' + this.newFloorsCount.value
+          + ', так как на этаже ' + this.safeFloorDeleteTreshold + ' уже созданы крылья'
+      });
+    }
   }
 
 }

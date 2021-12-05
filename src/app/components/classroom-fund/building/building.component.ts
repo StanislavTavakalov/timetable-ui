@@ -10,6 +10,8 @@ import {Subscription} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BuildingFloorCountChangeComponent} from '../../dialogs/classroom-fund/building/building-floor-count-change/building-floor-count-change.component';
 import {Floor} from '../../../model/dispatcher/floor';
+import {WingAddEditComponent} from '../../dialogs/classroom-fund/wing/wing-add-edit/wing-add-edit.component';
+import {Wing} from '../../../model/dispatcher/wing';
 
 
 @Component({
@@ -33,21 +35,30 @@ export class BuildingComponent implements OnInit, OnDestroy {
   buildingId: string;
   deleteBuildingDialogSubscription: Subscription;
   editMode = false;
-  copyBuilding = null;
+  copyBuilding: Building;
   buildingForm: FormGroup;
   changedFloorsNumber = null;
   changeFloorNumberDialogSubscription: Subscription;
+  wingDialogSubscription: Subscription;
 
   ngOnInit(): void {
+    this.copyBuilding = null;
     this.buildingId = this.route.snapshot.paramMap.get('id');
     this.isLoading = true;
 
-    this.buildingService.getBuilding(this.buildingId).subscribe(result => {
-      this.building = result;
-      this.isLoading = false;
-    }, error => {
-      this.isLoading = false;
-      this.notifierService.notify('error', 'Не удалось загрузить корпус.');
+    this.loadBuilding();
+
+  }
+
+  private sortFloors(): void {
+    this.building.floors.sort((f1, f2) => {
+      if (f1.number > f2.number) {
+        return 1;
+      } else if (f1.number < f2.number) {
+        return -1;
+      } else {
+        return 0;
+      }
     });
   }
 
@@ -69,18 +80,59 @@ export class BuildingComponent implements OnInit, OnDestroy {
 
   enableEditMode(): void {
     this.editMode = true;
+    this.createBuildingCopy();
+    this.initializeForm();
+  }
+
+  createBuildingCopy(): void {
     this.copyBuilding = new Building();
     this.copyBuilding.id = this.building.id;
     this.copyBuilding.number = this.building.number;
     this.copyBuilding.description = this.building.description;
-    this.copyBuilding.floors = this.building.floors;
     this.changedFloorsNumber = this.building.floors.length;
+    this.copyBuilding.floors = [];
+    this.createCopyFloors(this.copyBuilding.floors);
+  }
 
-    this.initializeForm();
+  private createCopyFloors(copyFloors: Floor[]): void {
+    for (const floor of this.building.floors) {
+      const copyFloor = new Floor();
+      copyFloor.id = floor.id;
+      copyFloor.number = floor.number;
+      copyFloor.wings = [];
+      this.createCopyWings(copyFloor.wings, floor.wings);
+      copyFloors.push(copyFloor);
+    }
+    console.log(copyFloors);
+    console.log(this.copyBuilding.floors);
+  }
+
+  private createCopyWings(copyWings: Wing[], sourceWings: Wing[]): void {
+    if (sourceWings !== undefined && sourceWings !== null && sourceWings.length !== 0) {
+      for (const wing of sourceWings) {
+        const wingCopy = new Wing();
+        wingCopy.id = wing.id;
+        wingCopy.name = wing.name;
+        copyWings.push(wingCopy);
+      }
+    }
   }
 
   save(): void {
-
+    this.copyBuilding.number = this.number.value;
+    this.copyBuilding.description = this.description.value;
+    this.buildingService.updateBuilding(this.copyBuilding).subscribe((result: Building) => {
+      this.isLoading = true;
+      this.loadBuilding();
+      this.sortFloors();
+      this.copyBuilding = null;
+      this.editMode = false;
+      this.notifierService.notify('success', 'Корпус был успешно изменен');
+    }, error => {
+      this.isLoading = false;
+      this.editMode = false;
+      this.notifierService.notify('error', 'Сохранение изменений завершилось неудачей');
+    });
   }
 
   cancel(): void {
@@ -107,10 +159,9 @@ export class BuildingComponent implements OnInit, OnDestroy {
   changeFloorNumber(): void {
     function findTreshhold(floors: Floor[]): number {
       let value = 0;
-      for (let ind = floors.length; ind > 0; ind--) {
-        if (floors[ind] !== undefined && floors[ind].wings !== undefined && floors[ind].wings.length !== 0) {
-          value = ind;
-          break;
+      for (const floor of floors) {
+        if (floor.wings.length > 0) {
+          value = floor.number;
         }
       }
       return value;
@@ -125,16 +176,61 @@ export class BuildingComponent implements OnInit, OnDestroy {
     });
 
     this.changeFloorNumberDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
-      if (operationResult.isCompleted && operationResult.errorMessage === null) {
-
-        this.changedFloorsNumber = operationResult.object;
-        for (let floorNum = this.changedFloorsNumber.length; floorNum < this.changedFloorsNumber; floorNum++) {
-          // this.
+      if (operationResult.isCompleted && operationResult.errorMessage === null && operationResult.object !== null) {
+        const newFloorNumber = operationResult.object;
+        if (newFloorNumber > this.changedFloorsNumber) {
+          for (let floorNum = this.changedFloorsNumber + 1; floorNum <= newFloorNumber; floorNum++) {
+            const newFloor = new Floor();
+            newFloor.number = floorNum;
+            newFloor.wings = [];
+            newFloor.isAddedOrChanged = true;
+            this.copyBuilding.floors.push(newFloor);
+          }
+        } else if (newFloorNumber < this.changedFloorsNumber) {
+          for (let floorNum = newFloorNumber + 1; floorNum <= this.changedFloorsNumber; floorNum++) {
+            const floorToRemove = this.copyBuilding.floors.find(floor => floor.number === floorNum);
+            if (floorToRemove !== undefined) {
+              const index = this.copyBuilding.floors.indexOf(floorToRemove, 0);
+              if (index > -1) {
+                this.copyBuilding.floors.splice(index, 1);
+              }
+            }
+          }
         }
-      } else if (operationResult.isCompleted) {
+        this.changedFloorsNumber = newFloorNumber;
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
         this.notifierService.notify('error', operationResult.errorMessage);
       }
     });
+  }
+
+
+  createWing(floorId: string, num: number): void {
+    const dialogRef = this.dialog.open(WingAddEditComponent, {
+      data: {title: 'Создать крыло', floorId}
+    });
+
+    this.wingDialogSubscription = dialogRef.afterClosed().subscribe((newWing: Wing) => {
+      if (newWing !== undefined && newWing !== null && newWing.name !== '') {
+        const floorChanged = this.copyBuilding.floors.find(floor => floor.number === num);
+        floorChanged.wings.push(newWing);
+        this.notifierService.notify('success', 'Крыло было добавлено');
+      }
+    });
+  }
+
+  editWing(wing: Wing, floorId: string): void {
+    const dialogRef = this.dialog.open(WingAddEditComponent, {
+      data: {title: 'Редактировать крыло', floorId, wing}
+    });
+  }
+
+  deleteWing(wing: Wing, floor: Floor): void {
+    const f = this.copyBuilding.floors.find(flo => floor.number === flo.number);
+    const index = f.wings.indexOf(wing, 0);
+    if (index > -1) {
+      f.wings.splice(index, 1);
+    }
   }
 
   ngOnDestroy(): void {
@@ -144,7 +240,20 @@ export class BuildingComponent implements OnInit, OnDestroy {
     if (this.changeFloorNumberDialogSubscription) {
       this.changeFloorNumberDialogSubscription.unsubscribe();
     }
+    if (this.wingDialogSubscription) {
+      this.wingDialogSubscription.unsubscribe();
+    }
   }
 
 
+  private loadBuilding(): void {
+    this.buildingService.getBuilding(this.buildingId).subscribe(result => {
+      this.building = result;
+      this.sortFloors();
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+      this.notifierService.notify('error', 'Не удалось загрузить корпус.');
+    });
+  }
 }

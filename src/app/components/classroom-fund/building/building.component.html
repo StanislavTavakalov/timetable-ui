@@ -7,7 +7,7 @@
     <div *ngIf="copyBuilding === null; else editBuildingContent">
       <div style="display: flex; flex-direction: column; padding-bottom: 1%">
         <h2 style="font-size: 40px; padding-bottom: 1%">Корпус {{building.number}}</h2>
-        <p style="font-size: 16px; max-width: 600px; min-height: 50px; overflow-wrap: break-word;">
+        <p style="font-size: 16px; max-width: 800px; min-height: 50px; overflow-wrap: break-word;">
           {{building.description}}
         </p>
       </div>
@@ -23,10 +23,9 @@
                 Этаж {{floor.number}}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <p style="margin-left: 2%">Крыло A</p>
-            <p style="margin-left: 2%">Крыло Б</p>
-            <p style="margin-left: 2%">Крыло С</p>
-            <button mat-button *ngIf="editMode"> Добавить крыло</button>
+            <p style="margin-left: 2%" *ngFor="let wing of floor.wings">
+              {{wing.name}}
+            </p>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
@@ -36,7 +35,7 @@
         </div>
 
         <div style="padding-left: 1%" *ngIf="!editMode">
-          <button mat-raised-button (click)="deleteBuilding()" color="warn"> Удалить</button>
+          <button mat-raised-button (click)="deleteBuilding()"> Удалить</button>
         </div>
       </div>
     </div>
@@ -55,7 +54,7 @@
         </mat-form-field>
       </div>
       <div style="display: flex; flex-direction: column">
-        <mat-form-field style="max-width:600px;">
+        <mat-form-field style="max-width:800px;">
           <textarea matInput placeholder="Описание: " [formControlName]="'description'"
                     style=" min-height: 100px"></textarea>
         </mat-form-field>
@@ -65,23 +64,38 @@
         <div style="align-self: center;"> Количество этажей: {{this.changedFloorsNumber}} </div>
         <button mat-icon-button (click)="changeFloorNumber()"
                 matTooltip="Изменить количество этажей">
-          <mat-icon> edit </mat-icon>
+          <mat-icon> edit</mat-icon>
         </button>
       </div>
     </form>
 
     <div style="padding-top: 1%">
       <mat-accordion>
-        <mat-expansion-panel *ngFor="let floor of building.floors">
+        <mat-expansion-panel *ngFor="let floor of copyBuilding.floors"
+                             [ngStyle]="{'background-color': floor.isAddedOrChanged ? 'limegreen' : 'white' }">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Этаж {{floor.number}}
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <p style="margin-left: 2%">Крыло A</p>
-          <p style="margin-left: 2%">Крыло Б</p>
-          <p style="margin-left: 2%">Крыло С</p>
-          <button mat-button *ngIf="editMode"> Добавить крыло</button>
+          <div style="display: flex; flex-direction: row; align-items: center" *ngFor="let wing of floor.wings"
+               [ngStyle]="{'background-color': wing.isAddedOrChanged ? 'limegreen' : 'white' }">
+            <div style="margin-left: 2%">
+              {{wing.name}}
+            </div>
+            <button mat-icon-button class="material-icons"
+                    matTooltip="Редактировать крыло" (click)="editWing(wing, floor.id)" style="margin-left: 2%">
+              <mat-icon> edit</mat-icon>
+            </button>
+            <button mat-icon-button class="material-icons"
+                    matTooltip="Удалить крыло" (click)="deleteWing(wing, floor)">
+              <mat-icon> delete</mat-icon>
+            </button>
+          </div>
+
+          <button mat-button *ngIf="editMode" (click)="createWing(floor.id, floor.number)" style="margin-top: 0.5%">
+            Добавить крыло
+          </button>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
@@ -91,7 +105,7 @@
         <button mat-raised-button (click)="save()" color="primary"> Сохранить</button>
       </div>
       <div style="padding-left: 1%" *ngIf="editMode">
-        <button mat-raised-button (click)="cancel()"> Отмена</button>
+        <button mat-raised-button (click)="cancel()" color="warn"> Отмена</button>
       </div>
     </div>
   </ng-template>

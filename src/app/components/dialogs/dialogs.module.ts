@@ -12,8 +12,12 @@ import {DeaneryDeleteComponent} from './deaneries/deanery-delete/deanery-delete.
 import {DepartmentDeleteComponent} from './departments/department-delete/department-delete.component';
 import {DeaneryAddEditComponent} from './deaneries/deanery-add-edit/deanery-add-edit.component';
 import {BuildingCreateComponent} from './classroom-fund/building/building-create/building-create.component';
-import { BuildingDeleteComponent } from './classroom-fund/building/building-delete/building-delete.component';
+import {BuildingDeleteComponent} from './classroom-fund/building/building-delete/building-delete.component';
 import {BuildingFloorCountChangeComponent} from './classroom-fund/building/building-floor-count-change/building-floor-count-change.component';
+import {WingAddEditComponent} from './classroom-fund/wing/wing-add-edit/wing-add-edit.component';
+import {ImageUploadComponent} from './classroom-fund/wing/wing-add-edit/image-upload/image-upload.component';
+import {ResizeableClassroomComponent} from './classroom-fund/wing/wing-add-edit/image-upload/resizeable-classroom/resizeable-classroom.component';
+import { ClassroomAddEditComponent } from './classroom-fund/wing/wing-add-edit/image-upload/classroom-add-edit/classroom-add-edit.component';
 
 @NgModule({
   imports: [
@@ -34,17 +38,21 @@ import {BuildingFloorCountChangeComponent} from './classroom-fund/building/build
     DepartmentDeleteComponent,
     BuildingCreateComponent,
     BuildingDeleteComponent,
-    BuildingFloorCountChangeComponent
+    BuildingFloorCountChangeComponent,
+    WingAddEditComponent,
+    ImageUploadComponent,
+    ResizeableClassroomComponent,
+    ClassroomAddEditComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
-    BuildingFloorCountChangeComponent
+    BuildingFloorCountChangeComponent, WingAddEditComponent, ImageUploadComponent, ResizeableClassroomComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
-    BuildingFloorCountChangeComponent
+    BuildingFloorCountChangeComponent, WingAddEditComponent, ImageUploadComponent, ResizeableClassroomComponent
   ]
 })
 export class DialogsModule {
