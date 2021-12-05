@@ -1,7 +1,6 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Department} from '../../../../model/department';
 import {Subscription} from 'rxjs';
 import {Deanery} from '../../../../model/deanery';
 import {DeaneryService} from '../../../../services/deanery.service';
@@ -34,7 +33,7 @@ export class DeaneryAddEditComponent implements OnInit, OnDestroy {
       this.initializeForm(this.deanery);
     } else {
       this.editMode = false;
-      this.initializeForm(new Department());
+      this.initializeForm(new Deanery());
     }
   }
 

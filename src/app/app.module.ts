@@ -27,6 +27,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/deaneries-table.component';
+import { ClassroomFundComponent } from './components/classroom-fund/classroom-fund.component';
+import { BuildingComponent } from './components/classroom-fund/building/building.component';
+import { WingComponent } from './components/classroom-fund/building/wing/wing.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,10 @@ import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/
     DeaneriesComponent,
     DepartmentsComponent,
     DepartmentsTableComponent,
-    DeaneriesTableComponent
+    DeaneriesTableComponent,
+    ClassroomFundComponent,
+    BuildingComponent,
+    WingComponent
   ],
   imports: [
     BrowserModule,

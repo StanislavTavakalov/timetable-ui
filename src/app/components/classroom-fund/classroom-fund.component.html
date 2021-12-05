@@ -1,0 +1,35 @@
+<div class="margin-left-top">
+  <h2> Корпуса </h2>
+  <mat-divider></mat-divider>
+
+  <mat-spinner *ngIf="isLoadingBuildings;else buildingsContent" diameter="150" mode="indeterminate" color="primary"
+               class="spinner">
+  </mat-spinner>
+
+  <ng-template #buildingsContent>
+    <div style="display: flex">
+      <mat-card *ngFor="let building of buildings" style="margin-right: 1%; margin-top: 1%; cursor: pointer" routerLink="/classroom-fund/building/{{building.id}}">
+        <mat-card-header> Корпус {{building?.number}}</mat-card-header>
+          <img mat-card-image src="assets/building_default.jpg" width="89px"
+               height="89px" style="padding-top: 4%">
+      </mat-card>
+    </div>
+    <button mat-raised-button style="margin-top: 1%" (click)="createBuilding()"> Создать корпус </button>
+  </ng-template>
+
+
+  <h2 style="padding-top: 1%"> Аудитории </h2>
+  <mat-divider></mat-divider>
+
+  <mat-spinner *ngIf="isLoadingBuildings;else classroomsContent" diameter="150" mode="indeterminate" color="primary"
+               class="spinner">
+  </mat-spinner>
+
+  <ng-template #classroomsContent>
+    <div style="display: flex">
+
+
+    </div>
+  </ng-template>
+
+</div>

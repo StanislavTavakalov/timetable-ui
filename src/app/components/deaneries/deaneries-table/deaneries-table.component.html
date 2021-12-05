@@ -1,3 +1,5 @@
+<h2> Деканаты </h2>
+
 <mat-form-field>
   <mat-label>Фильтр</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по деканатам...">
@@ -23,21 +25,21 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <mat-icon class="material-icons table-mat-icon-element" (click)="addDeanery()" style="cursor: pointer"
+        <button mat-icon-button class="material-icons table-mat-icon-element" (click)="addDeanery()"
                   matTooltip="Добавить деканат">
-          add_circle
-        </mat-icon>
+          <mat-icon> add_circle </mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let deanery">
-        <mat-icon class="material-icons" (click)="editDeanery(deanery)" style="cursor: pointer"
+        <button mat-icon-button class="material-icons" (click)="editDeanery(deanery)"
                   matTooltip="Редактировать деканат">
-          edit
-        </mat-icon>
-        <mat-icon class="material-icons" (click)="deleteDeanery(deanery)" style="cursor: pointer"
+          <mat-icon> edit </mat-icon>
+        </button>
+        <button mat-icon-button class="material-icons" (click)="deleteDeanery(deanery)"
                   matTooltip="Удалить деканат">
-          delete
-        </mat-icon>
+          <mat-icon> delete </mat-icon>
+        </button>
       </td>
     </ng-container>
 

@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="buildingForm" class="column">
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'number'" required>
+      <mat-error *ngIf="number.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="number.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input type="number" matInput placeholder="Количество этажей: " [formControlName]="'floorsNumber'" required>
+      <mat-error *ngIf="floorsNumber.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput placeholder="Описание: " [formControlName]="'description'"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="buildingForm.invalid">
+    Создать
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

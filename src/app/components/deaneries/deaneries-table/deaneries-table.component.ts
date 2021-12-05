@@ -5,7 +5,6 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {DeaneryService} from '../../../services/deanery.service';
 import {Deanery} from '../../../model/deanery';
 import {OperationResult} from '../../../model/operation-result';
 import {DeaneryDeleteComponent} from '../../dialogs/deaneries/deanery-delete/deanery-delete.component';
@@ -18,8 +17,7 @@ import {DeaneryAddEditComponent} from '../../dialogs/deaneries/deanery-add-edit/
 })
 export class DeaneriesTableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
-              private notifierService: NotifierService,
-              private deaneryService: DeaneryService) {
+              private notifierService: NotifierService) {
 
   }
 
@@ -65,7 +63,7 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
           this.deaneries.splice(index, 1);
         }
         this.refreshDataTableContent();
-        this.notifierService.notify('success', 'Деканат был удалена');
+        this.notifierService.notify('success', 'Деканат был удален');
       } else if (operationResult.isCompleted) {
         this.notifierService.notify('error', operationResult.errorMessage);
       }

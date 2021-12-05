@@ -1,0 +1,15 @@
+<h1 mat-dialog-title> Редактировать этажность корпуса</h1>
+<mat-dialog-content>
+  <form [formGroup]="floorsForm" class="column">
+    <mat-form-field>
+      <input matInput placeholder="Количество этажей:" [formControlName]="'newFloorsCount'" required>
+      <mat-error *ngIf="newFloorsCount.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="floorsForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

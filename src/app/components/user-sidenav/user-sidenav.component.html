@@ -13,6 +13,9 @@
       <mat-list-item class="parent" [routerLink]="'/departments'">
         <span class="full-width">Кафедры</span>
       </mat-list-item>
+      <mat-list-item class="parent" [routerLink]="'/classroom-fund'">
+        <span class="full-width">Аудиторный фонд</span>
+      </mat-list-item>
       <mat-list-item class="parent" [routerLink]="'/users'" *ngIf="currentUser.getValue() !== null && this.permissionCheckService.isAdmin(currentUser.getValue().role)">
         <span class="full-width">Пользователи</span>
       </mat-list-item>

@@ -1,0 +1,98 @@
+<div class="margin-left-top">
+  <mat-spinner *ngIf="isLoading;else buildingContent" diameter="150" mode="indeterminate" color="primary"
+               class="spinner">
+  </mat-spinner>
+
+  <ng-template #buildingContent>
+    <div *ngIf="copyBuilding === null; else editBuildingContent">
+      <div style="display: flex; flex-direction: column; padding-bottom: 1%">
+        <h2 style="font-size: 40px; padding-bottom: 1%">Корпус {{building.number}}</h2>
+        <p style="font-size: 16px; max-width: 600px; min-height: 50px; overflow-wrap: break-word;">
+          {{building.description}}
+        </p>
+      </div>
+      <!--    <div style="padding-top: 1%; padding-bottom: 1%">-->
+      <!--      <button mat-raised-button> Изменить кол-во этажей</button>-->
+      <!--    </div>-->
+      <mat-divider></mat-divider>
+      <div style="padding-top: 1%">
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let floor of building.floors">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Этаж {{floor.number}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p style="margin-left: 2%">Крыло A</p>
+            <p style="margin-left: 2%">Крыло Б</p>
+            <p style="margin-left: 2%">Крыло С</p>
+            <button mat-button *ngIf="editMode"> Добавить крыло</button>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div style="display: flex; padding-top: 2%">
+        <div *ngIf="!editMode">
+          <button mat-raised-button (click)="enableEditMode()"> Редактировать</button>
+        </div>
+
+        <div style="padding-left: 1%" *ngIf="!editMode">
+          <button mat-raised-button (click)="deleteBuilding()" color="warn"> Удалить</button>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template #editBuildingContent>
+    <form [formGroup]="buildingForm" class="column">
+      <div style="display: flex; flex-direction: row; padding-bottom: 1%">
+        <h2 style="font-size: 40px; padding-bottom: 1%">Корпус </h2>
+        <mat-form-field style="margin-left: 2%">
+          <input matInput placeholder="Название:" [formControlName]="'number'" required>
+          <mat-error *ngIf="number.hasError('maxlength')"> Количество символов не должно превышать 1000!
+          </mat-error>
+          <mat-error *ngIf="number.hasError('required')"> Поле должно быть заполнено</mat-error>
+        </mat-form-field>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <mat-form-field style="max-width:600px;">
+          <textarea matInput placeholder="Описание: " [formControlName]="'description'"
+                    style=" min-height: 100px"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div style="display: flex; flex-direction: row">
+        <div style="align-self: center;"> Количество этажей: {{this.changedFloorsNumber}} </div>
+        <button mat-icon-button (click)="changeFloorNumber()"
+                matTooltip="Изменить количество этажей">
+          <mat-icon> edit </mat-icon>
+        </button>
+      </div>
+    </form>
+
+    <div style="padding-top: 1%">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let floor of building.floors">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Этаж {{floor.number}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p style="margin-left: 2%">Крыло A</p>
+          <p style="margin-left: 2%">Крыло Б</p>
+          <p style="margin-left: 2%">Крыло С</p>
+          <button mat-button *ngIf="editMode"> Добавить крыло</button>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div style="display: flex; padding-top: 2%">
+      <div *ngIf="editMode">
+        <button mat-raised-button (click)="save()" color="primary"> Сохранить</button>
+      </div>
+      <div style="padding-left: 1%" *ngIf="editMode">
+        <button mat-raised-button (click)="cancel()"> Отмена</button>
+      </div>
+    </div>
+  </ng-template>
+</div>

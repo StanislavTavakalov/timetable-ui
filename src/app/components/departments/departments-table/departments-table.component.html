@@ -1,3 +1,5 @@
+<h2> Кафедры </h2>
+
 <mat-form-field>
   <mat-label>Фильтр</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по кафедрам...">
@@ -7,46 +9,47 @@
   <table #departmentsTable mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="fullName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название</th>
       <td mat-cell *matCellDef="let row"> {{row.fullName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="shortName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Аббревиатура </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Аббревиатура</th>
       <td mat-cell *matCellDef="let row"> {{row.shortName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="code">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Код кафедры </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Код кафедры</th>
       <td mat-cell *matCellDef="let row"> {{row.code}} </td>
     </ng-container>
 
     <ng-container matColumnDef="deanery">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Деканат </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Деканат</th>
       <td mat-cell *matCellDef="let row"> {{row.deanery?.shortName}} </td>
     </ng-container>
 
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание</th>
       <td mat-cell *matCellDef="let row"> {{row.description}} </td>
     </ng-container>
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <mat-icon class="material-icons table-mat-icon-element" (click)="addDepartment()" style="cursor: pointer"
-                  matTooltip="Добавить кафедру">
-          add_circle
-        </mat-icon>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addDepartment()"
+                matTooltip="Добавить кафедру">
+          <mat-icon> add_circle </mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let department">
-        <mat-icon class="material-icons" (click)="editDepartment(department)" style="cursor: pointer"
-                  matTooltip="Редактировать кафедру">
-          edit
-        </mat-icon>
-        <mat-icon class="material-icons" (click)="deleteDepartment(department)" style="cursor: pointer"
-                  matTooltip="Удалить кафедру">
-          delete
-        </mat-icon>
+        <button mat-icon-button (click)="editDepartment(department)"
+                matTooltip="Редактировать кафедру">
+          <mat-icon> edit</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="deleteDepartment(department)"
+                matTooltip="Удалить кафедру">
+          <mat-icon> delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 

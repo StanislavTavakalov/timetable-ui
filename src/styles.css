@@ -23,3 +23,23 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .text-center {
   text-align: center;
 }
+
+
+.table-content {
+  width: 100% !important;
+  margin: 2% !important;
+}
+
+.spinner{
+  margin: 10% auto auto;
+  height: 100%;
+  width: 100%;
+}
+
+.margin-left-top {
+  margin: 2% 2%;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
