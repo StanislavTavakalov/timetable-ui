@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BuildingService} from '../../../services/dispatcher/building.service';
 import {NotifierService} from 'angular-notifier';
@@ -12,6 +12,7 @@ import {BuildingFloorCountChangeComponent} from '../../dialogs/classroom-fund/bu
 import {Floor} from '../../../model/dispatcher/floor';
 import {WingAddEditComponent} from '../../dialogs/classroom-fund/wing/wing-add-edit/wing-add-edit.component';
 import {Wing} from '../../../model/dispatcher/wing';
+import {Classroom} from '../../../model/dispatcher/classroom';
 
 
 @Component({
@@ -113,7 +114,28 @@ export class BuildingComponent implements OnInit, OnDestroy {
         const wingCopy = new Wing();
         wingCopy.id = wing.id;
         wingCopy.name = wing.name;
+        wingCopy.planImage = wing.planImage;
+        wingCopy.classrooms = [];
+        this.createCopyClassrooms(wingCopy.classrooms, wing.classrooms);
         copyWings.push(wingCopy);
+      }
+    }
+  }
+
+  private createCopyClassrooms(classroomsCopy: Classroom[], classroomsSource: Classroom[]): void {
+    if (classroomsSource !== undefined && classroomsSource !== null && classroomsSource.length !== 0) {
+      for (const classroom of classroomsSource) {
+        const classroomCopy = new Classroom();
+        classroomCopy.id = classroom.id;
+        classroomCopy.number = classroom.number;
+        classroomCopy.classroomType = classroom.classroomType;
+        classroomCopy.classroomSpecialization = classroom.classroomSpecialization;
+        classroomCopy.x = classroom.x;
+        classroomCopy.y = classroom.y;
+        classroomCopy.width = classroom.width;
+        classroomCopy.height = classroom.height;
+        classroomCopy.capacity = classroom.capacity;
+        classroomsCopy.push(classroomCopy);
       }
     }
   }
@@ -219,9 +241,22 @@ export class BuildingComponent implements OnInit, OnDestroy {
     });
   }
 
-  editWing(wing: Wing, floorId: string): void {
+  editWing(wing: Wing, floor: Floor): void {
     const dialogRef = this.dialog.open(WingAddEditComponent, {
-      data: {title: 'Редактировать крыло', floorId, wing}
+      data: {title: 'Редактировать крыло', floorId: floor.id, wing}
+    });
+
+    this.wingDialogSubscription = dialogRef.afterClosed().subscribe((newWing: Wing) => {
+      if (newWing !== undefined && newWing !== null && newWing.name !== '') {
+        const floorChanged = this.copyBuilding.floors.find(floorF => floorF.number === floor.number);
+        const wingToRemove = floorChanged.wings.find(wingF => wingF.id === newWing.id);
+        const index = floorChanged.wings.indexOf(wingToRemove, 0);
+        if (index > -1) {
+          floorChanged.wings.splice(index, 1);
+        }
+        floorChanged.wings.push(newWing);
+        this.notifierService.notify('success', 'Крыло было добавлено');
+      }
     });
   }
 
@@ -256,4 +291,5 @@ export class BuildingComponent implements OnInit, OnDestroy {
       this.notifierService.notify('error', 'Не удалось загрузить корпус.');
     });
   }
+
 }

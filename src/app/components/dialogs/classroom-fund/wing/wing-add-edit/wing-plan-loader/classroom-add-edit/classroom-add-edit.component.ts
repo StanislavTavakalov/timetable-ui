@@ -1,10 +1,10 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {DeaneryService} from '../../../../../../../services/deanery.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Deanery} from '../../../../../../../model/deanery';
 import {Subscription} from 'rxjs';
 import {Classroom, ClassroomSpecialization, ClassroomType} from '../../../../../../../model/dispatcher/classroom';
+import {ClassroomService} from '../../../../../../../services/dispatcher/classroom.service';
+import {error} from 'protractor';
 
 @Component({
   selector: 'app-classroom-add-edit',
@@ -15,6 +15,7 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ClassroomAddEditComponent>,
+              private classroomService: ClassroomService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -24,16 +25,24 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   loading = false;
   serviceSubscription: Subscription;
   editMode: boolean;
-  classroomTypes: ClassroomType[] = [{name: 'Лекционная', color: 'green'},
-    {name: 'Практическая', color: 'red'},
-    {name: 'Лабораторная', color: 'blue'}];
-  classroomSpecializations: ClassroomSpecialization[] =
-    [{name: 'Спортивная'}, {name: 'Химическая'}, {name: 'Физическая'}, {name: 'Компьютерная'}];
+  classroomTypes: ClassroomType[] = undefined;
+  classroomSpecializations: ClassroomSpecialization[] = undefined;
+
 
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.classroom = this.data.classroom;
+    this.loading = true;
+
+    this.classroomService.getClassroomTypes().subscribe(classroomTypes => {
+      this.classroomTypes = classroomTypes;
+      this.classroomService.getClassroomSpecializations().subscribe(classroomSpecializations => {
+        this.classroomSpecializations = classroomSpecializations;
+        this.loading = false;
+      }, () => this.loading = false);
+    }, () => this.loading = false);
+
     if (this.classroom != null) {
       this.editMode = true;
       this.initializeForm(this.classroom);
@@ -73,13 +82,12 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   }
 
   onConfirmClick(): void {
-    // this.editMode ? this.editDeanery() : this.createNewClassroom();
-    this.createNewClassroom();
+    this.editMode ? this.editClassroom() : this.createNewClassroom();
   }
 
   private createNewClassroom(): void {
     const classroom = new Classroom();
-    this.setValuesFromForm(classroom);
+    this.setValuesFromForm(classroom, true);
     this.dialogRef.close(classroom);
   }
 
@@ -102,11 +110,19 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   //   );
   // }
 
-  private setValuesFromForm(classroom: Classroom): void {
+  private setValuesFromForm(classroom: Classroom, setDefaultSizeAndPosition: boolean): void {
     classroom.number = this.classroomForm.controls.number.value;
     classroom.capacity = this.classroomForm.controls.capacity.value;
     classroom.classroomType = this.classroomForm.controls.classroomType.value;
     classroom.classroomSpecialization = this.classroomForm.controls.classroomSpecialization.value;
+
+    // default sizes for classroom element
+    if (setDefaultSizeAndPosition) {
+      classroom.width = 300;
+      classroom.height = 150;
+      classroom.x = 100;
+      classroom.y = 100;
+    }
   }
 
   // private createDeaneryCopy(deanery: Deanery): Deanery {
@@ -115,17 +131,21 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   //   return deaneryCopy;
   // }
 
-  compareObjects(o1: any, o2: any): boolean {
-    return false;
-    // if (!o2) {
-    //   return false;
-    // }
-    // return o1.id === o2.id;
+  compareObjectsByName(o1: any, o2: any): boolean {
+    if (!o2) {
+      return false;
+    }
+    return o1.name === o2.name;
   }
 
   ngOnDestroy(): void {
     if (this.serviceSubscription) {
       this.serviceSubscription.unsubscribe();
     }
+  }
+
+  private editClassroom(): void {
+    this.setValuesFromForm(this.classroom, false);
+    this.dialogRef.close();
   }
 }

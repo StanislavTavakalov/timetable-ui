@@ -4,6 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {WingService} from '../../../../../services/dispatcher/wing.service';
 import {Wing} from '../../../../../model/dispatcher/wing';
+import {Classroom} from '../../../../../model/dispatcher/classroom';
 
 @Component({
   selector: 'app-wing-add-edit',
@@ -26,6 +27,7 @@ export class WingAddEditComponent implements OnInit, OnDestroy {
   wingServiceSubscription: Subscription;
   floorId: string;
   editMode: boolean;
+  classrooms = [];
 
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class WingAddEditComponent implements OnInit, OnDestroy {
     if (this.wing != null) {
       this.editMode = true;
       this.initializeForm(this.wing);
+      this.classrooms = this.wing.classrooms;
     } else {
       this.editMode = false;
       this.initializeForm(new Wing());
@@ -64,29 +67,24 @@ export class WingAddEditComponent implements OnInit, OnDestroy {
   }
 
   onConfirmClick(): void {
-    this.createWing();
+    this.createOrEditWing();
   }
 
-  private createWing(): void {
-    this.loading = true;
-    const wing = new Wing();
+  private createOrEditWing(): void {
+    let wing;
+    if (this.editMode) {
+      wing = this.wing;
+    } else {
+      wing = new Wing();
+    }
+
     wing.name = this.wingForm.controls.name.value;
     wing.floorId = this.floorId;
     wing.isAddedOrChanged = true;
-    this.dialogRef.close(wing);
+    wing.planImage = this.wingForm.controls['planImage'].value;
 
-    // this.wingServiceSubscription = this.wingService.createWing(wing).subscribe(result => {
-    //     this.loading = false;
-    //     this.dialogRef.close({isCompleted: true, object: result, errorMessage: null});
-    //   }, error => {
-    //     this.loading = false;
-    //     this.dialogRef.close({
-    //       isCompleted: true,
-    //       object: null,
-    //       errorMessage: error
-    //     });
-    //   }
-    // );
+    console.log(wing);
+    this.dialogRef.close(wing);
   }
 
   getImageAsString(base64textString: string): void {

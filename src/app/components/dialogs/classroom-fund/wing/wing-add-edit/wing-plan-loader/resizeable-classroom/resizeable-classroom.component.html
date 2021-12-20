@@ -1,0 +1,17 @@
+<div #box class="resizable-draggable {{classroom.classroomType.color}}"
+     [style.width.px]="classroom.width"
+     [style.height.px]="classroom.height"
+     [style.transform]="'translate3d('+ classroom.x + 'px,' + classroom.y + 'px,' + '0px)'"
+     [class.active]="status === 1 || status === 2 || isSelected"
+     (mousedown)="setStatus($event, 2)"
+     (window:mouseup)="setStatus($event, 0)"
+>
+  <div style="font-size: 28px; color: white"> {{classroom.number}} </div>
+
+  <div class="resize-action" (mousedown)="setStatus($event, 1)">
+
+  </div>
+  <!--    <span>{{width | number:'1.0-0'}}px</span>-->
+  <!--    <span>{{height | number:'1.0-0'}}px</span>-->
+  <!--    <span>({{left}}, {{top}})</span>-->
+</div>

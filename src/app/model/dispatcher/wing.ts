@@ -5,6 +5,6 @@ export class Wing {
   name: string;
   floorId: string;
   isAddedOrChanged: boolean;
-  classrooms: Classroom[];
+  classrooms: Classroom[] = [];
   planImage: string;
 }
