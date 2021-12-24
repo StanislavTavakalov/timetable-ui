@@ -144,8 +144,9 @@ export class BuildingComponent implements OnInit, OnDestroy {
     this.copyBuilding.number = this.number.value;
     this.copyBuilding.description = this.description.value;
     this.buildingService.updateBuilding(this.copyBuilding).subscribe((result: Building) => {
-      this.isLoading = true;
-      this.loadBuilding();
+      // this.isLoading = true;
+      // this.loadBuilding();
+      this.building = result;
       this.sortFloors();
       this.copyBuilding = null;
       this.editMode = false;
@@ -248,14 +249,7 @@ export class BuildingComponent implements OnInit, OnDestroy {
 
     this.wingDialogSubscription = dialogRef.afterClosed().subscribe((newWing: Wing) => {
       if (newWing !== undefined && newWing !== null && newWing.name !== '') {
-        const floorChanged = this.copyBuilding.floors.find(floorF => floorF.number === floor.number);
-        const wingToRemove = floorChanged.wings.find(wingF => wingF.id === newWing.id);
-        const index = floorChanged.wings.indexOf(wingToRemove, 0);
-        if (index > -1) {
-          floorChanged.wings.splice(index, 1);
-        }
-        floorChanged.wings.push(newWing);
-        this.notifierService.notify('success', 'Крыло было добавлено');
+        this.notifierService.notify('success', 'Крыло было изменено');
       }
     });
   }
