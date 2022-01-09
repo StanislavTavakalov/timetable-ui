@@ -4,7 +4,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {WingService} from '../../../../../services/dispatcher/wing.service';
 import {Wing} from '../../../../../model/dispatcher/wing';
-import {Classroom} from '../../../../../model/dispatcher/classroom';
 
 @Component({
   selector: 'app-wing-add-edit',
@@ -29,19 +28,29 @@ export class WingAddEditComponent implements OnInit, OnDestroy {
   editMode: boolean;
   classrooms = [];
 
+  readOnlyMode = false;
+
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.floorId = this.data.floorId;
 
+    this.readOnlyMode = this.data.readOnlyMode;
+
     this.wing = this.data.wing;
-    if (this.wing != null) {
-      this.editMode = true;
-      this.initializeForm(this.wing);
-      this.classrooms = this.wing.classrooms;
+    if (!this.readOnlyMode) {
+      if (this.wing != null) {
+        this.editMode = true;
+        this.initializeForm(this.wing);
+        this.classrooms = this.wing.classrooms;
+      } else {
+        this.editMode = false;
+        const wing = new Wing();
+        this.classrooms = wing.classrooms;
+        this.initializeForm(wing);
+      }
     } else {
-      this.editMode = false;
-      this.initializeForm(new Wing());
+      this.classrooms = this.wing.classrooms;
     }
 
   }
@@ -81,14 +90,15 @@ export class WingAddEditComponent implements OnInit, OnDestroy {
     wing.name = this.wingForm.controls.name.value;
     wing.floorId = this.floorId;
     wing.isAddedOrChanged = true;
-    wing.planImage = this.wingForm.controls['planImage'].value;
+    wing.planImage = this.wingForm.controls.planImage.value;
+    wing.classrooms = this.classrooms;
 
-    console.log(wing);
+    // console.log(wing);
     this.dialogRef.close(wing);
   }
 
   getImageAsString(base64textString: string): void {
-    this.wingForm.controls['planImage'].setValue(base64textString);
+    this.wingForm.controls.planImage.setValue(base64textString);
   }
 
   ngOnDestroy(): void {

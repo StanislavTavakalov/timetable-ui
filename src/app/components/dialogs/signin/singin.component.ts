@@ -44,21 +44,14 @@ export class SinginComponent implements OnInit {
 
   getErrorText(controlName: string): string {
     const control = this.credentialForm.get(controlName) as FormControl;
-    return this.getErrorMessage(control, controlName);
+    return this.getErrorMessage(control);
   }
 
-  private getErrorMessage(control: FormControl, controlName: string): string {
+  private getErrorMessage(control: FormControl): string {
     let errorMessage = '';
     if (control.errors) {
-      if (control.errors['required']) {
+      if (control.errors.required) {
         errorMessage = 'Field is required';
-      }
-      if (control.errors['minlength'] && (controlName === 'password')) {
-        errorMessage = 'Min length of password- 6 symbols';
-      }
-
-      if (control.errors['minlength'] && (controlName === 'login')) {
-        errorMessage = 'Min length of login - 6 symbols';
       }
     }
     return errorMessage;
@@ -78,14 +71,14 @@ export class SinginComponent implements OnInit {
       email: this.email.value,
       password: this.password.value
     }).subscribe(result => {
-      this.isLoading = false,
+      this.notifierService.notify('success', 'Успешно вошли в систему'),
+        this.isLoading = false,
         this.dialogRef.close(),
         this.localStorageService.setCurrentUserToken(result.token),
-        this.localStorageService.setCurrentUser(result.user),
-        this.notifierService.notify('success', 'Успешно вошли в систему');
+        this.localStorageService.setCurrentUser(result.user);
     }, errorMessage => {
-        this.isLoading = false,
-        this.notifierService.notify('error', errorMessage);
+      this.notifierService.notify('error', errorMessage),
+        this.isLoading = false;
     });
 
   }

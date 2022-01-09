@@ -26,6 +26,48 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-select placeholder="Статус: " [formControlName]="'classroomStatus'"
+                  required>
+        <mat-option *ngFor="let classroomStatus of classroomStatuses" [value]="classroomStatus">
+          {{resourceLocalizerService.localizeClassroomStatus(classroomStatus)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-select placeholder="Тип назначения: " [formControlName]="'assignmentType'"
+                  required>
+        <mat-option *ngFor="let assignmentType of assignmentTypes" [value]="assignmentType">
+          {{resourceLocalizerService.localizeAssignmentType(assignmentType)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="showDeaneryField()">
+      <mat-form-field>
+        <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'"
+                    [required]="showDeaneryField()">
+          <mat-option *ngFor="let deanery of deaneries" [value]="deanery">
+            {{getDeaneryOrDepartmentName(deanery)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </ng-container>
+    <ng-container *ngIf="showDepartmentField()">
+      <mat-form-field>
+        <mat-select [compareWith]="compareObjects" placeholder="Кафедра: " [formControlName]="'department'"
+                    [required]="showDepartmentField()">
+          <mat-option *ngFor="let department of departments" [value]="department">
+            {{getDeaneryOrDepartmentName(department)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions class="controls">

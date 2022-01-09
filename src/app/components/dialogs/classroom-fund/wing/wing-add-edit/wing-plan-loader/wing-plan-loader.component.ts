@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  Type,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -15,8 +14,12 @@ import {ResizeableClassroomComponent} from './resizeable-classroom/resizeable-cl
 import {MatDialog} from '@angular/material/dialog';
 import {Subject, Subscription} from 'rxjs';
 import {ClassroomAddEditComponent} from './classroom-add-edit/classroom-add-edit.component';
-import {Classroom} from '../../../../../../model/dispatcher/classroom';
+import {AssignmentType, Classroom} from '../../../../../../model/dispatcher/classroom';
 import {DomSanitizer} from '@angular/platform-browser';
+import {DeaneryService} from '../../../../../../services/deanery.service';
+import {DepartmentService} from '../../../../../../services/department.service';
+import {NotifierService} from 'angular-notifier';
+import {ResourceLocalizerService} from '../../../../../../services/shared/resource-localizer.service';
 
 @Component({
   selector: 'app-wing-plan-loader',
@@ -28,6 +31,7 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
   resizeableClassroom = ResizeableClassroomComponent;
   @Input() classrooms: Classroom[];
+  @Input() readOnlyMode: boolean;
   components = [];
 
   @Output() planImageChange = new EventEmitter();
@@ -48,12 +52,35 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
   classroomCreationSub: Subscription;
   classroomEditSub: Subscription;
 
+  deaneryServiceSub: Subscription;
+  departmentServiceSub: Subscription;
+
+  deaneries = [];
+  departments = [];
+
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private sanitizer: DomSanitizer,
+              private deaneryService: DeaneryService,
+              private departmentService: DepartmentService,
+              private notifierService: NotifierService,
+              public resourceLocalizerService: ResourceLocalizerService,
               private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+
+    this.deaneryServiceSub = this.deaneryService.getDeaneries().subscribe(deaneries => {
+      this.deaneries = deaneries;
+    }, () => {
+      this.notifierService.notify('error', 'Не удалось загрузить деканаты.');
+    });
+
+    this.departmentServiceSub = this.departmentService.getDepartments().subscribe(departments => {
+      this.departments = departments;
+    }, () => {
+      this.notifierService.notify('error', 'Не удалось загрузить кафедры.');
+    });
+
     this.backgroundImageUrl = null;
     this.defaultImage = 'data:image/jpeg;base64,' + this.defaultImage;
     if (this.defaultImage && this.defaultImage !== '') {
@@ -121,72 +148,49 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   initClassrooms(): void {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.resizeableClassroom);
-    for (const cr of this.classrooms) {
-      const component = this.container.createComponent(componentFactory);
-      component.instance.cHeight = this.imageHeight;
-      component.instance.cWidth = this.imageWidth;
-      component.instance.classroom = cr;
-      component.instance.id = this.idGenerator++;
-      component.instance.triggerComponentSelected = new Subject<boolean>();
-      component.instance.triggerComponentSelected.subscribe(value => {
-        component.instance.isSelected = value;
-      });
-      component.instance.selectedComponentIdEmitter.subscribe(selectedComp => {
-          this.selectedComponentId = selectedComp;
-          const foundComponent = this.components.find((c) => c.instance instanceof this.resizeableClassroom
-            && c.instance.id === selectedComp);
-          this.selectedClassroom = foundComponent.instance.classroom;
-          for (const c of this.components) {
-            if (c.instance.id === selectedComp) {
-              c.instance.triggerComponentSelected.next(true);
-            } else {
-              c.instance.triggerComponentSelected.next(false);
-            }
-          }
-        }
-      );
+    for (const classroom of this.classrooms) {
+      const component = this.generateComponent(classroom);
       this.components.push(component);
     }
   }
 
-  addClassroom(): void {
-    // Create component dynamically inside the ng-template
+  generateComponent(classroom: Classroom): any {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.resizeableClassroom);
+    const component = this.container.createComponent(componentFactory);
+    component.instance.cHeight = this.imageHeight;
+    component.instance.cWidth = this.imageWidth;
+    component.instance.classroom = classroom;
+    component.instance.id = this.idGenerator++;
+    component.instance.triggerComponentSelected = new Subject<boolean>();
+    component.instance.triggerComponentSelected.subscribe(value => {
+      component.instance.isSelected = value;
+    });
+    component.instance.selectedComponentIdEmitter.subscribe(selectedComp => {
+        this.selectedComponentId = selectedComp;
+        const foundComponent = this.components.find((c) => c.instance instanceof this.resizeableClassroom
+          && c.instance.id === selectedComp);
+        this.selectedClassroom = foundComponent.instance.classroom;
+        for (const c of this.components) {
+          if (c.instance.id === selectedComp) {
+            c.instance.triggerComponentSelected.next(true);
+          } else {
+            c.instance.triggerComponentSelected.next(false);
+          }
+        }
+      }
+    );
+    return component;
+  }
 
-
+  addClassroom(): void {
     const dialogRef = this.dialog.open(ClassroomAddEditComponent, {
-      data: {title: 'Добавить аудиторию'}
+      data: {title: 'Добавить аудиторию', deaneries: this.deaneries, departments: this.departments}
     });
 
     this.classroomCreationSub = dialogRef.afterClosed().subscribe((classroom: Classroom) => {
       if (classroom !== undefined && classroom !== null) {
-        const component = this.container.createComponent(componentFactory);
-        component.instance.cHeight = this.imageHeight;
-        component.instance.cWidth = this.imageWidth;
-        component.instance.classroom = classroom;
-        component.instance.id = this.idGenerator++;
-        component.instance.triggerComponentSelected = new Subject<boolean>();
-        component.instance.triggerComponentSelected.subscribe(value => {
-          component.instance.isSelected = value;
-          console.log('Triggered ' + value);
-        });
-        component.instance.selectedComponentIdEmitter.subscribe(selectedComp => {
-            this.selectedComponentId = selectedComp;
-            const foundComponent = this.components.find((c) => c.instance instanceof this.resizeableClassroom
-              && c.instance.id === selectedComp);
-            this.selectedClassroom = foundComponent.instance.classroom;
-            for (const c of this.components) {
-              if (c.instance.id === selectedComp) {
-                c.instance.triggerComponentSelected.next(true);
-              } else {
-                c.instance.triggerComponentSelected.next(false);
-              }
-            }
-          }
-        );
+        const component = this.generateComponent(classroom);
         this.classrooms.push(classroom);
-        // Push the component so that we can keep track of which components are created
         this.components.push(component);
       }
     });
@@ -214,7 +218,10 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
 
   editClassroom(): void {
     const dialogRef = this.dialog.open(ClassroomAddEditComponent, {
-      data: {title: 'Редактировать аудиторию', classroom: this.selectedClassroom}
+      data: {
+        title: 'Редактировать аудиторию', classroom: this.selectedClassroom,
+        deaneries: this.deaneries, departments: this.departments
+      }
     });
 
     this.classroomEditSub = dialogRef.afterClosed().subscribe((classroom: Classroom) => {
@@ -225,6 +232,7 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+
   ngOnDestroy(): void {
     if (this.classroomCreationSub !== undefined) {
       this.classroomCreationSub.unsubscribe();
@@ -234,5 +242,17 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+
+  isDepartmentAssigmentType(): boolean {
+    return this.selectedClassroom.assignmentType === AssignmentType.DEPARTMENT;
+  }
+
+  isDeaneryAssigmentType(): boolean {
+    return this.selectedClassroom.assignmentType === AssignmentType.DEANERY;
+  }
+
+  isOtherAssigmentType(): boolean {
+    return this.selectedClassroom.assignmentType === AssignmentType.OTHER;
+  }
 
 }

@@ -9,6 +9,7 @@ import {Permission} from '../../../../model/permission';
 import {map, startWith} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {ResourceLocalizerService} from '../../../../services/shared/resource-localizer.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
 
   constructor(private roleService: RoleService,
+              public resourceLocalizerService: ResourceLocalizerService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<RoleAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -202,16 +204,5 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     if (this.roleServiceSubscription) {
       this.roleServiceSubscription.unsubscribe();
     }
-  }
-
-  localizeRoleCategory(roleCategory: RoleCategory): string {
-    if (roleCategory === RoleCategory.ADMIN) {
-      return 'Администратор';
-    } else if (roleCategory === RoleCategory.DEANERY) {
-      return 'Деканат';
-    } else if (roleCategory === RoleCategory.DEPARTMENT) {
-      return 'Кафедра';
-    }
-    return 'Диспетчер';
   }
 }

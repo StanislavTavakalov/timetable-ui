@@ -1,0 +1,70 @@
+<h2> Аудитории </h2>
+
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по аудиторияи...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #classroomTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Номер</th>
+      <td mat-cell *matCellDef="let row"> {{row?.number}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="capacity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Вместимость </th>
+      <td mat-cell *matCellDef="let row"> {{row?.capacity}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="classroomType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Тип аудитории</th>
+      <td mat-cell *matCellDef="let row"> {{row.classroomType.name}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="classroomStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Статус аудитории</th>
+      <td mat-cell *matCellDef="let row"> {{resourceLocalizerService.localizeClassroomStatus(row.classroomStatus)}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="classroomSpecialization">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Специализация аудитории</th>
+      <td mat-cell *matCellDef="let row"> {{row.classroomSpecialization.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignmentType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Принадлежность</th>
+      <td mat-cell *matCellDef="let row"> {{resourceLocalizerService.localizeAssignmentType(row?.assignmentType)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="deanery">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Деканат</th>
+      <td mat-cell *matCellDef="let row"> {{showName(row?.deanery?.shortName)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Кафедра</th>
+      <td mat-cell *matCellDef="let row"> {{showName(row?.department?.shortName)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+      <td style="text-align: end; width: 3%" mat-cell class="icons" *matCellDef="let row">
+        <button mat-icon-button class="material-icons" (click)="showWing(row)"
+                matTooltip="Подробнее">
+          <mat-icon> info</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+

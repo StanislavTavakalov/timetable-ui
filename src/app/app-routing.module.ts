@@ -8,6 +8,7 @@ import {DepartmentsComponent} from './components/departments/departments.compone
 import {DeaneriesComponent} from './components/deaneries/deaneries.component';
 import {ClassroomFundComponent} from './components/classroom-fund/classroom-fund.component';
 import {BuildingComponent} from './components/classroom-fund/building/building.component';
+import {ClassroomTypeColorPaletteComponent} from './components/classroom-fund/classroom-type-color-palette/classroom-type-color-palette.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'departments', component: DepartmentsComponent},
   {path: 'deaneries', component: DeaneriesComponent},
   {path: 'classroom-fund', component: ClassroomFundComponent},
+  {path: 'classroom-type-palette', component: ClassroomTypeColorPaletteComponent},
   {path: 'classroom-fund/building/:id', component: BuildingComponent},
   {path: '**', redirectTo: 'main-page', pathMatch: 'full'},
 ];

@@ -32,4 +32,9 @@ export class WingService extends BasicHttpService{
     return this.http.delete<any>(`${this.fullEndpoint}/${wingId}`)
       .pipe(catchError(this.handleError));
   }
+
+  public getWingByClassroomId(classroomId: string): Observable<Wing> {
+    return this.http.get<Wing[]>(`${this.fullEndpoint}/classroom/${classroomId}`)
+      .pipe(catchError(this.handleError));
+  }
 }

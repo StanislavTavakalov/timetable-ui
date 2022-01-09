@@ -13,7 +13,7 @@
       <mat-select [compareWith]="compareObjects" placeholder="Категория роли: " [formControlName]="'roleCategory'"
                   required>
         <mat-option *ngFor="let roleCategory of roleCategories" [value]="roleCategory">
-          {{this.localizeRoleCategory(roleCategory)}}
+          {{resourceLocalizerService.localizeRoleCategory(roleCategory)}}
         </mat-option>
       </mat-select>
     </mat-form-field>

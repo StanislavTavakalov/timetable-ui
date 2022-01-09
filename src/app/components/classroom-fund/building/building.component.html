@@ -23,9 +23,13 @@
                 Этаж {{floor.number}}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <p style="margin-left: 2%" *ngFor="let wing of floor.wings">
+            <div style="margin-left: 2%" *ngFor="let wing of floor.wings">
               {{wing.name}}
-            </p>
+              <button mat-icon-button class="material-icons"
+                      matTooltip="Просмотр крыла" (click)="showWing(floor.id, wing)" style="margin-left: 1%">
+                <mat-icon> info </mat-icon>
+              </button>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
@@ -84,7 +88,7 @@
               {{wing.name}}
             </div>
             <button mat-icon-button class="material-icons"
-                    matTooltip="Редактировать крыло" (click)="editWing(wing, floor)" style="margin-left: 2%">
+                    matTooltip="Редактировать крыло" (click)="editWing(wing, floor)" style="margin-left: 1%">
               <mat-icon> edit</mat-icon>
             </button>
             <button mat-icon-button class="material-icons"

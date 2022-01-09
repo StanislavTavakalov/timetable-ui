@@ -18,17 +18,14 @@
   </ng-template>
 
 
-  <h2 style="padding-top: 1%"> Аудитории </h2>
-  <mat-divider></mat-divider>
 
   <mat-spinner *ngIf="isLoadingBuildings;else classroomsContent" diameter="150" mode="indeterminate" color="primary"
                class="spinner">
   </mat-spinner>
 
   <ng-template #classroomsContent>
-    <div style="display: flex">
-
-
+    <div style="display: flex; padding-top: 2%" >
+      <app-classrooms> </app-classrooms>
     </div>
   </ng-template>
 

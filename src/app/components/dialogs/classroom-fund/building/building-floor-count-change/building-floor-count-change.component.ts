@@ -15,12 +15,12 @@ export class BuildingFloorCountChangeComponent implements OnInit {
   }
 
   currentFloorsNumber: number;
-  safeFloorDeleteTreshold: number;
+  safeFloorDeleteThreshold: number;
   floorsForm: FormGroup;
 
   ngOnInit(): void {
     this.currentFloorsNumber = this.data.currentFloorsNumber;
-    this.safeFloorDeleteTreshold = this.data.safeFloorDeleteTreshold;
+    this.safeFloorDeleteThreshold = this.data.safeFloorDeleteThreshold;
     this.initializeForm();
   }
 
@@ -39,13 +39,13 @@ export class BuildingFloorCountChangeComponent implements OnInit {
   }
 
   onConfirmClick(): void {
-    if (this.newFloorsCount.value >= this.safeFloorDeleteTreshold) {
+    if (this.newFloorsCount.value >= this.safeFloorDeleteThreshold) {
       this.dialogRef.close({isCompleted: true, object: this.newFloorsCount.value, errorMessage: null});
     } else {
       this.dialogRef.close({
         isCompleted: true, object: null,
         errorMessage: 'Невозможно изменить количество этажей на ' + this.newFloorsCount.value
-          + ', так как на этаже ' + this.safeFloorDeleteTreshold + ' уже созданы крылья'
+          + ', так как на этаже ' + this.safeFloorDeleteThreshold + ' уже созданы крылья'
       });
     }
   }

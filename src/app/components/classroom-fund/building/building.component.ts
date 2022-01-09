@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BuildingService} from '../../../services/dispatcher/building.service';
 import {NotifierService} from 'angular-notifier';
@@ -135,6 +135,10 @@ export class BuildingComponent implements OnInit, OnDestroy {
         classroomCopy.width = classroom.width;
         classroomCopy.height = classroom.height;
         classroomCopy.capacity = classroom.capacity;
+        classroomCopy.assignmentType = classroom.assignmentType;
+        classroomCopy.classroomStatus = classroom.classroomStatus;
+        classroomCopy.deanery = classroom.deanery;
+        classroomCopy.department = classroom.department;
         classroomsCopy.push(classroomCopy);
       }
     }
@@ -180,7 +184,7 @@ export class BuildingComponent implements OnInit, OnDestroy {
   }
 
   changeFloorNumber(): void {
-    function findTreshhold(floors: Floor[]): number {
+    function findThreshold(floors: Floor[]): number {
       let value = 0;
       for (const floor of floors) {
         if (floor.wings.length > 0) {
@@ -193,7 +197,7 @@ export class BuildingComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(BuildingFloorCountChangeComponent, {
       data: {
         currentFloorsNumber: this.copyBuilding.floors.length,
-        safeFloorDeleteTreshold: findTreshhold(this.copyBuilding.floors)
+        safeFloorDeleteThreshold: findThreshold(this.copyBuilding.floors)
       },
       disableClose: true
     });
@@ -286,4 +290,9 @@ export class BuildingComponent implements OnInit, OnDestroy {
     });
   }
 
+  showWing(floorId: string, wing: Wing): void {
+    const dialogRef = this.dialog.open(WingAddEditComponent, {
+      data: {title: 'Просмотр крыла', floorId, wing, readOnlyMode: true}
+    });
+  }
 }

@@ -42,4 +42,10 @@ export class ClassroomService extends BasicHttpService{
     return this.http.delete<any>(`${this.fullEndpoint}/${classroomId}`)
       .pipe(catchError(this.handleError));
   }
+
+  public updateClassroomType(classroomType: ClassroomType): Observable<ClassroomType> {
+    return this.http.put<ClassroomType>(`${this.fullEndpoint}/classroom-type`, classroomType)
+      .pipe(catchError(this.handleError));
+  }
+
 }

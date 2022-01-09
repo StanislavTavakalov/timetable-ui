@@ -2,9 +2,15 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {Classroom, ClassroomSpecialization, ClassroomType} from '../../../../../../../model/dispatcher/classroom';
+import {
+  AssignmentType,
+  Classroom,
+  ClassroomSpecialization,
+  ClassroomStatus,
+  ClassroomType
+} from '../../../../../../../model/dispatcher/classroom';
 import {ClassroomService} from '../../../../../../../services/dispatcher/classroom.service';
-import {error} from 'protractor';
+import {ResourceLocalizerService} from '../../../../../../../services/shared/resource-localizer.service';
 
 @Component({
   selector: 'app-classroom-add-edit',
@@ -15,6 +21,7 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ClassroomAddEditComponent>,
+              public resourceLocalizerService: ResourceLocalizerService,
               private classroomService: ClassroomService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -27,8 +34,10 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   editMode: boolean;
   classroomTypes: ClassroomType[] = undefined;
   classroomSpecializations: ClassroomSpecialization[] = undefined;
-
-
+  classroomStatuses = [];
+  assignmentTypes = [];
+  deaneries = [];
+  departments = [];
 
   ngOnInit(): void {
     this.title = this.data.title;
@@ -43,6 +52,11 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
       }, () => this.loading = false);
     }, () => this.loading = false);
 
+    this.fillClassroomStatuses();
+    this.fillAssignmentTypes();
+    this.deaneries = this.data.deaneries;
+    this.departments = this.data.departments;
+
     if (this.classroom != null) {
       this.editMode = true;
       this.initializeForm(this.classroom);
@@ -52,12 +66,29 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  private fillAssignmentTypes(): void {
+    this.assignmentTypes.push(AssignmentType.DEANERY);
+    this.assignmentTypes.push(AssignmentType.DEPARTMENT);
+    this.assignmentTypes.push(AssignmentType.OTHER);
+  }
+
+
+  private fillClassroomStatuses(): void {
+    this.classroomStatuses.push(ClassroomStatus.WORKING);
+    this.classroomStatuses.push(ClassroomStatus.NOT_WORKING);
+    this.classroomStatuses.push(ClassroomStatus.IN_REPAIR);
+  }
+
   private initializeForm(classroom: Classroom): void {
     this.classroomForm = this.fb.group({
       number: [classroom.number, [Validators.required, Validators.maxLength(1000)]],
       classroomType: [classroom.classroomType, [Validators.required, Validators.maxLength(1000)]],
       classroomSpecialization: [classroom.classroomSpecialization],
-      capacity: [classroom.capacity]
+      capacity: [classroom.capacity],
+      classroomStatus: [classroom.classroomStatus],
+      department: [classroom.department],
+      deanery: [classroom.deanery],
+      assignmentType: [classroom.assignmentType]
     });
   }
 
@@ -77,6 +108,22 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
     return this.classroomForm.get('capacity') as FormControl;
   }
 
+  get classroomStatus(): FormControl {
+    return this.classroomForm.get('classroomStatus') as FormControl;
+  }
+
+  get department(): FormControl {
+    return this.classroomForm.get('department') as FormControl;
+  }
+
+  get deanery(): FormControl {
+    return this.classroomForm.get('deanery') as FormControl;
+  }
+
+  get assignmentType(): FormControl {
+    return this.classroomForm.get('assignmentType') as FormControl;
+  }
+
   onCancelClick(): void {
     this.dialogRef.close(null);
   }
@@ -91,30 +138,18 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
     this.dialogRef.close(classroom);
   }
 
-  // private editDeanery(): void {
-  //   const deaneryToSave = this.createDeaneryCopy(this.classroom);
-  //   this.setValuesFromForm(deaneryToSave);
-  //   this.loading = true;
-  //   this.serviceSubscription = this.classroomService.updateDeanery(deaneryToSave).subscribe(result => {
-  //       this.loading = false;
-  //       this.setValuesFromForm(this.classroom);
-  //       this.dialogRef.close({isCompleted: true, object: result, errorMessage: null});
-  //     }, error => {
-  //       this.loading = false;
-  //       this.dialogRef.close({
-  //         isCompleted: true,
-  //         object: null,
-  //         errorMessage: error
-  //       });
-  //     }
-  //   );
-  // }
-
   private setValuesFromForm(classroom: Classroom, setDefaultSizeAndPosition: boolean): void {
     classroom.number = this.classroomForm.controls.number.value;
     classroom.capacity = this.classroomForm.controls.capacity.value;
     classroom.classroomType = this.classroomForm.controls.classroomType.value;
     classroom.classroomSpecialization = this.classroomForm.controls.classroomSpecialization.value;
+    classroom.classroomStatus = this.classroomForm.controls.classroomStatus.value;
+    classroom.assignmentType = this.classroomForm.controls.assignmentType.value;
+    if (classroom.assignmentType === AssignmentType.DEANERY) {
+      classroom.deanery = this.classroomForm.controls.deanery.value;
+    } else if (classroom.assignmentType === AssignmentType.DEPARTMENT) {
+      classroom.department = this.classroomForm.controls.department.value;
+    }
 
     // default sizes for classroom element
     if (setDefaultSizeAndPosition) {
@@ -124,12 +159,6 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
       classroom.y = 100;
     }
   }
-
-  // private createDeaneryCopy(deanery: Deanery): Deanery {
-  //   const deaneryCopy = new Deanery();
-  //   deaneryCopy.id = deanery.id;
-  //   return deaneryCopy;
-  // }
 
   compareObjectsByName(o1: any, o2: any): boolean {
     if (!o2) {
@@ -147,5 +176,24 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
   private editClassroom(): void {
     this.setValuesFromForm(this.classroom, false);
     this.dialogRef.close();
+  }
+
+  showDeaneryField(): boolean {
+    return this.classroomForm.controls.assignmentType.value === AssignmentType.DEANERY;
+  }
+
+  showDepartmentField(): boolean {
+    return this.classroomForm.controls.assignmentType.value === AssignmentType.DEPARTMENT;
+  }
+
+  compareObjects(o1: any, o2: any): boolean {
+    if (!o2) {
+      return false;
+    }
+    return o1.id === o2.id;
+  }
+
+  getDeaneryOrDepartmentName(object: any): string {
+    return object.shortName;
   }
 }

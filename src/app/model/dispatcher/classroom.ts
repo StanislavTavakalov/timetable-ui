@@ -1,3 +1,6 @@
+import {Department} from '../department';
+import {Deanery} from '../deanery';
+
 export class ClassroomType {
   id: string;
   name: string;
@@ -7,6 +10,18 @@ export class ClassroomType {
 export class ClassroomSpecialization {
   id: string;
   name: string;
+}
+
+export enum AssignmentType {
+  DEANERY = 'DEANERY',
+  DEPARTMENT = 'DEPARTMENT',
+  OTHER = 'OTHER'
+}
+
+export enum ClassroomStatus {
+  WORKING = 'WORKING',
+  NOT_WORKING = 'NOT_WORKING',
+  IN_REPAIR = 'IN_REPAIR'
 }
 
 export class Classroom {
@@ -20,4 +35,8 @@ export class Classroom {
   y: number;
   width: number;
   height: number;
+  classroomStatus: ClassroomStatus;
+  assignmentType: AssignmentType;
+  department: Department;
+  deanery: Deanery;
 }

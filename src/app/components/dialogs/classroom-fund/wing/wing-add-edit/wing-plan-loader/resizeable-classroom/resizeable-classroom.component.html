@@ -1,4 +1,5 @@
-<div #box class="resizable-draggable {{classroom.classroomType.color}}"
+<div #box class="resizable-draggable"
+     [ngStyle]="{'background-color': classroom.classroomType.color}"
      [style.width.px]="classroom.width"
      [style.height.px]="classroom.height"
      [style.transform]="'translate3d('+ classroom.x + 'px,' + classroom.y + 'px,' + '0px)'"

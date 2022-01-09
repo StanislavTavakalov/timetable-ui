@@ -1,22 +1,37 @@
 <h1 mat-dialog-title>{{title}}</h1>
-<mat-dialog-content>
-  <form [formGroup]="wingForm" class="column">
-    <mat-form-field>
-      <input matInput placeholder="Название:" [formControlName]="'name'" required>
-      <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
-    </mat-form-field>
-    <app-wing-plan-loader (planImageChange)='getImageAsString($event)' [defaultImage]="wing?.planImage"
-                          [classrooms]="classrooms"
-                          [imageHeight]="650" [imageWidth]="800"
-                          [onErrorImage]="'assets/bntu.png'" ></app-wing-plan-loader>
-  </form>
-</mat-dialog-content>
+<div *ngIf="!readOnlyMode; else showReadOnlyWing">
+  <mat-dialog-content>
+    <form [formGroup]="wingForm" class="column">
+      <mat-form-field>
+        <input matInput placeholder="Название:" [formControlName]="'name'" required>
+        <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+      </mat-form-field>
+      <app-wing-plan-loader (planImageChange)='getImageAsString($event)' [defaultImage]="wing?.planImage"
+                            [classrooms]="classrooms"
+                            [imageHeight]="650" [imageWidth]="800"
+                            [readOnlyMode]="readOnlyMode"
+                            [onErrorImage]="'assets/bntu.png'"></app-wing-plan-loader>
+    </form>
+  </mat-dialog-content>
 
-<mat-dialog-actions class="controls">
-  <mat-spinner *ngIf="loading" diameter="40" color="primary">
-  </mat-spinner>
-  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="wingForm.invalid">
-    Подтвердить
-  </button>
-  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
-</mat-dialog-actions>
+  <mat-dialog-actions class="controls">
+    <mat-spinner *ngIf="loading" diameter="40" color="primary">
+    </mat-spinner>
+    <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="wingForm.invalid">
+      Подтвердить
+    </button>
+    <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+  </mat-dialog-actions>
+</div>
+
+
+<ng-template #showReadOnlyWing>
+
+  Имя крыла: {{wing.name}}
+  <app-wing-plan-loader (planImageChange)='getImageAsString($event)' [defaultImage]="wing?.planImage"
+                        [classrooms]="classrooms"
+                        [imageHeight]="650" [imageWidth]="800"
+                        [readOnlyMode]="readOnlyMode"
+                        [onErrorImage]="'assets/bntu.png'"></app-wing-plan-loader>
+
+</ng-template>

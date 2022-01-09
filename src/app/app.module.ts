@@ -30,6 +30,11 @@ import { DeaneriesTableComponent } from './components/deaneries/deaneries-table/
 import { ClassroomFundComponent } from './components/classroom-fund/classroom-fund.component';
 import { BuildingComponent } from './components/classroom-fund/building/building.component';
 import { WingComponent } from './components/classroom-fund/building/wing/wing.component';
+import { ClassroomTypeColorPaletteComponent } from './components/classroom-fund/classroom-type-color-palette/classroom-type-color-palette.component';
+import { ClassroomTypeColorPaletteTableComponent } from './components/classroom-fund/classroom-type-color-palette/classroom-type-color-palette-table/classroom-type-color-palette-table.component';
+import {ColorPickerModule} from 'ngx-color-picker';
+import { ClassroomsComponent } from './components/classroom-fund/classrooms/classrooms.component';
+import { ClassroomsTableComponent } from './components/classroom-fund/classrooms/classrooms-table/classrooms-table.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +55,11 @@ import { WingComponent } from './components/classroom-fund/building/wing/wing.co
     DeaneriesTableComponent,
     ClassroomFundComponent,
     BuildingComponent,
-    WingComponent
+    WingComponent,
+    ClassroomTypeColorPaletteComponent,
+    ClassroomTypeColorPaletteTableComponent,
+    ClassroomsComponent,
+    ClassroomsTableComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +73,8 @@ import { WingComponent } from './components/classroom-fund/building/wing/wing.co
     NotifierModule.withConfig(customNotifierOptions),
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    ColorPickerModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

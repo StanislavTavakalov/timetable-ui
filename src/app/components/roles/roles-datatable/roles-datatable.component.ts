@@ -13,6 +13,7 @@ import {OperationResult} from '../../../model/operation-result';
 import {RoleDeleteComponent} from '../../dialogs/roles/role-delete/role-delete.component';
 import {RoleAddEditComponent} from '../../dialogs/roles/role-add-edit/role-add-edit.component';
 import {RoleCategory} from '../../../model/role-category';
+import {ResourceLocalizerService} from '../../../services/shared/resource-localizer.service';
 
 @Component({
   selector: 'app-roles-datatable',
@@ -24,6 +25,7 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
               private userService: UserService,
+              public resourceLocalizerService: ResourceLocalizerService,
               private roleService: RoleService) {
 
   }
@@ -156,15 +158,4 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  localizeRoleCategory(roleCategory: RoleCategory): string {
-    if (roleCategory === RoleCategory.ADMIN) {
-      return 'Администратор';
-    } else if (roleCategory === RoleCategory.DEANERY) {
-      return 'Деканат';
-    } else if (roleCategory === RoleCategory.DEPARTMENT) {
-      return 'Кафедра';
-    }
-    return 'Диспетчер';
-  }
 }

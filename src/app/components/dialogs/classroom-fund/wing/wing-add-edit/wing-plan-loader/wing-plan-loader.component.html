@@ -18,21 +18,29 @@
         <h2 style="font-size: 16px"> Вместимость: {{selectedClassroom.capacity}} чел.</h2>
         <h2 style="font-size: 16px"> Тип: {{selectedClassroom.classroomType.name}}</h2>
         <h2 style="font-size: 16px"> Специализация: {{selectedClassroom.classroomSpecialization.name}}</h2>
-        <button mat-raised-button (click)="editClassroom()" style="margin-right: 2%">
-          Редактировать
-        </button>
-        <button mat-raised-button (click)="removeClassroom()">
-          Удалить
-        </button>
+        <h2 style="font-size: 16px"> Статус: {{resourceLocalizerService.localizeClassroomStatus(selectedClassroom.classroomStatus)}}</h2>
+        <h2 style="font-size: 16px" *ngIf="isDepartmentAssigmentType()"> Закреплена за
+          кафедрой: {{selectedClassroom.department?.shortName}}</h2>
+        <h2 style="font-size: 16px" *ngIf="isDeaneryAssigmentType()"> Закреплена за
+          деканатом: {{selectedClassroom.deanery?.shortName}}</h2>
+        <h2 style="font-size: 16px" *ngIf="isOtherAssigmentType()"> Закреплена за администрацией</h2>
+        <div *ngIf="!readOnlyMode">
+          <button mat-raised-button (click)="editClassroom()" style="margin-right: 2%">
+            Редактировать
+          </button>
+          <button mat-raised-button (click)="removeClassroom()">
+            Удалить
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <input type="file" id="selectedFile" (change)="selectFile($event)" style="display: none;">
+  <input type="file" id="selectedFile" (change)="selectFile($event)" style="display: none;" *ngIf="!readOnlyMode">
 
   <!--  <br/>-->
   <!--</mat-card>-->
-  <div style="display: flex; flex-direction: row; margin-top: 2%">
+  <div style="display: flex; flex-direction: row; margin-top: 2%" *ngIf="!readOnlyMode">
     <button mat-raised-button onclick="document.getElementById('selectedFile').click()">Загрузить эвакуационный план
     </button>
     <button mat-raised-button (click)="addClassroom()" style="margin-left: 1%">Добавить аудиторию</button>
