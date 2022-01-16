@@ -8,7 +8,7 @@
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/app/model/role-category.ts"
+    "src/app/model/users/role-category.ts"
   ],
   "include": [
     "src/**/*.d.ts"

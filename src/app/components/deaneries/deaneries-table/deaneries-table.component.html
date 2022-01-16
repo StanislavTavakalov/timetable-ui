@@ -32,6 +32,10 @@
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let deanery">
+        <button mat-icon-button class="material-icons" routerLink="deaneries/{{deanery.id}}/departments"
+                matTooltip="Перейти в деканат" (click)="enterDeanery(deanery)">
+          <mat-icon> open_in_new </mat-icon>
+        </button>
         <button mat-icon-button class="material-icons" (click)="editDeanery(deanery)"
                   matTooltip="Редактировать деканат">
           <mat-icon> edit </mat-icon>

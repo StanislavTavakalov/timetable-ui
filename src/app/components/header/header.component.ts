@@ -2,6 +2,11 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SinginComponent} from '../dialogs/signin/singin.component';
 import {LocalStorageService} from '../../services/local-storage.service';
+import {HeaderType} from '../../model/header-type';
+import {Subscription} from 'rxjs';
+import {Deanery} from '../../model/deanery/deanery';
+import {Department} from '../../model/department/department';
+import {Constants} from '../../constants';
 
 
 @Component({
@@ -15,14 +20,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   currentUser = this.localStorageService.subscribableCurrentUser;
-  links = ['Расписание занятий', 'Расписания преподавателей'];
-  activeLink = this.links[0];
+  currentTabs;
 
-  ngOnDestroy(): void {
-
-  }
+  headerValueSubscription: Subscription;
+  tabType: HeaderType;
+  deanery: Deanery;
+  department: Department;
+  departmentSubscription: Subscription;
+  deanerySubscription: Subscription;
 
   ngOnInit(): void {
+    this.tabType = null;
+    this.currentTabs = Constants.mainTabs;
+
+    this.headerValueSubscription = this.localStorageService.subscribableHeaderType.subscribe(value => {
+      this.tabType = value;
+      if (HeaderType.DEPARTMENT === value) {
+        this.currentTabs = Constants.departmentTabs;
+      } else if (HeaderType.DEANERY === value) {
+        this.currentTabs = Constants.deaneryTabs;
+      } else if (HeaderType.MAIN) {
+        this.currentTabs = Constants.mainTabs;
+      }
+    });
+
+    this.departmentSubscription = this.localStorageService.subscribableDepartment.subscribe(department =>
+      this.department = department);
+
+    this.deanerySubscription = this.localStorageService.subscribableDeanery.subscribe(deanery =>
+      this.deanery = deanery);
   }
 
   openSignInForm(): void {
@@ -39,5 +65,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.currentUser.getValue() != null) {
       this.localStorageService.subscribableIsNavBarOpened.next(!this.localStorageService.subscribableIsNavBarOpened.getValue());
     }
+  }
+
+  ngOnDestroy(): void {
+    this.headerValueSubscription.unsubscribe();
+    this.departmentSubscription.unsubscribe();
+    this.deanerySubscription.unsubscribe();
   }
 }

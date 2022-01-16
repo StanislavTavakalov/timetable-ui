@@ -7,12 +7,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {Permission} from '../../../model/permission';
-import {Role} from '../../../model/role';
+import {Permission} from '../../../model/users/permission';
+import {Role} from '../../../model/users/role';
 import {OperationResult} from '../../../model/operation-result';
 import {RoleDeleteComponent} from '../../dialogs/roles/role-delete/role-delete.component';
 import {RoleAddEditComponent} from '../../dialogs/roles/role-add-edit/role-add-edit.component';
-import {RoleCategory} from '../../../model/role-category';
 import {ResourceLocalizerService} from '../../../services/shared/resource-localizer.service';
 
 @Component({

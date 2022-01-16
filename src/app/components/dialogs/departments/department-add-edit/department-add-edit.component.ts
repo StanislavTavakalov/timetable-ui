@@ -2,8 +2,8 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {Department} from '../../../../model/department';
-import {Deanery} from '../../../../model/deanery';
+import {Department} from '../../../../model/department/department';
+import {Deanery} from '../../../../model/deanery/deanery';
 import {DepartmentService} from '../../../../services/department.service';
 
 @Component({
@@ -26,11 +26,13 @@ export class DepartmentAddEditComponent implements OnInit, OnDestroy {
   departmentServiceSubscription: Subscription;
   editMode: boolean;
   deaneries: Deanery[];
+  deaneryFor: Deanery;
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.department = this.data.department;
     this.deaneries = this.data.deaneries;
+    this.deaneryFor = this.data.deanery;
 
     if (this.department != null) {
       this.editMode = true;
@@ -47,7 +49,7 @@ export class DepartmentAddEditComponent implements OnInit, OnDestroy {
       shortName: [department.shortName, [Validators.required, Validators.maxLength(1000)]],
       code: [department.code, [Validators.required, Validators.maxLength(1000)]],
       description: [department.description],
-      deanery: [department.deanery],
+      deanery: [this.deaneryFor],
     });
   }
 
@@ -122,7 +124,11 @@ export class DepartmentAddEditComponent implements OnInit, OnDestroy {
     department.shortName = this.departmentForm.controls.shortName.value;
     department.code = this.departmentForm.controls.code.value;
     department.description = this.departmentForm.controls.description.value;
-    department.deanery = this.departmentForm.controls.deanery.value;
+    if (this.deaneryFor !== null) {
+      department.deanery = this.deaneryFor;
+    } else {
+      department.deanery = this.departmentForm.controls.deanery.value;
+    }
   }
 
   private createDepartmentCopy(department: Department): Department {

@@ -2,10 +2,10 @@ import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angu
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
-import {Role} from '../../../../model/role';
-import {RoleCategory} from '../../../../model/role-category';
+import {Role} from '../../../../model/users/role';
+import {RoleCategory} from '../../../../model/users/role-category';
 import {RoleService} from '../../../../services/role.service';
-import {Permission} from '../../../../model/permission';
+import {Permission} from '../../../../model/users/permission';
 import {map, startWith} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';

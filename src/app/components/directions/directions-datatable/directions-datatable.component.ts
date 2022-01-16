@@ -5,8 +5,8 @@ import {DirectionService} from '../../../services/direction.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {User} from '../../../model/user';
-import {Direction} from '../../../model/direction.model';
+import {User} from '../../../model/users/user';
+import {Direction} from '../../../model/department/direction.model';
 import {Subscription} from 'rxjs';
 
 @Component({

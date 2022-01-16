@@ -1,5 +1,5 @@
-import {Department} from '../department';
-import {Deanery} from '../deanery';
+import {Department} from '../department/department';
+import {Deanery} from '../deanery/deanery';
 
 export class ClassroomType {
   id: string;

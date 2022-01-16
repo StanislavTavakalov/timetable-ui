@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Role} from '../model/role';
+import {Role} from '../model/users/role';
 import {BasicHttpService} from './basic-http.service';
-import {Permission} from '../model/permission';
+import {Permission} from '../model/users/permission';
 
 @Injectable({
   providedIn: 'root'

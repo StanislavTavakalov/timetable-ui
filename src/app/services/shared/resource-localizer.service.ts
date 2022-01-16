@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AssignmentType, ClassroomStatus} from '../../model/dispatcher/classroom';
-import {RoleCategory} from '../../model/role-category';
+import {RoleCategory} from '../../model/users/role-category';
 
 @Injectable({
   providedIn: 'root'

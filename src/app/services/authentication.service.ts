@@ -3,9 +3,9 @@ import {environment} from '../../environments/environment';
 import {Observable, throwError} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
-import {Credentials} from '../model/credentials';
-import {AuthResponse} from '../model/authResponse';
-import {User} from '../model/user';
+import {Credentials} from '../model/users/credentials';
+import {AuthResponse} from '../model/users/authResponse';
+import {User} from '../model/users/user';
 
 @Injectable({
   providedIn: 'root'

@@ -9,6 +9,8 @@ import {Subscription} from 'rxjs';
 import {WingAddEditComponent} from '../../../dialogs/classroom-fund/wing/wing-add-edit/wing-add-edit.component';
 import {WingService} from '../../../../services/dispatcher/wing.service';
 import {ResourceLocalizerService} from '../../../../services/shared/resource-localizer.service';
+import {LocalStorageService} from '../../../../services/local-storage.service';
+import {Constants} from '../../../../constants';
 
 @Component({
   selector: 'app-classrooms-table',
@@ -19,6 +21,7 @@ export class ClassroomsTableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
+              private localStorageService: LocalStorageService,
               public resourceLocalizerService: ResourceLocalizerService,
               private wingService: WingService) {
 
@@ -31,8 +34,7 @@ export class ClassroomsTableComponent implements OnInit, OnDestroy {
 
   @Input() classrooms: Classroom[];
 
-  displayedColumns: string[] = ['number', 'capacity', 'classroomType', 'classroomSpecialization', 'classroomStatus',
-    'assignmentType', 'deanery', 'department', 'icons'];
+  displayedColumns: string[] = Constants.classroomColumnsGeneral;
   dataSource: MatTableDataSource<Classroom>;
   editClassroomTypeSubscription: Subscription;
 
@@ -40,6 +42,11 @@ export class ClassroomsTableComponent implements OnInit, OnDestroy {
     this.dataSource = new MatTableDataSource(this.classrooms);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    if (this.localStorageService.subscribableDeanery.getValue() !== null ||
+      this.localStorageService.subscribableDepartment.getValue() !== null){
+      this.displayedColumns = Constants.classroomColumnsDeaneryOrDepartment;
+    }
   }
 
 

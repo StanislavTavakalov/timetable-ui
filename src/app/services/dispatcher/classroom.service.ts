@@ -1,21 +1,39 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {BasicHttpService} from '../basic-http.service';
 import {environment} from '../../../environments/environment';
 import {Classroom, ClassroomSpecialization, ClassroomType} from '../../model/dispatcher/classroom';
+import {Department} from '../../model/department/department';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClassroomService extends BasicHttpService{
+export class ClassroomService extends BasicHttpService {
 
   private classroomApiUrl = 'api/v1/classrooms';
   private fullEndpoint = environment.domain + this.classroomApiUrl;
 
-  public getClassrooms(): Observable<Classroom[]> {
-    return this.http.get<Classroom[]>(`${this.fullEndpoint}`)
+  public getClassrooms(deaneryId: string, departmentId: string): Observable<Classroom[]> {
+    const params = this.fillParams(deaneryId, departmentId);
+    return this.http.get<Classroom[]>(`${this.fullEndpoint}`, {params})
       .pipe(catchError(this.handleError));
+  }
+
+//   const params = this.fillDeaneryParams(deaneryId);
+//   return this.http.get<Department[]>(this.fullDepartmentEndpoint, {
+//   params
+// }).pipe(catchError(this.handleError));
+// }
+
+  private fillParams(deaneryId: string, departmentId): any {
+    if (deaneryId) {
+      return {deaneryId};
+    } else if (departmentId) {
+      return {departmentId};
+    } else {
+      return {};
+    }
   }
 
   public getClassroomTypes(): Observable<ClassroomType[]> {

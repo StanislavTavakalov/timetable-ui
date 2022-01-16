@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BasicHttpService} from './basic-http.service';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Deanery} from '../model/deanery';
+import {Deanery} from '../model/deanery/deanery';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeaneryService extends BasicHttpService{
+export class DeaneryService extends BasicHttpService {
 
   private deaneryApiUrl = 'api/v1/deaneries';
   private fullDeaneryEndpoint = environment.domain + this.deaneryApiUrl;
@@ -30,6 +30,11 @@ export class DeaneryService extends BasicHttpService{
 
   public deleteDeanery(deaneryId: string): Observable<any> {
     return this.http.delete<any>(`${this.fullDeaneryEndpoint}/${deaneryId}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  public getDeanery(deaneryId: string): Observable<Deanery> {
+    return this.http.get<any>(`${this.fullDeaneryEndpoint}/${deaneryId}`)
       .pipe(catchError(this.handleError));
   }
 }

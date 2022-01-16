@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Role} from '../model/role';
-import {RoleCategory} from '../model/role-category';
+import {Role} from '../model/users/role';
+import {RoleCategory} from '../model/users/role-category';
 
 @Injectable({
   providedIn: 'root'

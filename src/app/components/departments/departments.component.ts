@@ -3,7 +3,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
 import {DepartmentService} from '../../services/department.service';
-import {Department} from '../../model/department';
+import {Department} from '../../model/department/department';
+import {HeaderType} from '../../model/header-type';
+import {LocalStorageService} from '../../services/local-storage.service';
+import {ActivatedRoute} from '@angular/router';
+import {UtilityService} from '../../services/utility.service';
 
 @Component({
   selector: 'app-departments',
@@ -14,6 +18,9 @@ export class DepartmentsComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
+              private activatedRoute: ActivatedRoute,
+              private localStorageService: LocalStorageService,
+              private utilityService: UtilityService,
               private departmentService: DepartmentService) {
 
   }
@@ -23,10 +30,34 @@ export class DepartmentsComponent implements OnInit, OnDestroy {
   departmentTableVisible = false;
   isDepartmentsLoading = false;
 
+
   ngOnInit(): void {
     this.isDepartmentsLoading = true;
+    const deaneryId = this.activatedRoute.snapshot.paramMap.get('id');
+    if (deaneryId) {
+      this.loadDepartmentsByDeanery(deaneryId);
+    } else {
+      this.loadAllDepartments();
+    }
+  }
 
-    this.departmentServiceSubscription = this.departmentService.getDepartments().subscribe(departments => {
+  private loadDepartmentsByDeanery(deaneryId: string): void {
+    this.utilityService.loadDeaneryWithHeaderTabs(deaneryId);
+    this.localStorageService.changeHeaderType(HeaderType.DEANERY);
+    this.departmentServiceSubscription = this.departmentService.getDepartments(deaneryId).subscribe(departments => {
+      this.departments = departments;
+      this.isDepartmentsLoading = false;
+      this.departmentTableVisible = true;
+    }, () => {
+      this.isDepartmentsLoading = false;
+      this.departmentTableVisible = true;
+      this.notifierService.notify('error', 'Не удалось загрузить кафедры.');
+    });
+  }
+
+  private loadAllDepartments(): void {
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
+    this.departmentServiceSubscription = this.departmentService.getDepartments(null).subscribe(departments => {
       this.departments = departments;
       this.isDepartmentsLoading = false;
       this.departmentTableVisible = true;

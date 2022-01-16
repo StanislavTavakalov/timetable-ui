@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {Deanery} from '../../../../model/deanery';
+import {Deanery} from '../../../../model/deanery/deanery';
 import {DeaneryService} from '../../../../services/deanery.service';
 
 @Component({

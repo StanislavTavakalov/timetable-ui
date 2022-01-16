@@ -6,12 +6,16 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {DepartmentService} from '../../../services/department.service';
 import {Subscription} from 'rxjs';
-import {Department} from '../../../model/department';
+import {Department} from '../../../model/department/department';
 import {DepartmentDeleteComponent} from '../../dialogs/departments/department-delete/department-delete.component';
 import {OperationResult} from '../../../model/operation-result';
 import {DeaneryService} from '../../../services/deanery.service';
-import {Deanery} from '../../../model/deanery';
+import {Deanery} from '../../../model/deanery/deanery';
 import {DepartmentAddEditComponent} from '../../dialogs/departments/department-add-edit/department-add-edit.component';
+import {Constants} from '../../../constants';
+import {LocalStorageService} from '../../../services/local-storage.service';
+import {HeaderType} from '../../../model/header-type';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-departments-table',
@@ -23,6 +27,8 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
               private departmentService: DepartmentService,
+              private localStorageService: LocalStorageService,
+              private router: Router,
               private deaneryService: DeaneryService) {
 
   }
@@ -33,8 +39,9 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
   @ViewChild('departmentsTable', {static: false}) departmentsTable: MatTable<Department>;
 
   @Input() departments: Department[];
-  displayedColumns: string[] = ['fullName', 'shortName', 'code', 'deanery', 'description' , 'icons'];
+  displayedColumns: string[] = Constants.departmentsColumnsGeneral;
   dataSource: MatTableDataSource<Department>;
+  deanery: Deanery;
 
   editDepartmentDialogSubscription: Subscription;
   deleteDepartmentDialogSubscription: Subscription;
@@ -44,6 +51,7 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
     this.dataSource = new MatTableDataSource(this.departments);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.deanery = this.localStorageService.subscribableDeanery.value;
   }
 
 
@@ -81,15 +89,23 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
   }
 
   private openDepartmentDialog(isEdit: boolean, department: Department): void {
-    this.deaneryService.getDeaneries().subscribe((deaneries: Deanery[]) => {
+    if (this.deanery) {
       if (isEdit) {
-        this.openEditDepartmentDialog(department, deaneries);
+        this.openEditDepartmentDialog(department, []);
       } else {
-        this.openAddDepartmentDialog(deaneries);
+        this.openAddDepartmentDialog([]);
       }
-    }, (er: any) => {
-      this.notifierService.notify('error', er);
-    });
+    } else {
+      this.deaneryService.getDeaneries().subscribe((deaneries: Deanery[]) => {
+        if (isEdit) {
+          this.openEditDepartmentDialog(department, deaneries);
+        } else {
+          this.openAddDepartmentDialog(deaneries);
+        }
+      }, (er: any) => {
+        this.notifierService.notify('error', er);
+      });
+    }
   }
 
   public addDepartment(): void {
@@ -98,7 +114,7 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
 
   private openAddDepartmentDialog(deaneries: Deanery[]): void {
     const dialogRef = this.dialog.open(DepartmentAddEditComponent, {
-      data: {title: 'Создать кафедру', deaneries}
+      data: {title: 'Создать кафедру', deaneries, deanery: this.deanery}
     });
 
     this.addDepartmentDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
@@ -114,7 +130,7 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
 
   private openEditDepartmentDialog(department: Department, deaneries: Deanery[]): void {
     const dialogRef = this.dialog.open(DepartmentAddEditComponent, {
-      data: {title: 'Редактировать кафедру', department, deaneries}
+      data: {title: 'Редактировать кафедру', department, deaneries, deanery: this.deanery}
     });
 
     this.editDepartmentDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
@@ -126,6 +142,11 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  public enterDepartment(department): void {
+    this.localStorageService.subscribableDepartment.next(department);
+    this.localStorageService.subscribableHeaderType.next(HeaderType.DEPARTMENT);
+    this.router.navigate(['departments/' + department.id + '/specialities']);
+  }
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.departments;

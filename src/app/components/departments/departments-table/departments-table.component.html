@@ -41,6 +41,11 @@
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let department">
+        <button mat-icon-button class="material-icons"
+                matTooltip="Перейти на кафедру" (click)="enterDepartment(department)">
+          <mat-icon> open_in_new </mat-icon>
+        </button>
+
         <button mat-icon-button (click)="editDepartment(department)"
                 matTooltip="Редактировать кафедру">
           <mat-icon> edit</mat-icon>

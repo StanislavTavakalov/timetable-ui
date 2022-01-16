@@ -3,8 +3,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {UserService} from '../../services/user.service';
-import {User} from '../../model/user';
+import {User} from '../../model/users/user';
 import {Subscription} from 'rxjs';
+import {HeaderType} from '../../model/header-type';
 
 @Component({
   selector: 'app-users',
@@ -27,6 +28,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isUserLoading = true;
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
 
     this.userServiceSubscription = this.userService.getUsers().subscribe(users => {
       this.isUserLoading = false;

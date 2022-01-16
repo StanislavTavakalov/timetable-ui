@@ -4,14 +4,47 @@
 
   <mat-icon (click)="openOrCloseNavBar()">menu</mat-icon>
   <span style="padding-left: 1%; padding-right: 4.5%"> БНТУ </span>
-  <nav mat-tab-nav-bar>
-    <a mat-tab-link *ngFor="let link of links"
-       (click)="activeLink = link"
-       [active]="activeLink == link"> {{link}} </a>
+
+  <div style="display: flex; justify-items: center; align-items: center">
+    <div style="margin-left: 2%; margin-right: 2%" *ngIf="tabType === 'DEPARTMENT'">
+      Кафедра: {{(department !== null) ? department.shortName : '' }}</div>
+    <div style="margin-left: 10px; margin-right: 10px" *ngIf="tabType === 'DEANERY'">
+      Деканат: {{(deanery !== null) ? deanery.shortName : '' }}</div>
+  </div>
+
+  <nav mat-tab-nav-bar *ngIf="tabType === 'DEANERY' ">
+    <a mat-tab-link
+       *ngFor="let link of currentTabs"
+       [routerLink]="'/deaneries/' + ((deanery !== null) ? deanery.id : '') + link.path"
+       routerLinkActive #rla="routerLinkActive"
+       [active]="rla.isActive">
+      {{link.label}}
+    </a>
   </nav>
+
+  <nav mat-tab-nav-bar *ngIf="tabType === 'DEPARTMENT'">
+    <a mat-tab-link
+       *ngFor="let link of currentTabs"
+       [routerLink]="'/department/' + ((department !== null) ? department.id : '') + link.path"
+       routerLinkActive #rla="routerLinkActive"
+       [active]="rla.isActive">
+      {{link.label}}
+    </a>
+  </nav>
+
+  <nav mat-tab-nav-bar *ngIf="tabType === 'MAIN'">
+    <a mat-tab-link
+       *ngFor="let link of currentTabs"
+       [routerLink]="link.path"
+       routerLinkActive #rla="routerLinkActive"
+       [active]="rla.isActive">
+      {{link.label}}
+    </a>
+  </nav>
+
   <span class="example-spacer"></span>
 
-  <mat-icon>home</mat-icon>
+  <mat-icon routerLink="">home</mat-icon>
   <mat-icon>account_circle</mat-icon>
 
   <div *ngIf="!currentUser.getValue(); else logout">

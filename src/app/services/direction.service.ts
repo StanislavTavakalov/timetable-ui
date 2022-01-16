@@ -3,7 +3,7 @@ import {BasicHttpService} from './basic-http.service';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {Direction} from '../model/direction.model';
+import {Direction} from '../model/department/direction.model';
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,4 @@
-import {Deanery} from './deanery';
+import {Deanery} from '../deanery/deanery';
 
 export class Department {
   id: string;

@@ -2,8 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
-import {Deanery} from '../../model/deanery';
+import {Deanery} from '../../model/deanery/deanery';
 import {DeaneryService} from '../../services/deanery.service';
+import {LocalStorageService} from '../../services/local-storage.service';
+import {HeaderType} from '../../model/header-type';
 
 @Component({
   selector: 'app-deaneries',
@@ -14,6 +16,7 @@ export class DeaneriesComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
+              private localStorageService: LocalStorageService,
               private deaneryService: DeaneryService) {
 
   }
@@ -25,6 +28,7 @@ export class DeaneriesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isDeaneriesLoading = true;
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
 
     this.deaneryServiceSubscription = this.deaneryService.getDeaneries().subscribe(deaneries => {
       this.deaneries = deaneries;

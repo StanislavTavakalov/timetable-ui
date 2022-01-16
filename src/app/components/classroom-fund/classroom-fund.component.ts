@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ClassroomService} from '../../services/dispatcher/classroom.service';
 import {BuildingService} from '../../services/dispatcher/building.service';
 import {Building} from '../../model/dispatcher/building';
-import {Classroom} from '../../model/dispatcher/classroom';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
 import {BuildingCreateComponent} from '../dialogs/classroom-fund/building/building-create/building-create.component';
@@ -23,7 +22,6 @@ export class ClassroomFundComponent implements OnInit {
   }
 
   buildings: Building[];
-  classrooms: Classroom[];
   isLoadingBuildings: boolean;
   isLoadingClassrooms: boolean;
   buildingCreateSubscription: Subscription;
@@ -39,16 +37,6 @@ export class ClassroomFundComponent implements OnInit {
       error => {
         this.isLoadingBuildings = false;
         this.notifierService.notify('error', 'Не удалось загрузить корпуса.');
-      });
-
-
-    this.classroomService.getClassrooms().subscribe(result => {
-        this.classrooms = result;
-        this.isLoadingClassrooms = false;
-      },
-      error => {
-        this.isLoadingClassrooms = false;
-        this.notifierService.notify('error', 'Не удалось загрузить аудитории.');
       });
   }
 

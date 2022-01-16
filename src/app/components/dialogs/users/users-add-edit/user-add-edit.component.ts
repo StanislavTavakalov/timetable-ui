@@ -2,13 +2,13 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from '../../../../services/user.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {User} from '../../../../model/user';
+import {User} from '../../../../model/users/user';
 import {Subscription} from 'rxjs';
-import {Role} from '../../../../model/role';
+import {Role} from '../../../../model/users/role';
 import {AuthenticationService} from '../../../../services/authentication.service';
-import {Department} from '../../../../model/department';
-import {Deanery} from '../../../../model/deanery';
-import {RoleCategory} from '../../../../model/role-category';
+import {Department} from '../../../../model/department/department';
+import {Deanery} from '../../../../model/deanery/deanery';
+import {RoleCategory} from '../../../../model/users/role-category';
 
 @Component({
   selector: 'app-users-add-edit',

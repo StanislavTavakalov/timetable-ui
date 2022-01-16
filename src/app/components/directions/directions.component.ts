@@ -3,7 +3,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {DirectionService} from '../../services/direction.service';
 import {Subscription} from 'rxjs';
-import {Direction} from '../../model/direction.model';
+import {Direction} from '../../model/department/direction.model';
+import {HeaderType} from '../../model/header-type';
+import {LocalStorageService} from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-directions',
@@ -14,6 +16,7 @@ export class DirectionsComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
+              private localStorageService: LocalStorageService,
               private directionService: DirectionService) {
   }
 
@@ -24,6 +27,7 @@ export class DirectionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isDirectionLoading = true;
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
 
     this.directionServiceSubscription = this.directionService.getDirections().subscribe(directions => {
       this.isDirectionLoading = false;

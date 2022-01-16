@@ -75,7 +75,7 @@ export class WingPlanLoaderComponent implements OnInit, OnDestroy, AfterViewInit
       this.notifierService.notify('error', 'Не удалось загрузить деканаты.');
     });
 
-    this.departmentServiceSub = this.departmentService.getDepartments().subscribe(departments => {
+    this.departmentServiceSub = this.departmentService.getDepartments(null).subscribe(departments => {
       this.departments = departments;
     }, () => {
       this.notifierService.notify('error', 'Не удалось загрузить кафедры.');

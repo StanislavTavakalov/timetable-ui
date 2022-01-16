@@ -3,8 +3,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
 import {RoleService} from '../../services/role.service';
-import {Role} from '../../model/role';
-import {Permission} from '../../model/permission';
+import {Role} from '../../model/users/role';
+import {Permission} from '../../model/users/permission';
+import {LocalStorageService} from '../../services/local-storage.service';
+import {HeaderType} from '../../model/header-type';
 
 @Component({
   selector: 'app-roles',
@@ -15,6 +17,7 @@ export class RolesComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
+              private localStorageService: LocalStorageService,
               private roleService: RoleService) {
 
   }
@@ -27,6 +30,7 @@ export class RolesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isRoleLoading = true;
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
 
     this.roleServiceSubscription = this.roleService.getRoles().subscribe(roles => {
       this.roles = roles;

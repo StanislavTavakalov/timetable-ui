@@ -3,7 +3,7 @@
 
 <ng-template #mainContent>
   <div style="display: flex">
-    <div *ngIf="classroomTableVisible" style="width: 100% ">
+    <div *ngIf="classroomTableVisible" style="width: 100% " [ngClass]="{'table-content' : isDeanery || isDepartment}" >
       <app-classrooms-table [classrooms]="classrooms"></app-classrooms-table>
     </div>
   </div>

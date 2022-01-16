@@ -4,18 +4,18 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {User} from '../../../model/user';
+import {User} from '../../../model/users/user';
 import {Subscription} from 'rxjs';
 import {UsersDeleteComponent} from '../../dialogs/users/users-delete/users-delete.component';
 import {OperationResult} from '../../../model/operation-result';
 import {UserAddEditComponent} from '../../dialogs/users/users-add-edit/user-add-edit.component';
 import {RoleService} from '../../../services/role.service';
-import {Role} from '../../../model/role';
+import {Role} from '../../../model/users/role';
 import {Constants} from '../../../constants';
-import {Status} from '../../../model/status';
+import {Status} from '../../../model/users/status';
 import {UserService} from '../../../services/user.service';
-import {Department} from '../../../model/department';
-import {Deanery} from '../../../model/deanery';
+import {Department} from '../../../model/department/department';
+import {Deanery} from '../../../model/deanery/deanery';
 import {DeaneryService} from '../../../services/deanery.service';
 import {DepartmentService} from '../../../services/department.service';
 
@@ -76,7 +76,7 @@ export class UsersDatatableComponent implements OnInit, OnDestroy {
   private openUserDialog(isEdit: boolean, user: User): void {
     this.roleService.getRoles().subscribe((roleList: Role[]) => {
       this.roleList = roleList;
-      this.departmentService.getDepartments().subscribe
+      this.departmentService.getDepartments(null).subscribe
       ((departmentsList: Department[]) => {
           this.departmentList = departmentsList;
           this.deaneryService.getDeaneries().subscribe((deaneries: Deanery[]) => {

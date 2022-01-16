@@ -5,10 +5,13 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {Deanery} from '../../../model/deanery';
+import {Deanery} from '../../../model/deanery/deanery';
 import {OperationResult} from '../../../model/operation-result';
 import {DeaneryDeleteComponent} from '../../dialogs/deaneries/deanery-delete/deanery-delete.component';
 import {DeaneryAddEditComponent} from '../../dialogs/deaneries/deanery-add-edit/deanery-add-edit.component';
+import {LocalStorageService} from '../../../services/local-storage.service';
+import {HeaderType} from '../../../model/header-type';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-deaneries-table',
@@ -17,6 +20,8 @@ import {DeaneryAddEditComponent} from '../../dialogs/deaneries/deanery-add-edit/
 })
 export class DeaneriesTableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
+              private localStorageService: LocalStorageService,
+              private router: Router,
               private notifierService: NotifierService) {
 
   }
@@ -120,6 +125,12 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
     this.dataSource.data = this.deaneries;
   }
 
+  public enterDeanery(deanery): void {
+    this.localStorageService.subscribableDeanery.next(deanery);
+    this.localStorageService.subscribableHeaderType.next(HeaderType.DEANERY);
+    this.router.navigate(['deaneries/' + deanery.id + '/departments']);
+  }
+
   ngOnDestroy(): void {
     if (this.editDeaneryDialogSubscription) {
       this.editDeaneryDialogSubscription.unsubscribe();
@@ -133,5 +144,7 @@ export class DeaneriesTableComponent implements OnInit, OnDestroy {
       this.addDeaneryDialogSubscription.unsubscribe();
     }
   }
+
+
 
 }
