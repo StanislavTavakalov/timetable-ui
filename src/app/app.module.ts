@@ -35,6 +35,10 @@ import { ClassroomTypeColorPaletteTableComponent } from './components/classroom-
 import {ColorPickerModule} from 'ngx-color-picker';
 import { ClassroomsComponent } from './components/classroom-fund/classrooms/classrooms.component';
 import { ClassroomsTableComponent } from './components/classroom-fund/classrooms/classrooms-table/classrooms-table.component';
+import { GroupsComponent } from './components/groups/groups.component';
+import { GroupsTableComponent } from './components/groups/groups-table/groups-table.component';
+import { SpecialitiesComponent } from './components/specialities/specialities.component';
+import { SpecialitiesTableComponent } from './components/specialities/specialities-table/specialities-table.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +63,11 @@ import { ClassroomsTableComponent } from './components/classroom-fund/classrooms
     ClassroomTypeColorPaletteComponent,
     ClassroomTypeColorPaletteTableComponent,
     ClassroomsComponent,
-    ClassroomsTableComponent
+    ClassroomsTableComponent,
+    GroupsComponent,
+    GroupsTableComponent,
+    SpecialitiesComponent,
+    SpecialitiesTableComponent
   ],
   imports: [
     BrowserModule,

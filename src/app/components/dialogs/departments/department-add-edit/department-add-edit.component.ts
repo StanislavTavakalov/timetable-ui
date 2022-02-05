@@ -44,12 +44,13 @@ export class DepartmentAddEditComponent implements OnInit, OnDestroy {
   }
 
   private initializeForm(department: Department): void {
+    const deaneryFor = this.deaneryFor ? this.deaneryFor : department.deanery;
     this.departmentForm = this.fb.group({
       fullName: [department.fullName, [Validators.required, Validators.maxLength(1000)]],
       shortName: [department.shortName, [Validators.required, Validators.maxLength(1000)]],
       code: [department.code, [Validators.required, Validators.maxLength(1000)]],
       description: [department.description],
-      deanery: [this.deaneryFor],
+      deanery: [deaneryFor],
     });
   }
 

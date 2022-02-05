@@ -21,6 +21,7 @@ const routes: Routes = [
   {path: 'deaneries/:id', component: DepartmentsComponent},
   {path: 'deaneries/:id/departments', component: DepartmentsComponent},
   {path: 'deaneries/:id/classrooms', component: ClassroomsComponent},
+  {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},
   {path: 'classroom-fund', component: ClassroomFundComponent},
   {path: 'classroom-type-palette', component: ClassroomTypeColorPaletteComponent},
   {path: 'classroom-fund/building/:id', component: BuildingComponent},

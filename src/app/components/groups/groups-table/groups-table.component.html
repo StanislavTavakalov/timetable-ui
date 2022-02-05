@@ -1,0 +1,52 @@
+<h2> Группы </h2>
+
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по группам...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #groupsTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Номер </th>
+      <td mat-cell *matCellDef="let row"> {{row.number}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="studentCount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Количество студентов </th>
+      <td mat-cell *matCellDef="let row"> {{row.studentCount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="enterYear">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Год поступления  </th>
+      <td mat-cell *matCellDef="let row"> {{row.enterYear}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <button mat-icon-button class="material-icons table-mat-icon-element" (click)="addGroup()"
+                matTooltip="Добавить группу">
+          <mat-icon> add_circle </mat-icon>
+        </button>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let group">
+        <button mat-icon-button class="material-icons" (click)="editGroup(group)"
+                matTooltip="Редактировать группу">
+          <mat-icon> edit </mat-icon>
+        </button>
+        <button mat-icon-button class="material-icons" (click)="deleteGroup(group)"
+                matTooltip="Удалить группу">
+          <mat-icon> delete </mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

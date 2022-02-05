@@ -13,7 +13,7 @@ export class DepartmentService extends BasicHttpService {
   private departmentApiUrl = 'api/v1/departments';
   private fullDepartmentEndpoint = environment.domain + this.departmentApiUrl;
 
-  // deaneryID - optional parameter. If 'null' specified - will be return all values
+  // deaneryId - optional parameter. If 'null' specified - will be return all values
   public getDepartments(deaneryId: string): Observable<Department[]> {
     const params = this.fillDeaneryParams(deaneryId);
     return this.http.get<Department[]>(this.fullDepartmentEndpoint, {
