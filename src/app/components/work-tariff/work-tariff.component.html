@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isWorkTariffLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="workTariffTableVisible" class="table-content">
+      <app-work-tariff-datatable [workTariffs]="workTariffs"></app-work-tariff-datatable>
+    </div>
+  </div>
+</ng-template>

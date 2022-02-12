@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectionsComponent } from './directions.component';
+import { WorkTypeDatatableComponent } from './work-type-datatable.component';
 
-describe('DirectionsComponent', () => {
-  let component: DirectionsComponent;
-  let fixture: ComponentFixture<DirectionsComponent>;
+describe('WorkTypeDatatableComponent', () => {
+  let component: WorkTypeDatatableComponent;
+  let fixture: ComponentFixture<WorkTypeDatatableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DirectionsComponent ]
+      declarations: [ WorkTypeDatatableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DirectionsComponent);
+    fixture = TestBed.createComponent(WorkTypeDatatableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

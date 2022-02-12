@@ -1,11 +1,11 @@
-<h2> Направления </h2>
+<h2> Типы работы </h2>
 <mat-form-field>
   <mat-label>Фильтр</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по направлениям...">
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по типам работ...">
 </mat-form-field>
 
 <div class="mat-elevation-z8">
-  <table #directionsTable mat-table [dataSource]="dataSource" matSort>
+  <table #workTypeTable mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
@@ -14,19 +14,19 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addDirection()" style="cursor: pointer"
-              matTooltip="Добавить направление">
+        <span class="material-icons" (click)="addWorkType()" style="cursor: pointer"
+              matTooltip="Добавить тип работы">
               add_circle
          </span>
       </th>
 
-      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let direction">
-         <span class="material-icons" (click)="editDirection(direction)" style="cursor: pointer"
-               matTooltip="Редактировать направление">
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let workType">
+         <span class="material-icons" (click)="editWorkType(workType)" style="cursor: pointer"
+               matTooltip="Редактировать тип работы">
              edit
          </span>
-        <span class="material-icons" (click)="deleteDirection(direction)" style="cursor: pointer"
-              matTooltip="Удалить направление">
+        <span class="material-icons" (click)="deleteWorkType(workType)" style="cursor: pointer"
+              matTooltip="Удалить тип работы">
              delete
         </span>
 
