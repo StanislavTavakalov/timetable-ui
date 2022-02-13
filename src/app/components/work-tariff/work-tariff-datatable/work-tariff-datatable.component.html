@@ -1,0 +1,42 @@
+<h2> Рабочие ставки </h2>
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по рабочим ставкам...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #workTariffTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <span class="material-icons" (click)="addWorkTariff()" style="cursor: pointer"
+              matTooltip="Добавить рабочую ставку">
+              add_circle
+         </span>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let workTariff">
+         <span class="material-icons" (click)="editWorkTariff(workTariff)" style="cursor: pointer"
+               matTooltip="Редактировать рабочую ставку">
+             edit
+         </span>
+        <span class="material-icons" (click)="deleteWorkTariff(workTariff)" style="cursor: pointer"
+              matTooltip="Удалить рабочую ставку">
+             delete
+        </span>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isAcademicDegreeLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="academicDegreeTableVisible" class="table-content">
+      <app-academic-degree-datatable [academicDegrees]="academicDegrees"></app-academic-degree-datatable>
+    </div>
+  </div>
+</ng-template>

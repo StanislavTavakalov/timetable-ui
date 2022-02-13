@@ -1,4 +1,4 @@
-export class Direction {
+export class WorkTariff {
   id: string;
   name: string;
 }

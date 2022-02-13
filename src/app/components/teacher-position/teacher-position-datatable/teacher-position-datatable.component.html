@@ -1,0 +1,42 @@
+<h2> Должности </h2>
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по должностям...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #teacherPositionTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <span class="material-icons" (click)="addTeacherPosition()" style="cursor: pointer"
+              matTooltip="Добавить должность">
+              add_circle
+         </span>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let teacherPosition">
+         <span class="material-icons" (click)="editTeacherPosition(teacherPosition)" style="cursor: pointer"
+               matTooltip="Редактировать должность">
+             edit
+         </span>
+        <span class="material-icons" (click)="deleteTeacherPosition(teacherPosition)" style="cursor: pointer"
+              matTooltip="Удалить должность">
+             delete
+        </span>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>

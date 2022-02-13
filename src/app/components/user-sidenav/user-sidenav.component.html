@@ -29,14 +29,12 @@
         </mat-icon>
       </mat-list-item>
       <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-        <a mat-list-item [routerLink]="'/directions'">Направления</a>
         <a mat-list-item [routerLink]="'/classroom-type-palette'">Типы аудиторий</a>
-        <a mat-list-item [routerLink]="'/'">Специализации</a>
-        <a mat-list-item [routerLink]="'/'">Научные звания</a>
-        <a mat-list-item [routerLink]="'/'">Научные степени</a>
-        <a mat-list-item [routerLink]="'/'">Должности</a>
-        <a mat-list-item [routerLink]="'/'">Типы работ</a>
-        <a mat-list-item [routerLink]="'/'">Рабочие ставки</a>
+        <a mat-list-item [routerLink]="'/academic_titles'">Научные звания</a>
+        <a mat-list-item [routerLink]="'/degrees'">Научные степени</a>
+        <a mat-list-item [routerLink]="'/positions'">Должности</a>
+        <a mat-list-item [routerLink]="'/work_types'">Типы работ</a>
+        <a mat-list-item [routerLink]="'/work_tariffs'">Рабочие ставки</a>
       </div>
     </mat-nav-list>
   </mat-sidenav>

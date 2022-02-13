@@ -18,8 +18,6 @@ import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.compo
 import {MainPageComponent} from './components/main-page/main-page.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RolesDatatableComponent } from './components/roles/roles-datatable/roles-datatable.component';
-import { DirectionsComponent } from './components/directions/directions.component';
-import { DirectionsDatatableComponent } from './components/directions/directions-datatable/directions-datatable.component';
 import { DeaneriesComponent } from './components/deaneries/deaneries.component';
 import { DepartmentsComponent } from './components/departments/departments.component';
 import { DepartmentsTableComponent } from './components/departments/departments-table/departments-table.component';
@@ -39,6 +37,16 @@ import { GroupsComponent } from './components/groups/groups.component';
 import { GroupsTableComponent } from './components/groups/groups-table/groups-table.component';
 import { SpecialitiesComponent } from './components/specialities/specialities.component';
 import { SpecialitiesTableComponent } from './components/specialities/specialities-table/specialities-table.component';
+import { WorkTypeComponent } from './components/work-type/work-type.component';
+import { WorkTariffComponent } from './components/work-tariff/work-tariff.component';
+import { AcademicDegreeComponent } from './components/academic-degree/academic-degree.component';
+import { AcademicTitleComponent } from './components/academic-title/academic-title.component';
+import { TeacherPositionComponent } from './components/teacher-position/teacher-position.component';
+import { TeacherPositionDatatableComponent } from './components/teacher-position/teacher-position-datatable/teacher-position-datatable.component';
+import { WorkTariffDatatableComponent } from './components/work-tariff/work-tariff-datatable/work-tariff-datatable.component';
+import { WorkTypeDatatableComponent } from './components/work-type/work-type-datatable/work-type-datatable.component';
+import { AcademicTitleDatatableComponent } from './components/academic-title/academic-title-datatable/academic-title-datatable.component';
+import { AcademicDegreeDatatableComponent } from './components/academic-degree/academic-degree-datatable/academic-degree-datatable.component';
 
 @NgModule({
   declarations: [
@@ -51,8 +59,6 @@ import { SpecialitiesTableComponent } from './components/specialities/specialiti
     MainPageComponent,
     RolesComponent,
     RolesDatatableComponent,
-    DirectionsComponent,
-    DirectionsDatatableComponent,
     DeaneriesComponent,
     DepartmentsComponent,
     DepartmentsTableComponent,
@@ -67,7 +73,17 @@ import { SpecialitiesTableComponent } from './components/specialities/specialiti
     GroupsComponent,
     GroupsTableComponent,
     SpecialitiesComponent,
-    SpecialitiesTableComponent
+    SpecialitiesTableComponent,
+    WorkTypeComponent,
+    WorkTariffComponent,
+    AcademicDegreeComponent,
+    AcademicTitleComponent,
+    TeacherPositionComponent,
+    TeacherPositionDatatableComponent,
+    WorkTariffDatatableComponent,
+    WorkTypeDatatableComponent,
+    AcademicTitleDatatableComponent,
+    AcademicDegreeDatatableComponent
   ],
   imports: [
     BrowserModule,
