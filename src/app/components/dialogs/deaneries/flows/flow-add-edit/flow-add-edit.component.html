@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="flowForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'name'" required>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-chip-list">
+      <mat-label>Группы</mat-label>
+      <mat-chip-list #groupList aria-label="Fruit selection">
+        <mat-chip
+          *ngFor="let group of addedGroups"
+          [removable]="removable"
+          (removed)="remove(group)">
+          {{group.number}}
+          <button matChipRemove *ngIf="removable">
+            <mat-icon *ngIf="removable" class="chip-icon">cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input
+          placeholder="Введите номер группы..."
+          #groupInput
+          [formControl]="groupCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="groupList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let group of filteredGroups | async" [value]="group">
+          {{group?.number}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="flowForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

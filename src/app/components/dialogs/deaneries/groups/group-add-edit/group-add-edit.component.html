@@ -1,0 +1,109 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <mat-vertical-stepper [linear]="true" #stepper>
+
+    <ng-template matStepperIcon="edit">
+      <mat-icon>done</mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="done">
+      <mat-icon>done_all</mat-icon>
+    </ng-template>
+
+    <mat-step [stepControl]="groupForm">
+      <ng-template matStepLabel>Основное</ng-template>
+      <form [formGroup]="groupForm" class="column">
+        <mat-form-field>
+          <input matInput placeholder="Номер:" [formControlName]="'number'" required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select [compareWith]="compareObjects" placeholder="Специальность: " [formControlName]="'speciality'"
+                      required>
+            <mat-option *ngFor="let spec of specialities as Speciality" [value]="spec">
+              {{printerService.printSpecialityFullCodeWithShortName(spec)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input  type="number" matInput placeholder="Год поступления" [formControlName]="'enterYear'" required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input type="number" matInput placeholder="Количество студентов: " [formControlName]="'studentCount'"
+                 required>
+        </mat-form-field>
+
+        <div>
+          <button mat-button matStepperNext>Далее</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="subgroupsForm">
+      <form [formGroup]="subgroupsForm">
+        <ng-template matStepLabel> Подгруппы</ng-template>
+        <div>
+          Всего студентов в группе: {{showTotalStudentCount()}}
+          <mat-divider></mat-divider>
+        </div>
+
+        <div formArrayName="subgroups"
+             *ngFor="let subgroup of subgroupsForm.get('subgroups')['controls']; let subgroupIndex = index;">
+          <div [formGroupName]="subgroupIndex" class="column">
+            <div style="display: flex; flex-direction: row">
+
+              <div>
+                <mat-form-field style="min-width: 200px ">
+                  <input matInput placeholder="Номер подгруппы: " [formControlName]="'number'" required>
+                </mat-form-field>
+              </div>
+
+              <div style="margin-left: 10px">
+                <mat-form-field style="min-width: 200px; ">
+                  <input matInput placeholder="Количество студентов: " [formControlName]="'studentCount'" required>
+                </mat-form-field>
+              </div>
+
+
+              <button mat-icon-button color="primary" (click)="deleteSubgroup(subgroupIndex);">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px">
+          <button mat-raised-button (click)="addSubgroup()" style="font-size: 14px">
+            Добавить подгруппу
+          </button>
+        </div>
+
+
+        <div style="margin-top: 15px">
+          <button mat-button matStepperPrevious>Назад</button>
+          <button mat-button matStepperNext>Далее</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Готово</ng-template>
+      <mat-error *ngIf="!checkSubgroupsCountIsValid()" style="font-size: 16px"> Количество студентов в подгруппах не совпадает с общим количеством в группе</mat-error>
+      <div>
+        <mat-spinner *ngIf="loading" diameter="40" color="primary">
+        </mat-spinner>
+        <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="groupForm.invalid || !checkSubgroupsCountIsValid()">
+          Подтвердить
+        </button>
+        <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+      </div>
+    </mat-step>
+
+  </mat-vertical-stepper>
+
+</mat-dialog-content>
+<!--<mat-dialog-actions class="controls">-->
+
+<!--</mat-dialog-actions>-->
+

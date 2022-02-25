@@ -47,6 +47,8 @@ import { WorkTariffDatatableComponent } from './components/work-tariff/work-tari
 import { WorkTypeDatatableComponent } from './components/work-type/work-type-datatable/work-type-datatable.component';
 import { AcademicTitleDatatableComponent } from './components/academic-title/academic-title-datatable/academic-title-datatable.component';
 import { AcademicDegreeDatatableComponent } from './components/academic-degree/academic-degree-datatable/academic-degree-datatable.component';
+import { FlowsComponent } from './components/flows/flows.component';
+import { FlowsTableComponent } from './components/flows/flows-table/flows-table.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { AcademicDegreeDatatableComponent } from './components/academic-degree/a
     WorkTariffDatatableComponent,
     WorkTypeDatatableComponent,
     AcademicTitleDatatableComponent,
-    AcademicDegreeDatatableComponent
+    AcademicDegreeDatatableComponent,
+    FlowsComponent,
+    FlowsTableComponent
   ],
   imports: [
     BrowserModule,

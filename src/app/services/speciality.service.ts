@@ -13,15 +13,16 @@ export class SpecialityService extends BasicHttpService {
   private specialityApiUrl = 'api/v1/specialities';
   private fullSpecialityEndpoint = environment.domain + this.specialityApiUrl;
 
-  // departmentId  - optional parameters
-  public getSpecialities(departmentId: string): Observable<Speciality[]> {
-    const params = this.fillDepartmentIfPresent(departmentId);
+  public getSpecialities(departmentId: string, deaneryId: string): Observable<Speciality[]> {
+    const params = this.fillDeaneryOrDepartmentIfPresent(departmentId, deaneryId);
     return this.http.get<Speciality[]>(`${this.fullSpecialityEndpoint}`, {params})
       .pipe(catchError(this.handleError));
   }
 
-  private fillDepartmentIfPresent(departmentId): any {
-    if (departmentId) {
+  private fillDeaneryOrDepartmentIfPresent(departmentId: string, deaneryId: string): any {
+    if (deaneryId) {
+      return {deaneryId};
+    } else if (departmentId) {
       return {departmentId};
     } else {
       return {};

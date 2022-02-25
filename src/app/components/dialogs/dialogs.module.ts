@@ -17,7 +17,13 @@ import {BuildingFloorCountChangeComponent} from './classroom-fund/building/build
 import {WingAddEditComponent} from './classroom-fund/wing/wing-add-edit/wing-add-edit.component';
 import {WingPlanLoaderComponent} from './classroom-fund/wing/wing-add-edit/wing-plan-loader/wing-plan-loader.component';
 import {ResizeableClassroomComponent} from './classroom-fund/wing/wing-add-edit/wing-plan-loader/resizeable-classroom/resizeable-classroom.component';
-import { ClassroomAddEditComponent } from './classroom-fund/wing/wing-add-edit/wing-plan-loader/classroom-add-edit/classroom-add-edit.component';
+import {ClassroomAddEditComponent} from './classroom-fund/wing/wing-add-edit/wing-plan-loader/classroom-add-edit/classroom-add-edit.component';
+import {SpecialityAddEditComponent} from './departments/specialities/speciality-add-edit/speciality-add-edit.component';
+import {SpecialityDeleteComponent} from './departments/specialities/speciality-delete/speciality-delete.component';
+import {GroupAddEditComponent} from './deaneries/groups/group-add-edit/group-add-edit.component';
+import {GroupsDeleteComponent} from './deaneries/groups/groups-delete/groups-delete.component';
+import {FlowAddEditComponent} from './deaneries/flows/flow-add-edit/flow-add-edit.component';
+import {FlowDeleteComponent} from './deaneries/flows/flow-delete/flow-delete.component';
 
 @NgModule({
   imports: [
@@ -42,17 +48,27 @@ import { ClassroomAddEditComponent } from './classroom-fund/wing/wing-add-edit/w
     WingAddEditComponent,
     WingPlanLoaderComponent,
     ResizeableClassroomComponent,
-    ClassroomAddEditComponent
+    ClassroomAddEditComponent,
+    SpecialityAddEditComponent,
+    SpecialityDeleteComponent,
+    GroupAddEditComponent,
+    GroupsDeleteComponent,
+    FlowAddEditComponent,
+    FlowDeleteComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
-    BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent
+    BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
+    SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
+    FlowAddEditComponent, FlowDeleteComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
-    BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent
+    BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
+    SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
+    FlowAddEditComponent, FlowDeleteComponent
   ]
 })
 export class DialogsModule {

@@ -1,0 +1,23 @@
+mat-form-field {
+  width: auto;
+  min-width: 400px;
+}
+
+
+
+.example-chip-list {
+  width: 100%;
+}
+
+.mat-chip-remove {
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0;
+  background: none;
+  margin-left: 0 !important;
+}
+
+.chip-icon {
+  font-size: 18px;
+}

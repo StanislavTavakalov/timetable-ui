@@ -6,47 +6,6 @@
 }
 
 mat-form-field {
-  width: 100%;
-}
-
-h1 {
-  text-align: center;
-}
-
-.fill-space {
-  flex: 1 1 auto;
-}
-
-.controls {
-  margin-top: 2%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-button {
-  font-size: 17px;
-}
-
-span:focus {
-  outline:none;
-}
-button:focus{
-  outline:none;
-}
-
-.row {
-  display: flex;
-  flex-direction: row !important;
-  margin: 1%;
-}
-
-.column{
-  display: flex;
-  flex-direction: column !important;
-  margin: 1%;
-}
-
-mat-form-field {
   min-width: 600px;
 }
 

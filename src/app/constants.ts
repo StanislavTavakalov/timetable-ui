@@ -55,6 +55,10 @@ export class Constants {
     label: 'Группы',
     isActive: true
   }, {
+    path: '/flows',
+    label: 'Потоки',
+    isActive: true
+  }, {
     path: '/subjects',
     label: 'Предметы',
     isActive: true
@@ -76,4 +80,7 @@ export class Constants {
     'classroomSpecialization', 'classroomStatus', 'icons'];
   static classroomColumnsGeneral = ['number', 'capacity', 'classroomType', 'classroomSpecialization', 'classroomStatus',
     'assignmentType', 'deanery', 'department', 'icons'];
+
+  static specialitiesColumns = ['fullName', 'shortName', 'code', 'description', 'icons'];
+
 }

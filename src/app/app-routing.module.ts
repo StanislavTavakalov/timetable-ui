@@ -9,11 +9,14 @@ import {ClassroomFundComponent} from './components/classroom-fund/classroom-fund
 import {BuildingComponent} from './components/classroom-fund/building/building.component';
 import {ClassroomTypeColorPaletteComponent} from './components/classroom-fund/classroom-type-color-palette/classroom-type-color-palette.component';
 import {ClassroomsComponent} from './components/classroom-fund/classrooms/classrooms.component';
+import {SpecialitiesComponent} from './components/specialities/specialities.component';
 import {TeacherPositionComponent} from './components/teacher-position/teacher-position.component';
 import {AcademicDegreeComponent} from './components/academic-degree/academic-degree.component';
 import {AcademicTitleComponent} from './components/academic-title/academic-title.component';
 import {WorkTypeComponent} from './components/work-type/work-type.component';
 import {WorkTariffComponent} from './components/work-tariff/work-tariff.component';
+import {GroupsComponent} from './components/groups/groups.component';
+import {FlowsComponent} from './components/flows/flows.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -29,7 +32,13 @@ const routes: Routes = [
   {path: 'deaneries/:id', component: DepartmentsComponent},
   {path: 'deaneries/:id/departments', component: DepartmentsComponent},
   {path: 'deaneries/:id/classrooms', component: ClassroomsComponent},
+  {path: 'deaneries/:id/groups', component: GroupsComponent},
+  {path: 'deaneries/:id/flows', component: FlowsComponent},
+  {path: 'departments/:departmentId', component: SpecialitiesComponent},
+  {path: 'departments/:departmentId/specialities', component: SpecialitiesComponent},
   {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},
+  {path: 'departments/:departmentId/groups', component: GroupsComponent},
+  {path: 'departments/:departmentId/flows', component: FlowsComponent},
   {path: 'classroom-fund', component: ClassroomFundComponent},
   {path: 'classroom-type-palette', component: ClassroomTypeColorPaletteComponent},
   {path: 'classroom-fund/building/:id', component: BuildingComponent},

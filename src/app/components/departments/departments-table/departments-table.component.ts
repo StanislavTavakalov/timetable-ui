@@ -145,7 +145,7 @@ export class DepartmentsTableComponent implements OnInit, OnDestroy {
   public enterDepartment(department): void {
     this.localStorageService.subscribableDepartment.next(department);
     this.localStorageService.subscribableHeaderType.next(HeaderType.DEPARTMENT);
-    this.router.navigate(['departments/' + department.id + '/classrooms']);
+    this.router.navigate(['departments/' + department.id]);
   }
 
   public refreshDataTableContent(): void {

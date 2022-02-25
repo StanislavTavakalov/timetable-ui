@@ -4,7 +4,7 @@
 <ng-template #mainContent>
   <div style="display: flex">
     <div *ngIf="isTableVisible" class="table-content">
-      <app-groups-table [groups]="groups"></app-groups-table>
+      <app-groups-table [groups]="groups" [specialities]="specialities" [isChangesEnabled] ="isChangesEnabled"></app-groups-table>
     </div>
   </div>
 </ng-template>

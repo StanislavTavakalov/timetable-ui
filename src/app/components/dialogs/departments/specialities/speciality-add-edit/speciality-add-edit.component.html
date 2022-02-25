@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="specialityForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название специальности (полное):" [formControlName]="'fullName'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Название специальности (краткое):" [formControlName]="'shortName'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Краткий код специальности:" [formControlName]="'shortCode'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Полный код специальности: " [formControlName]="'specialityCode'" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Направление: " [formControlName]="'directionName'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Код направления: " [formControlName]="'directionCode'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Специализация: " [formControlName]="'specializationName'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Код специализации: " [formControlName]="'specializationCode'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput placeholder="Описание: " [formControlName]="'description'"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="specialityForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+
