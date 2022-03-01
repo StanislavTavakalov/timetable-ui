@@ -12,13 +12,13 @@ export class PrinterService {
   public printSpecialityFullCode(speciality: Speciality): string {
     let result = speciality.specialityCode;
 
-    if (speciality.directionCode !== undefined && speciality.directionCode !== '') {
+    if (speciality.directionCode !== undefined && speciality.directionCode !== null && speciality.directionCode !== '') {
       result = result + '-' + speciality.directionCode;
     } else {
       return result;
     }
 
-    if (speciality.specializationCode !== undefined && speciality.specializationCode !== '') {
+    if (speciality.specializationCode !== undefined && speciality.specializationCode !== null && speciality.specializationCode !== '') {
       return result + '-' + speciality.specializationCode;
     }
     return result;

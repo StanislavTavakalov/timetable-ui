@@ -13,6 +13,7 @@ import {GroupAddEditComponent} from '../../dialogs/deaneries/groups/group-add-ed
 import {Speciality} from '../../../model/department/speciality';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {GroupsDeleteComponent} from '../../dialogs/deaneries/groups/groups-delete/groups-delete.component';
+import {PrinterService} from '../../../services/shared/printer.service';
 
 @Component({
   selector: 'app-groups-table',
@@ -30,6 +31,7 @@ export class GroupsTableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private localStorageService: LocalStorageService,
+              public printerService: PrinterService,
               private router: Router,
               private notifierService: NotifierService) {
 
@@ -140,12 +142,6 @@ export class GroupsTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  printSpecialityFullCodeWithShortName(speciality: Speciality): string {
-    if (speciality.specialityCode) {
-      return speciality.shortName + ' ' + speciality.specialityCode + '-' + speciality.directionCode + '-' + speciality.specializationCode;
-    }
-    return speciality.shortName + ' ' + speciality.specialityCode + '-' + speciality.directionCode;
-  }
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.groups;

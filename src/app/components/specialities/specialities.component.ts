@@ -35,13 +35,13 @@ export class SpecialitiesComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const departmentId = this.activatedRoute.snapshot.paramMap.get('departmentId');
     if (departmentId) {
-      this.loadDepartmentsByDepartment(departmentId);
+      this.loadSpecialitiesByDepartment(departmentId);
     } else {
-      this.notifierService.notify('error', 'Не удается загрузить специальности для деканата');
+      this.notifierService.notify('error', 'Не удается загрузить специальности для кафедры');
     }
   }
 
-  private loadDepartmentsByDepartment(departmentId: string): void {
+  private loadSpecialitiesByDepartment(departmentId: string): void {
     this.utilityService.loadDepartmentWithHeaderTabs(departmentId);
     this.localStorageService.changeHeaderType(HeaderType.DEPARTMENT);
     this.specialityServiceSubscription = this.specialityService.getSpecialities(departmentId, null).subscribe(departments => {

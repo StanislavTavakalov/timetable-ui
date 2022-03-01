@@ -51,12 +51,8 @@ export class Constants {
     label: 'Аудитории',
     isActive: true
   }, {
-    path: '/groups',
-    label: 'Группы',
-    isActive: true
-  }, {
-    path: '/flows',
-    label: 'Потоки',
+    path: '/groups-and-flows',
+    label: 'Группы и потоки',
     isActive: true
   }, {
     path: '/subjects',
@@ -82,5 +78,9 @@ export class Constants {
     'assignmentType', 'deanery', 'department', 'icons'];
 
   static specialitiesColumns = ['fullName', 'shortName', 'code', 'description', 'icons'];
+
+  static teachersColumns = ['firstName', 'lastName', 'patronymic', 'teacherPosition',
+    'academicTitle', 'academicDegree', 'staffType', 'workTariff', 'hours',
+    'additionalInfo', 'icons'];
 
 }

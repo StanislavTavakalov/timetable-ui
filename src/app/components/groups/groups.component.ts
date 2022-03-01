@@ -84,9 +84,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private sortSubgroupsByCount(groups: Group[]): void {
     for (const gr of groups) {
       gr.subgroups.sort((s1, s2) => {
-        if (s1.studentCount > s2.studentCount) {
+        if (s1.studentCount < s2.studentCount) {
           return 1;
-        } else if (s1.studentCount < s2.studentCount) {
+        } else if (s1.studentCount > s2.studentCount) {
           return -1;
         } else {
           return 0;

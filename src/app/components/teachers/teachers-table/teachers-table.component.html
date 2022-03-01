@@ -1,0 +1,89 @@
+<h2> Преподаватели </h2>
+
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Поиск по преподавателям...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #teachesTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Имя </th>
+      <td mat-cell *matCellDef="let row"> {{row.firstName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Фамилия </th>
+      <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="patronymic">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Отчество</th>
+      <td mat-cell *matCellDef="let row"> {{row.patronymic}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="teacherPosition">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Должность </th>
+      <td mat-cell *matCellDef="let row"> {{row.teacherPosition?.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="academicTitle">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Академическое звание</th>
+      <td mat-cell *matCellDef="let row"> {{row.academicTitle?.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="academicDegree">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Академическая степень </th>
+      <td mat-cell *matCellDef="let row"> {{row.academicDegree?.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="staffType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> В штатном составе </th>
+      <td mat-cell *matCellDef="let row"> {{resourceLocalizerService.localizeStaffType(row.staffType)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="workTariff">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Рабочая ставка </th>
+      <td mat-cell *matCellDef="let row"> {{row.workTariff?.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="hours">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Часы</th>
+      <td mat-cell *matCellDef="let row"> {{row.hours}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="additionalInfo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Дополнительная информация</th>
+      <td mat-cell *matCellDef="let row"> {{row.additionalInfo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addTeacher()"
+                matTooltip="Добавить преподавателя">
+          <mat-icon> add_circle </mat-icon>
+        </button>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let teacher">
+        <button mat-icon-button (click)="editTeacher(teacher)"
+                matTooltip="Редактировать преподавателя">
+          <mat-icon> edit</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="deleteSpeciality(teacher)"
+                matTooltip="Удалить преподавателя">
+          <mat-icon> delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+

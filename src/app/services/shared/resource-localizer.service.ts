@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AssignmentType, ClassroomStatus} from '../../model/dispatcher/classroom';
 import {RoleCategory} from '../../model/users/role-category';
+import {StaffType} from '../../model/department/teacher';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,20 @@ export class ResourceLocalizerService {
     return 'Диспетчер';
   }
 
+  localizeStaffType(staffType: StaffType): string {
+    switch (staffType) {
+      case StaffType.EXTERNAL_COMBINER:
+        return 'Внешний совместитель';
+      case StaffType.FULL_TIME:
+        return 'Штатный';
+      case StaffType.PART_TIME:
+        return 'Почасовик';
+      case StaffType.INTERNAL_COMBINER:
+        return 'Внутренний совместитель';
+      case staffType:
+        return 'Не указано';
+    }
+    return '-';
+  }
 
 }

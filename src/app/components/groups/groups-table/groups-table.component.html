@@ -25,7 +25,7 @@
 
     <ng-container matColumnDef="speciality">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Специальность</th>
-      <td mat-cell *matCellDef="let row"> {{printSpecialityFullCodeWithShortName(row.speciality)}} </td>
+      <td mat-cell *matCellDef="let row"> {{printerService.printSpecialityFullCode(row.speciality)}} </td>
     </ng-container>
 
     <ng-container matColumnDef="icons">

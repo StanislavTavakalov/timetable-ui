@@ -1,0 +1,13 @@
+<mat-spinner *ngIf="isLoading || isInfoLoading;else mainContent" diameter="150"
+             mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="isTableVisible" class="table-content">
+      <app-teachers-table [teachers]="teachers"
+                          [infoForTeacherCreation]="infoForTeacherCreation">
+      </app-teachers-table>
+    </div>
+  </div>
+</ng-template>

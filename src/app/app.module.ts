@@ -37,18 +37,19 @@ import { GroupsComponent } from './components/groups/groups.component';
 import { GroupsTableComponent } from './components/groups/groups-table/groups-table.component';
 import { SpecialitiesComponent } from './components/specialities/specialities.component';
 import { SpecialitiesTableComponent } from './components/specialities/specialities-table/specialities-table.component';
-import { WorkTypeComponent } from './components/work-type/work-type.component';
 import { WorkTariffComponent } from './components/work-tariff/work-tariff.component';
 import { AcademicDegreeComponent } from './components/academic-degree/academic-degree.component';
 import { AcademicTitleComponent } from './components/academic-title/academic-title.component';
 import { TeacherPositionComponent } from './components/teacher-position/teacher-position.component';
 import { TeacherPositionDatatableComponent } from './components/teacher-position/teacher-position-datatable/teacher-position-datatable.component';
 import { WorkTariffDatatableComponent } from './components/work-tariff/work-tariff-datatable/work-tariff-datatable.component';
-import { WorkTypeDatatableComponent } from './components/work-type/work-type-datatable/work-type-datatable.component';
 import { AcademicTitleDatatableComponent } from './components/academic-title/academic-title-datatable/academic-title-datatable.component';
 import { AcademicDegreeDatatableComponent } from './components/academic-degree/academic-degree-datatable/academic-degree-datatable.component';
 import { FlowsComponent } from './components/flows/flows.component';
 import { FlowsTableComponent } from './components/flows/flows-table/flows-table.component';
+import { TeachersComponent } from './components/teachers/teachers.component';
+import { TeachersTableComponent } from './components/teachers/teachers-table/teachers-table.component';
+import { GroupsAndFlowsComponent } from './components/groups-and-flows/groups-and-flows.component';
 
 @NgModule({
   declarations: [
@@ -76,18 +77,19 @@ import { FlowsTableComponent } from './components/flows/flows-table/flows-table.
     GroupsTableComponent,
     SpecialitiesComponent,
     SpecialitiesTableComponent,
-    WorkTypeComponent,
     WorkTariffComponent,
     AcademicDegreeComponent,
     AcademicTitleComponent,
     TeacherPositionComponent,
     TeacherPositionDatatableComponent,
     WorkTariffDatatableComponent,
-    WorkTypeDatatableComponent,
     AcademicTitleDatatableComponent,
     AcademicDegreeDatatableComponent,
     FlowsComponent,
-    FlowsTableComponent
+    FlowsTableComponent,
+    TeachersComponent,
+    TeachersTableComponent,
+    GroupsAndFlowsComponent
   ],
   imports: [
     BrowserModule,

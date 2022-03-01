@@ -24,6 +24,8 @@ import {GroupAddEditComponent} from './deaneries/groups/group-add-edit/group-add
 import {GroupsDeleteComponent} from './deaneries/groups/groups-delete/groups-delete.component';
 import {FlowAddEditComponent} from './deaneries/flows/flow-add-edit/flow-add-edit.component';
 import {FlowDeleteComponent} from './deaneries/flows/flow-delete/flow-delete.component';
+import { TeacherAddEditComponent } from './teachers/teacher-add-edit/teacher-add-edit.component';
+import { TeacherDeleteComponent } from './teachers/teacher-delete/teacher-delete.component';
 
 @NgModule({
   imports: [
@@ -54,21 +56,23 @@ import {FlowDeleteComponent} from './deaneries/flows/flow-delete/flow-delete.com
     GroupAddEditComponent,
     GroupsDeleteComponent,
     FlowAddEditComponent,
-    FlowDeleteComponent
+    FlowDeleteComponent,
+    TeacherAddEditComponent,
+    TeacherDeleteComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
     BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
     SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
-    FlowAddEditComponent, FlowDeleteComponent
+    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
     BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
     SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
-    FlowAddEditComponent, FlowDeleteComponent
+    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent
   ]
 })
 export class DialogsModule {
