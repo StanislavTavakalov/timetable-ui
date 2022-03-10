@@ -90,7 +90,7 @@ export class FlowsComponent implements OnInit, OnDestroy {
   }
 
   private loadGroupsByDeanery(deaneryId: string): void {
-    this.groupServiceSubscription = this.groupService.getGroups(deaneryId, null, true).subscribe(sp => {
+    this.groupServiceSubscription = this.groupService.getGroups(deaneryId, null).subscribe(sp => {
       this.groups = sp;
     }, () => {
       this.notifierService.notify('error', 'Не удалось загрузить группы.');

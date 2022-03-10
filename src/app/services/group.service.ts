@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BasicHttpService} from './basic-http.service';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
@@ -8,31 +8,23 @@ import {Group} from '../model/deanery/group';
 @Injectable({
   providedIn: 'root'
 })
-export class GroupService extends BasicHttpService{
+export class GroupService extends BasicHttpService {
 
   private groupApiUrl = 'api/v1/groups';
   private fullGroupEndpoint = environment.domain + this.groupApiUrl;
 
   // deaneryId and deaneryId - optional parameters
-  public getGroups(deaneryId: string, departmentId: string, withoutFlow: boolean): Observable<Group[]> {
-    const params = this.fillDeaneryOrDepartmentIfPresent(deaneryId, departmentId, withoutFlow);
+  public getGroups(deaneryId: string, departmentId: string): Observable<Group[]> {
+    const params = this.fillDeaneryOrDepartmentIfPresent(deaneryId, departmentId);
     return this.http.get<Group[]>(`${this.fullGroupEndpoint}`, {params})
       .pipe(catchError(this.handleError));
   }
 
-  private fillDeaneryOrDepartmentIfPresent(deaneryId: string, departmentId: string,  withoutFlow: boolean): any {
+  private fillDeaneryOrDepartmentIfPresent(deaneryId: string, departmentId: string): any {
     if (deaneryId) {
-      if (withoutFlow) {
-        return {deaneryId, withoutFlow};
-      } else {
-        return {deaneryId};
-      }
-    } else if (departmentId ) {
-      if (withoutFlow) {
-        return {departmentId, withoutFlow};
-      } else {
-        return {departmentId};
-      }
+      return {deaneryId};
+    } else if (departmentId) {
+      return {departmentId};
     } else {
       return {};
     }

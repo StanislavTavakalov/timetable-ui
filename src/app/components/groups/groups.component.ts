@@ -54,7 +54,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.utilityService.loadDepartmentWithHeaderTabs(departmentId);
     this.localStorageService.changeHeaderType(HeaderType.DEPARTMENT);
 
-    this.groupServiceSubscription = this.groupService.getGroups(null, departmentId, null).subscribe(groups => {
+    this.groupServiceSubscription = this.groupService.getGroups(null, departmentId).subscribe(groups => {
       this.sortSubgroupsByCount(groups);
       this.groups = groups;
       this.isLoading = false;
@@ -69,7 +69,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private loadGroupsByDeanery(deaneryId: string): void {
     this.localStorageService.changeHeaderType(HeaderType.DEANERY);
     this.utilityService.loadDeaneryWithHeaderTabs(deaneryId);
-    this.groupServiceSubscription = this.groupService.getGroups(deaneryId, null, null).subscribe(groups => {
+    this.groupServiceSubscription = this.groupService.getGroups(deaneryId, null).subscribe(groups => {
       this.sortSubgroupsByCount(groups);
       this.groups = groups;
       this.isLoading = false;

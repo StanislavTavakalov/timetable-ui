@@ -7,7 +7,7 @@ export class Group {
   number: string;
   studentCount: number;
   enterYear: number;
-  flow: Flow;
+  flows: Flow[];
   subgroups: Subgroup[];
   speciality: Speciality;
 }
