@@ -29,4 +29,9 @@ export class AcademicTitleService extends BasicHttpService {
       .pipe(catchError(this.handleError));
   }
 
+  public deleteAcademicTitle(academicTitleId: string): Observable<any> {
+    return this.http.delete<any>(`${this.fullAcademicTitleEndpoint}/${academicTitleId}`)
+      .pipe(catchError(this.handleError));
+  }
+
 }

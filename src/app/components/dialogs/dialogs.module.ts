@@ -25,10 +25,17 @@ import {GroupAddEditComponent} from './deaneries/groups/group-add-edit/group-add
 import {GroupsDeleteComponent} from './deaneries/groups/groups-delete/groups-delete.component';
 import {FlowAddEditComponent} from './deaneries/flows/flow-add-edit/flow-add-edit.component';
 import {FlowDeleteComponent} from './deaneries/flows/flow-delete/flow-delete.component';
-import {TeacherAddEditComponent} from './teachers/teacher-add-edit/teacher-add-edit.component';
-import {TeacherDeleteComponent} from './teachers/teacher-delete/teacher-delete.component';
 import {DisciplineAddEditComponent} from './disciplines/discipline-add-edit/discipline-add-edit.component';
 import {DisciplineDeleteComponent} from './disciplines/discipline-delete/discipline-delete.component';
+import { TeacherAddEditComponent } from './teachers/teacher-add-edit/teacher-add-edit.component';
+import { TeacherDeleteComponent } from './teachers/teacher-delete/teacher-delete.component';
+import { AcademicTitleDeleteComponent } from './academic-title/academic-title-delete/academic-title-delete.component';
+import { AcademicDegreeAddEditComponent } from './academic-degree/academic-degree-add-edit/academic-degree-add-edit.component';
+import { AcademicDegreeDeleteComponent } from './academic-degree/academic-degree-delete/academic-degree-delete.component';
+import { TeacherPositionAddEditComponent } from './teacher-position/teacher-position-add-edit/teacher-position-add-edit.component';
+import { TeacherPositionDeleteComponent } from './teacher-position/teacher-position-delete/teacher-position-delete.component';
+import { WorkTariffAddEditComponent } from './work-tariff/work-tariff-add-edit/work-tariff-add-edit.component';
+import { WorkTariffDeleteComponent } from './work-tariff/work-tariff-delete/work-tariff-delete.component';
 
 @NgModule({
   imports: [
@@ -64,7 +71,14 @@ import {DisciplineDeleteComponent} from './disciplines/discipline-delete/discipl
     TeacherDeleteComponent,
     DisciplineAddEditComponent,
     DisciplineDeleteComponent,
-    AcademicTitleAddEditComponent
+    AcademicTitleAddEditComponent,
+    AcademicTitleDeleteComponent,
+    AcademicDegreeAddEditComponent,
+    AcademicDegreeDeleteComponent,
+    TeacherPositionAddEditComponent,
+    TeacherPositionDeleteComponent,
+    WorkTariffAddEditComponent,
+    WorkTariffDeleteComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,

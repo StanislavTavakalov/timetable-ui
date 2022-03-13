@@ -12,6 +12,8 @@ import {AcademicTitleAddEditComponent} from '../../dialogs/academic-title/academ
 import {HeaderType} from '../../../model/header-type';
 import {LocalStorageService} from '../../../services/local-storage.service';
 import {Router} from '@angular/router';
+import {DepartmentDeleteComponent} from '../../dialogs/departments/department-delete/department-delete.component';
+import {AcademicTitleDeleteComponent} from '../../dialogs/academic-title/academic-title-delete/academic-title-delete.component';
 
 @Component({
   selector: 'app-academic-title-datatable',
@@ -31,7 +33,7 @@ export class AcademicTitleDatatableComponent implements OnInit, OnDestroy {
   @ViewChild('academicTitlesTable', {static: false}) academicTitlesTable: MatTable<AcademicTitle>;
 
   @Input() academicTitles: AcademicTitle[];
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name', 'icons'];
   dataSource: MatTableDataSource<AcademicTitle>;
  // academicTitle: AcademicTitle;
 
@@ -55,7 +57,23 @@ export class AcademicTitleDatatableComponent implements OnInit, OnDestroy {
   }
 
   public deleteAcademicTitle(academicTitle: AcademicTitle): void {
+    const dialogRef = this.dialog.open(AcademicTitleDeleteComponent, {
+      data: academicTitle.id,
+      disableClose: true
+    });
 
+    this.deleteAcademicTitleDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.academicTitles.indexOf(academicTitle, 0);
+        if (index > -1) {
+          this.academicTitles.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Научное звание было удалено');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
   public editAcademicTitle(academicTitle: AcademicTitle): void {
@@ -106,12 +124,6 @@ export class AcademicTitleDatatableComponent implements OnInit, OnDestroy {
 
   public refreshDataTableContent(): void {
     this.dataSource.data = this.academicTitles;
-  }
-
-  public enterAcademicTitle(academicTitle): void {
-    this.localStorageService.subscribableAcademicTitle.next(academicTitle);
-    this.localStorageService.subscribableHeaderType.next(HeaderType.ACADEMIC_TITLE);
-    this.router.navigate(['academic_titles/' + academicTitle.id]);
   }
 
   ngOnDestroy(): void {
