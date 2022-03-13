@@ -5,14 +5,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {AcademicTitleService} from '../../../services/academic-title.service';
 import {AcademicTitle} from '../../../model/additionals/academic-title';
 import {OperationResult} from '../../../model/operation-result';
 import {AcademicTitleAddEditComponent} from '../../dialogs/academic-title/academic-title-add-edit/academic-title-add-edit.component';
-import {HeaderType} from '../../../model/header-type';
 import {LocalStorageService} from '../../../services/local-storage.service';
 import {Router} from '@angular/router';
-import {DepartmentDeleteComponent} from '../../dialogs/departments/department-delete/department-delete.component';
 import {AcademicTitleDeleteComponent} from '../../dialogs/academic-title/academic-title-delete/academic-title-delete.component';
 
 @Component({
@@ -23,9 +20,7 @@ import {AcademicTitleDeleteComponent} from '../../dialogs/academic-title/academi
 export class AcademicTitleDatatableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
-              private localStorageService: LocalStorageService,
-              private notifierService: NotifierService,
-              private router: Router) {
+              private notifierService: NotifierService) {
   }
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -35,7 +30,6 @@ export class AcademicTitleDatatableComponent implements OnInit, OnDestroy {
   @Input() academicTitles: AcademicTitle[];
   displayedColumns: string[] = ['name', 'icons'];
   dataSource: MatTableDataSource<AcademicTitle>;
- // academicTitle: AcademicTitle;
 
   editAcademicTitleDialogSubscription: Subscription;
   deleteAcademicTitleDialogSubscription: Subscription;
