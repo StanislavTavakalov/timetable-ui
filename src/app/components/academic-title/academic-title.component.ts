@@ -27,7 +27,7 @@ export class AcademicTitleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isAcademicTitleLoading = true;
-    this.localStorageService.changeHeaderType(HeaderType.MAIN);
+    this.localStorageService.changeHeaderType(HeaderType.ACADEMIC_TITLE);
 
     this.academicTitleServiceSubscription = this.academicTitleService.getAcademicTitles().subscribe(academicTitles => {
       this.isAcademicTitleLoading = false;

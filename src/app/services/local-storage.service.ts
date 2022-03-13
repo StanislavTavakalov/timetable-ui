@@ -5,6 +5,7 @@ import * as CryptoJS from 'crypto-js';
 import {HeaderType} from '../model/header-type';
 import {Department} from '../model/department/department';
 import {Deanery} from '../model/deanery/deanery';
+import {AcademicTitle} from '../model/additionals/academic-title';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +21,14 @@ export class LocalStorageService {
   subscribableHeaderType: BehaviorSubject<HeaderType>;
   subscribableDepartment: BehaviorSubject<Department>;
   subscribableDeanery: BehaviorSubject<Deanery>;
+  subscribableAcademicTitle: BehaviorSubject<AcademicTitle>;
 
   constructor() {
     this.subscribableCurrentUser = new BehaviorSubject<User>(this.getCurrentUser());
     this.subscribableIsNavBarOpened = new BehaviorSubject<boolean>(false);
     this.subscribableDepartment = new BehaviorSubject<Department>(null);
     this.subscribableDeanery = new BehaviorSubject<Deanery>(null);
+    this.subscribableAcademicTitle = new BehaviorSubject<AcademicTitle>(null);
     this.subscribableHeaderType = new BehaviorSubject<HeaderType>(HeaderType.MAIN);
   }
 
@@ -65,10 +68,13 @@ export class LocalStorageService {
     if (headerType === HeaderType.MAIN) {
       this.subscribableDeanery.next(null);
       this.subscribableDepartment.next(null);
+      this.subscribableAcademicTitle.next(null);
     } else if (headerType === HeaderType.DEANERY) {
       this.subscribableDepartment.next(null);
     } else if (headerType === HeaderType.DEPARTMENT) {
       this.subscribableDeanery.next(null);
+    } else if (headerType === HeaderType.ACADEMIC_TITLE) {
+      this.subscribableAcademicTitle.next(null);
     }
   }
 

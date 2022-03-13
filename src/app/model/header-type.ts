@@ -1,5 +1,6 @@
 export enum HeaderType {
   DEANERY = 'DEANERY',
   DEPARTMENT = 'DEPARTMENT',
+  ACADEMIC_TITLE = 'ACADEMIC_TITLE',
   MAIN = 'MAIN'
 }
