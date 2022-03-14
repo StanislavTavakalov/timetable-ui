@@ -5,7 +5,6 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {AcademicDegreeService} from '../../../services/academic-degree.service';
 import {AcademicDegree} from '../../../model/additionals/academic-degree';
 import {OperationResult} from '../../../model/operation-result';
 import {AcademicDegreeDeleteComponent} from '../../dialogs/academic-degree/academic-degree-delete/academic-degree-delete.component';

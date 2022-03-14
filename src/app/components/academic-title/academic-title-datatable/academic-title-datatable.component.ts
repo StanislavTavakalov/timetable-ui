@@ -8,8 +8,6 @@ import {Subscription} from 'rxjs';
 import {AcademicTitle} from '../../../model/additionals/academic-title';
 import {OperationResult} from '../../../model/operation-result';
 import {AcademicTitleAddEditComponent} from '../../dialogs/academic-title/academic-title-add-edit/academic-title-add-edit.component';
-import {LocalStorageService} from '../../../services/local-storage.service';
-import {Router} from '@angular/router';
 import {AcademicTitleDeleteComponent} from '../../dialogs/academic-title/academic-title-delete/academic-title-delete.component';
 
 @Component({

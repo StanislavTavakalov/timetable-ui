@@ -27,7 +27,6 @@ const routes: Routes = [
   {path: 'positions', component: TeacherPositionComponent},
   {path: 'degrees', component: AcademicDegreeComponent},
   {path: 'academic_titles', component: AcademicTitleComponent},
-  {path: 'academic_titles/:id', component: AcademicTitleComponent},
   {path: 'work_tariffs', component: WorkTariffComponent},
   {path: 'departments', component: DepartmentsComponent},
   {path: 'deaneries', component: DeaneriesComponent},
