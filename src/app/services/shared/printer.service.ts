@@ -27,4 +27,12 @@ export class PrinterService {
   public printSpecialityFullCodeWithShortName(speciality: Speciality): string {
     return speciality.shortName + ' '  + this.printSpecialityFullCode(speciality);
   }
+
+  printListObjects(objects: any[]): string {
+    let result = '';
+    for (const obj of objects) {
+      result = result + obj.name + ', ';
+    }
+    return result.slice(0, -2);
+  }
 }

@@ -1,7 +1,6 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
-import {LocalStorageService} from '../../../services/local-storage.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -14,6 +13,9 @@ import {TeacherAddEditComponent} from '../../dialogs/teachers/teacher-add-edit/t
 import {InfoForTeacherCreation} from '../../../model/department/info-for-teacher-creation';
 import {ResourceLocalizerService} from '../../../services/shared/resource-localizer.service';
 import {TeacherDeleteComponent} from '../../dialogs/teachers/teacher-delete/teacher-delete.component';
+import {PrinterService} from '../../../services/shared/printer.service';
+import {DisciplineService} from '../../../services/discipline.service';
+import {StudyDisciplineGroup} from '../../../model/discipline/study-discipline-group';
 
 @Component({
   selector: 'app-teachers-table',
@@ -26,8 +28,9 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private notifierService: NotifierService,
               private teacherService: TeacherService,
-              public resourceLocalizerService: ResourceLocalizerService,
-              private localStorageService: LocalStorageService) {
+              private disciplineService: DisciplineService,
+              public printerService: PrinterService,
+              public resourceLocalizerService: ResourceLocalizerService) {
   }
 
 
@@ -45,7 +48,15 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
   deleteDialogSubscription: Subscription;
   addDialogSubscription: Subscription;
 
+  studyDisciplineGroups: StudyDisciplineGroup[];
+
   ngOnInit(): void {
+    this.disciplineService.getDisciplineGroups().subscribe(disciplineGroups => {
+      this.studyDisciplineGroups = disciplineGroups;
+    }, error => {
+      this.notifierService.notify('error', 'Не удалось загрузить группы дисциплин.');
+    });
+
     this.dataSource = new MatTableDataSource(this.teachers);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -100,7 +111,11 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
 
   private openAddTeacherDialog(): void {
     const dialogRef = this.dialog.open(TeacherAddEditComponent, {
-      data: {title: 'Создать преподавателя', infoForTeacherCreation: this.infoForTeacherCreation}
+      data: {
+        title: 'Создать преподавателя',
+        infoForTeacherCreation: this.infoForTeacherCreation,
+        studyDisciplineGroups: this.studyDisciplineGroups
+      }
     });
 
     this.addDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
@@ -116,7 +131,12 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
 
   private openEditTeacherDialog(teacher: Teacher): void {
     const dialogRef = this.dialog.open(TeacherAddEditComponent, {
-      data: {title: 'Редактировать преподавателя', teacher, infoForTeacherCreation: this.infoForTeacherCreation}
+      data: {
+        title: 'Редактировать преподавателя',
+        teacher,
+        infoForTeacherCreation: this.infoForTeacherCreation,
+        studyDisciplineGroups: this.studyDisciplineGroups
+      }
     });
 
     this.editDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {

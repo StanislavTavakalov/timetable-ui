@@ -6,6 +6,7 @@ import {TeacherService} from '../../../../services/teacher.service';
 import {StaffType, Teacher} from '../../../../model/department/teacher';
 import {InfoForTeacherCreation} from '../../../../model/department/info-for-teacher-creation';
 import {ResourceLocalizerService} from '../../../../services/shared/resource-localizer.service';
+import {StudyDisciplineGroup} from '../../../../model/discipline/study-discipline-group';
 
 @Component({
   selector: 'app-teacher-add-edit',
@@ -30,13 +31,14 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
   info: InfoForTeacherCreation;
   staffTypes: StaffType[] = [];
   tariffStaffTypes = [StaffType.INTERNAL_COMBINER, StaffType.EXTERNAL_COMBINER, StaffType.FULL_TIME];
+  studyDisciplineGroups: StudyDisciplineGroup[];
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.teacher = this.data.teacher;
     this.info = this.data.infoForTeacherCreation;
+    this.studyDisciplineGroups = this.data.studyDisciplineGroups;
     this.fillStaffTypes();
-
     if (this.teacher != null) {
       this.editMode = true;
       this.initializeForm(this.teacher);
@@ -64,7 +66,8 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
       additionalInfo: [teacher.additionalInfo],
       staffType: [teacher.staffType],
       workTariff: [teacher.workTariff],
-      hours: [teacher.hours]
+      hours: [teacher.hours],
+      studyDisciplineGroups: [teacher.studyDisciplineGroups]
     });
   }
 
@@ -130,6 +133,7 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
       teacher.workTariff = this.teacherForm.controls.workTariff.value;
       teacher.hours = null;
     }
+    teacher.studyDisciplineGroups = this.teacherForm.controls.studyDisciplineGroups.value;
   }
 
   private createCopy(teacher: Teacher): Teacher {
@@ -151,11 +155,11 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  isNeedToShowTariff(): boolean{
+  isNeedToShowTariff(): boolean {
     return this.tariffStaffTypes.includes(this.teacherForm.controls.staffType.value);
   }
 
-  isNeedToShowHours(): boolean{
+  isNeedToShowHours(): boolean {
     return StaffType.PART_TIME === this.teacherForm.controls.staffType.value;
   }
 }

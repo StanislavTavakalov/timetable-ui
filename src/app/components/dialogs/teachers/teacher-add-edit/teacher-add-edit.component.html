@@ -60,6 +60,15 @@
       <input matInput type="number" placeholder="Часы: " [formControlName]="'hours'">
     </mat-form-field>
 
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Закрепленные предметы: " [formControlName]="'studyDisciplineGroups'"  multiple required>
+        <mat-option *ngFor="let studyDisciplineGroup of studyDisciplineGroups" [value]="studyDisciplineGroup">
+          {{studyDisciplineGroup?.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field>
       <textarea matInput placeholder="Дополнительная информация: " [formControlName]="'additionalInfo'"></textarea>
     </mat-form-field>

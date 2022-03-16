@@ -38,6 +38,11 @@
       <td mat-cell *matCellDef="let row"> {{row.academicDegree?.name}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="studyDisciplineGroups">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Закрепленные дисциплины</th>
+      <td mat-cell *matCellDef="let row"> {{printerService.printListObjects(row.studyDisciplineGroups)}} </td>
+    </ng-container>
+
     <ng-container matColumnDef="staffType">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> В штатном составе </th>
       <td mat-cell *matCellDef="let row"> {{resourceLocalizerService.localizeStaffType(row.staffType)}} </td>
