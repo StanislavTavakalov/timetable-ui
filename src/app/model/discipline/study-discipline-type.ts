@@ -1,0 +1,7 @@
+export enum StudyDisciplineType {
+  STANDARD = 'STANDARD',
+  BASIC = 'BASIC',
+  EXTRA = 'EXTRA',
+  COURSE_WORK = 'COURSE_WORK',
+  COURSE_PROJECT = 'COURSE_PROJECT'
+}

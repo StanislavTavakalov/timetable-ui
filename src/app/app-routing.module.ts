@@ -18,6 +18,7 @@ import {GroupsComponent} from './components/groups/groups.component';
 import {FlowsComponent} from './components/flows/flows.component';
 import {TeachersComponent} from './components/teachers/teachers.component';
 import {GroupsAndFlowsComponent} from './components/groups-and-flows/groups-and-flows.component';
+import {DisciplinesComponent} from './components/disciplines/disciplines.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},
   {path: 'departments/:departmentId/groups-and-flows', component: GroupsAndFlowsComponent},
   {path: 'departments/:departmentId/teachers', component: TeachersComponent},
+  {path: 'disciplines', component: DisciplinesComponent},
   {path: 'classroom-fund', component: ClassroomFundComponent},
   {path: 'classroom-type-palette', component: ClassroomTypeColorPaletteComponent},
   {path: 'classroom-fund/building/:id', component: BuildingComponent},

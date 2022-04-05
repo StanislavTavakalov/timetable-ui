@@ -11,7 +11,7 @@ import {StudyDisciplineGroup} from '../model/discipline/study-discipline-group';
 })
 export class DisciplineService extends BasicHttpService {
 
-  private disciplineEndpoint = environment.domain + 'api/v1/discipline';
+  private disciplineEndpoint = environment.domain + 'api/v1/disciplines';
   private disciplineGroupsEndpoint = environment.domain + 'api/v1/disciplinegroups';
 
   public getDisciplines(): Observable<StudyDiscipline[]> {

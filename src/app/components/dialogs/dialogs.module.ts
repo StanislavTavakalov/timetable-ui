@@ -26,6 +26,8 @@ import {FlowAddEditComponent} from './deaneries/flows/flow-add-edit/flow-add-edi
 import {FlowDeleteComponent} from './deaneries/flows/flow-delete/flow-delete.component';
 import { TeacherAddEditComponent } from './teachers/teacher-add-edit/teacher-add-edit.component';
 import { TeacherDeleteComponent } from './teachers/teacher-delete/teacher-delete.component';
+import {DisciplineAddEditComponent} from './disciplines/discipline-add-edit/discipline-add-edit.component';
+import {DisciplineDeleteComponent} from './disciplines/discipline-delete/discipline-delete.component';
 
 @NgModule({
   imports: [
@@ -58,21 +60,25 @@ import { TeacherDeleteComponent } from './teachers/teacher-delete/teacher-delete
     FlowAddEditComponent,
     FlowDeleteComponent,
     TeacherAddEditComponent,
-    TeacherDeleteComponent
+    TeacherDeleteComponent,
+    DisciplineAddEditComponent,
+    DisciplineDeleteComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
     BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
     SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
-    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent
+    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent,
+    DisciplineAddEditComponent, DisciplineDeleteComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
     DepartmentAddEditComponent, DepartmentDeleteComponent, BuildingCreateComponent, BuildingDeleteComponent,
     BuildingFloorCountChangeComponent, WingAddEditComponent, WingPlanLoaderComponent, ResizeableClassroomComponent,
     SpecialityAddEditComponent, SpecialityDeleteComponent, GroupAddEditComponent, GroupsDeleteComponent,
-    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent
+    FlowAddEditComponent, FlowDeleteComponent, TeacherAddEditComponent, TeacherDeleteComponent,
+    DisciplineAddEditComponent, DisciplineDeleteComponent
   ]
 })
 export class DialogsModule {

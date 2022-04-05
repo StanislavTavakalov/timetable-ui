@@ -55,10 +55,6 @@ export class Constants {
     label: 'Группы и потоки',
     isActive: true
   }, {
-    path: '/subjects',
-    label: 'Предметы',
-    isActive: true
-  }, {
     path: '/study-plans',
     label: 'Учебные планы',
     isActive: true

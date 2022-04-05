@@ -1,0 +1,59 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="disciplineFormGroup" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Имя:" [formControlName]="'name'" required>
+    </mat-form-field>
+    <div style="display: flex; flex-direction: row">
+      <mat-form-field style="min-width: 100px; padding-right: 2%">
+        <input matInput type="number" placeholder="Всего часов:" [formControlName]="'totalHours'" required>
+      </mat-form-field>
+
+      <mat-form-field style="min-width: 100px; padding-right: 2%">
+        <input matInput type="number" placeholder="Аудиторных часов:" [formControlName]="'classroomHours'" required>
+      </mat-form-field>
+
+      <mat-form-field style="min-width: 100px;">
+        <input matInput type="number" placeholder="Зачетных единиц:" [formControlName]="'creditUnits'" required>
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <input matInput placeholder="Университет:" [formControlName]="'university'">
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-select [compareWith]="compareObjects" placeholder="Группа дисциплины: "
+                  [formControlName]="'studyDisciplineGroup'"
+                  required>
+        <mat-option *ngFor="let studyDisciplineGroup of studyDisciplineGroups" [value]="studyDisciplineGroup">
+          {{studyDisciplineGroup.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Тип дисциплины: " [formControlName]="'studyDisciplineType'"
+                  required>
+        <mat-option *ngFor="let studyDisciplineType of studyDisciplineTypes" [value]="studyDisciplineType">
+          {{resourceLocalizerService.localizeStudyDisciplineType(studyDisciplineType)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput placeholder="О дисциплине: " [formControlName]="'description'"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="disciplineFormGroup.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+
