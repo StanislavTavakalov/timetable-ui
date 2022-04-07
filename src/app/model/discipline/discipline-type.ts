@@ -1,4 +1,4 @@
-export enum StudyDisciplineType {
+export enum DisciplineType {
   STANDARD = 'STANDARD',
   BASIC = 'BASIC',
   EXTRA = 'EXTRA',

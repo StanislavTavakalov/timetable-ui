@@ -3,10 +3,10 @@ import {ResourceLocalizerService} from '../../../../services/shared/resource-loc
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {StudyDisciplineGroup} from '../../../../model/discipline/study-discipline-group';
+import {DisciplineGroup} from '../../../../model/discipline/discipline-group';
 import {DisciplineService} from '../../../../services/discipline.service';
-import {StudyDiscipline} from '../../../../model/discipline/study-discipline';
-import {StudyDisciplineType} from '../../../../model/discipline/study-discipline-type';
+import {Discipline} from '../../../../model/discipline/discipline';
+import {DisciplineType} from '../../../../model/discipline/discipline-type';
 
 @Component({
   selector: 'app-discipline-add-edit',
@@ -23,32 +23,32 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
   }
 
   title: string;
-  discipline: StudyDiscipline;
+  discipline: Discipline;
   disciplineFormGroup: FormGroup;
   loading = false;
   serviceSubscription: Subscription;
   editMode: boolean;
-  studyDisciplineGroups: StudyDisciplineGroup[];
-  studyDisciplineTypes = [StudyDisciplineType.BASIC, StudyDisciplineType.STANDARD, StudyDisciplineType.EXTRA];
+  disciplineGroups: DisciplineGroup[];
+  disciplineTypes = [DisciplineType.BASIC, DisciplineType.STANDARD, DisciplineType.EXTRA];
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.discipline = this.data.discipline;
-    this.studyDisciplineGroups = this.data.studyDisciplineGroups;
+    this.disciplineGroups = this.data.disciplineGroups;
     if (this.discipline != null) {
       this.editMode = true;
       this.initializeForm(this.discipline);
     } else {
       this.editMode = false;
-      this.initializeForm(new StudyDiscipline());
+      this.initializeForm(new Discipline());
     }
   }
 
-  private initializeForm(discipline: StudyDiscipline): void {
+  private initializeForm(discipline: Discipline): void {
     this.disciplineFormGroup = this.fb.group({
       name: [discipline.name],
-      studyDisciplineGroup: [discipline.studyDisciplineGroup],
-      studyDisciplineType: [discipline.studyDisciplineType],
+      disciplineGroup: [discipline.disciplineGroup],
+      disciplineType: [discipline.disciplineType],
       totalHours: [discipline.totalHours],
       classroomHours: [discipline.classroomHours],
       creditUnits: [discipline.creditUnits],
@@ -66,7 +66,7 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
   }
 
   private create(): void {
-    const discipline = new StudyDiscipline();
+    const discipline = new Discipline();
     this.setValuesFromForm(discipline);
     this.loading = true;
 
@@ -103,19 +103,19 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setValuesFromForm(discipline: StudyDiscipline): void {
+  private setValuesFromForm(discipline: Discipline): void {
     discipline.name = this.disciplineFormGroup.controls.name.value;
-    discipline.studyDisciplineType = this.disciplineFormGroup.controls.studyDisciplineType.value;
+    discipline.disciplineType = this.disciplineFormGroup.controls.disciplineType.value;
     discipline.description = this.disciplineFormGroup.controls.description.value;
     discipline.totalHours = this.disciplineFormGroup.controls.totalHours.value;
-    discipline.studyDisciplineGroup = this.disciplineFormGroup.controls.studyDisciplineGroup.value;
+    discipline.disciplineGroup = this.disciplineFormGroup.controls.disciplineGroup.value;
     discipline.creditUnits = this.disciplineFormGroup.controls.creditUnits.value;
     discipline.classroomHours = this.disciplineFormGroup.controls.classroomHours.value;
     discipline.university = this.disciplineFormGroup.controls.university.value;
   }
 
-  private createCopy(discipline: StudyDiscipline): StudyDiscipline {
-    const disciplineCopy = new StudyDiscipline();
+  private createCopy(discipline: Discipline): Discipline {
+    const disciplineCopy = new Discipline();
     disciplineCopy.id = discipline.id;
     return disciplineCopy;
   }

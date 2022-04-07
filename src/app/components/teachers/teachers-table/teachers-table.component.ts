@@ -15,7 +15,7 @@ import {ResourceLocalizerService} from '../../../services/shared/resource-locali
 import {TeacherDeleteComponent} from '../../dialogs/teachers/teacher-delete/teacher-delete.component';
 import {PrinterService} from '../../../services/shared/printer.service';
 import {DisciplineService} from '../../../services/discipline.service';
-import {StudyDisciplineGroup} from '../../../model/discipline/study-discipline-group';
+import {DisciplineGroup} from '../../../model/discipline/discipline-group';
 
 @Component({
   selector: 'app-teachers-table',
@@ -48,11 +48,11 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
   deleteDialogSubscription: Subscription;
   addDialogSubscription: Subscription;
 
-  studyDisciplineGroups: StudyDisciplineGroup[];
+  disciplineGroups: DisciplineGroup[];
 
   ngOnInit(): void {
     this.disciplineService.getDisciplineGroups().subscribe(disciplineGroups => {
-      this.studyDisciplineGroups = disciplineGroups;
+      this.disciplineGroups = disciplineGroups;
     }, error => {
       this.notifierService.notify('error', 'Не удалось загрузить группы дисциплин.');
     });
@@ -114,7 +114,7 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
       data: {
         title: 'Создать преподавателя',
         infoForTeacherCreation: this.infoForTeacherCreation,
-        studyDisciplineGroups: this.studyDisciplineGroups
+        disciplineGroups: this.disciplineGroups
       }
     });
 
@@ -135,7 +135,7 @@ export class TeachersTableComponent implements OnInit, OnDestroy {
         title: 'Редактировать преподавателя',
         teacher,
         infoForTeacherCreation: this.infoForTeacherCreation,
-        studyDisciplineGroups: this.studyDisciplineGroups
+        disciplineGroups: this.disciplineGroups
       }
     });
 

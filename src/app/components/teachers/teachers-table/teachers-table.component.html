@@ -38,9 +38,9 @@
       <td mat-cell *matCellDef="let row"> {{row.academicDegree?.name}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="studyDisciplineGroups">
+    <ng-container matColumnDef="disciplineGroups">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Закрепленные дисциплины</th>
-      <td mat-cell *matCellDef="let row"> {{printerService.printListObjects(row.studyDisciplineGroups)}} </td>
+      <td mat-cell *matCellDef="let row"> {{printerService.printListObjects(row.disciplineGroups)}} </td>
     </ng-container>
 
     <ng-container matColumnDef="staffType">

@@ -62,9 +62,9 @@
 
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Закрепленные предметы: " [formControlName]="'studyDisciplineGroups'"  multiple required>
-        <mat-option *ngFor="let studyDisciplineGroup of studyDisciplineGroups" [value]="studyDisciplineGroup">
-          {{studyDisciplineGroup?.name}}
+      <mat-select [compareWith]="compareObjects" placeholder="Закрепленные предметы: " [formControlName]="'disciplineGroups'"  multiple required>
+        <mat-option *ngFor="let disciplineGroup of disciplineGroups" [value]="disciplineGroup">
+          {{disciplineGroup?.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

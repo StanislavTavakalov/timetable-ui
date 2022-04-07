@@ -76,7 +76,7 @@ export class Constants {
   static specialitiesColumns = ['fullName', 'shortName', 'code', 'description', 'icons'];
 
   static teachersColumns = ['firstName', 'lastName', 'patronymic', 'teacherPosition',
-    'academicTitle', 'academicDegree', 'studyDisciplineGroups', 'staffType', 'workTariff', 'hours',
+    'academicTitle', 'academicDegree', 'disciplineGroups', 'staffType', 'workTariff', 'hours',
     'additionalInfo', 'icons'];
 
 }

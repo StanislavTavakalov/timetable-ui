@@ -4,7 +4,7 @@ import {NotifierService} from 'angular-notifier';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {Subscription} from 'rxjs';
 import {DisciplineService} from '../../services/discipline.service';
-import {StudyDiscipline} from '../../model/discipline/study-discipline';
+import {Discipline} from '../../model/discipline/discipline';
 
 @Component({
   selector: 'app-disciplines',
@@ -20,7 +20,7 @@ export class DisciplinesComponent implements OnInit, OnDestroy {
 
   }
 
-  disciplines: StudyDiscipline[];
+  disciplines: Discipline[];
   disciplineServiceSubscription: Subscription;
   isTableVisible = false;
   isLoading = false;

@@ -2,7 +2,7 @@ import {TeacherPosition} from '../additionals/teacher-position';
 import {AcademicTitle} from '../additionals/academic-title';
 import {AcademicDegree} from '../additionals/academic-degree';
 import {WorkTariff} from '../additionals/work-tariff';
-import {StudyDisciplineGroup} from '../discipline/study-discipline-group';
+import {DisciplineGroup} from '../discipline/discipline-group';
 
 export enum StaffType {
   FULL_TIME = 'FULL_TIME',
@@ -23,5 +23,5 @@ export class Teacher {
   staffType: StaffType;
   workTariff: WorkTariff;
   hours: number;
-  studyDisciplineGroups: StudyDisciplineGroup[];
+  disciplineGroups: DisciplineGroup[];
 }

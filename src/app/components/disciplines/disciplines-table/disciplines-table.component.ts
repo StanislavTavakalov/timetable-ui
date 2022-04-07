@@ -8,7 +8,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {OperationResult} from '../../../model/operation-result';
-import {StudyDiscipline} from '../../../model/discipline/study-discipline';
+import {Discipline} from '../../../model/discipline/discipline';
 import {DisciplineAddEditComponent} from '../../dialogs/disciplines/discipline-add-edit/discipline-add-edit.component';
 import {DisciplineDeleteComponent} from '../../dialogs/disciplines/discipline-delete/discipline-delete.component';
 import {DisciplineService} from '../../../services/discipline.service';
@@ -32,21 +32,21 @@ export class DisciplinesTableComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild('disciplines', {static: false}) disciplinesTable: MatTable<StudyDiscipline>;
+  @ViewChild('disciplines', {static: false}) disciplinesTable: MatTable<Discipline>;
 
-  @Input() disciplines: StudyDiscipline[];
+  @Input() disciplines: Discipline[];
 
   displayedColumns: string[] = ['name', 'totalHours', 'classroomHours', 'creditUnits',
-    'studyDisciplineType', 'studyDisciplineGroup', 'university', 'description', 'icons'];
-  dataSource: MatTableDataSource<StudyDiscipline>;
+    'disciplineType', 'disciplineGroup', 'university', 'description', 'icons'];
+  dataSource: MatTableDataSource<Discipline>;
 
   deleteDisciplineDialogSubscription: Subscription;
   addDisciplineDialogSubscription: Subscription;
-  studyDisciplineGroups = [];
+  disciplineGroups = [];
 
   ngOnInit(): void {
     this.disciplineService.getDisciplineGroups().subscribe(disciplineGroups => {
-      this.studyDisciplineGroups = disciplineGroups;
+      this.disciplineGroups = disciplineGroups;
     }, error => {
       this.notifierService.notify('error', 'Не удалось загрузить группы дисциплин.');
     });
@@ -66,7 +66,7 @@ export class DisciplinesTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public deleteDiscipline(discipline: StudyDiscipline): void {
+  public deleteDiscipline(discipline: Discipline): void {
     const dialogRef = this.dialog.open(DisciplineDeleteComponent, {
       data: discipline.id,
       disableClose: true
@@ -86,11 +86,11 @@ export class DisciplinesTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  public editDiscipline(discipline: StudyDiscipline): void {
+  public editDiscipline(discipline: Discipline): void {
     this.openDialog(true, discipline);
   }
 
-  private openDialog(isEdit: boolean, discipline: StudyDiscipline): void {
+  private openDialog(isEdit: boolean, discipline: Discipline): void {
     if (isEdit) {
       this.openEditDisciplineDialog(discipline);
     } else {
@@ -99,12 +99,12 @@ export class DisciplinesTableComponent implements OnInit, OnDestroy {
   }
 
   public addDiscipline(): void {
-    this.openDialog(false, new StudyDiscipline());
+    this.openDialog(false, new Discipline());
   }
 
   private openAddDisciplineDialog(): void {
     const dialogRef = this.dialog.open(DisciplineAddEditComponent, {
-      data: {title: 'Создать дисциплину', studyDisciplineGroups: this.studyDisciplineGroups}
+      data: {title: 'Создать дисциплину', disciplineGroups: this.disciplineGroups}
     });
 
     this.addDisciplineDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
@@ -118,9 +118,9 @@ export class DisciplinesTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  private openEditDisciplineDialog(discipline: StudyDiscipline): void {
+  private openEditDisciplineDialog(discipline: Discipline): void {
     const dialogRef = this.dialog.open(DisciplineAddEditComponent, {
-      data: {title: 'Редактировать дисциплину', discipline, studyDisciplineGroups: this.studyDisciplineGroups}
+      data: {title: 'Редактировать дисциплину', discipline, disciplineGroups: this.disciplineGroups}
     });
 
     this.addDisciplineDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {

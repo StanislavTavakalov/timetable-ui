@@ -25,19 +25,19 @@
 
     <mat-form-field>
       <mat-select [compareWith]="compareObjects" placeholder="Группа дисциплины: "
-                  [formControlName]="'studyDisciplineGroup'"
+                  [formControlName]="'disciplineGroup'"
                   required>
-        <mat-option *ngFor="let studyDisciplineGroup of studyDisciplineGroups" [value]="studyDisciplineGroup">
-          {{studyDisciplineGroup.name}}
+        <mat-option *ngFor="let disciplineGroup of disciplineGroups" [value]="disciplineGroup">
+          {{disciplineGroup.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select placeholder="Тип дисциплины: " [formControlName]="'studyDisciplineType'"
+      <mat-select placeholder="Тип дисциплины: " [formControlName]="'disciplineType'"
                   required>
-        <mat-option *ngFor="let studyDisciplineType of studyDisciplineTypes" [value]="studyDisciplineType">
-          {{resourceLocalizerService.localizeStudyDisciplineType(studyDisciplineType)}}
+        <mat-option *ngFor="let disciplineType of disciplineTypes" [value]="disciplineType">
+          {{resourceLocalizerService.localizeDisciplineType(disciplineType)}}
         </mat-option>
       </mat-select>
     </mat-form-field>

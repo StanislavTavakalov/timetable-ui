@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AssignmentType, ClassroomStatus} from '../../model/dispatcher/classroom';
 import {RoleCategory} from '../../model/users/role-category';
 import {StaffType} from '../../model/department/teacher';
-import {StudyDisciplineType} from '../../model/discipline/study-discipline-type';
+import {DisciplineType} from '../../model/discipline/discipline-type';
 
 @Injectable({
   providedIn: 'root'
@@ -62,19 +62,19 @@ export class ResourceLocalizerService {
     return '-';
   }
 
-  localizeStudyDisciplineType(studyDisciplineType: StudyDisciplineType): string {
-    switch (studyDisciplineType) {
-      case StudyDisciplineType.EXTRA:
+  localizeDisciplineType(disciplineType: DisciplineType): string {
+    switch (disciplineType) {
+      case DisciplineType.EXTRA:
         return 'Дополнительная';
-      case StudyDisciplineType.BASIC:
+      case DisciplineType.BASIC:
         return 'Базовая (УВО)';
-      case StudyDisciplineType.STANDARD:
+      case DisciplineType.STANDARD:
         return 'Типовая';
-      case StudyDisciplineType.COURSE_PROJECT:
+      case DisciplineType.COURSE_PROJECT:
         return 'Курсовой проект';
-      case StudyDisciplineType.COURSE_WORK:
+      case DisciplineType.COURSE_WORK:
         return 'Курсовая работа';
-      case studyDisciplineType:
+      case disciplineType:
         return 'Не указано';
     }
     return '-';
