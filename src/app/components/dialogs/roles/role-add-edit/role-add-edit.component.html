@@ -25,7 +25,7 @@
           *ngFor="let permission of addedPermissions"
           [removable]="removable"
           (removed)="remove(permission)">
-          {{permission.name}}
+          {{this.resourceLocalizerService.localizePermissionName(permission.name)}}
           <button matChipRemove *ngIf="removable">
             <mat-icon *ngIf="removable" class="chip-icon">cancel</mat-icon>
           </button>
@@ -40,7 +40,7 @@
       </mat-chip-list>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
         <mat-option *ngFor="let permission of filteredPermissions | async" [value]="permission">
-          {{permission?.name}}
+          {{this.resourceLocalizerService.localizePermissionName(permission?.name)}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -137,7 +137,7 @@ export class RolesDatatableComponent implements OnInit, OnDestroy {
   printPermissions(permissions: Permission[]): string {
     let allPermissions = '';
     for (const permission of permissions) {
-      allPermissions = allPermissions + permission.name + ', ';
+      allPermissions = allPermissions + this.resourceLocalizerService.localizePermissionName(permission.name) + ', ';
     }
     return allPermissions.slice(0, -2);
   }

@@ -88,5 +88,7 @@ button:focus{
 }
 
 
-
+td {
+  overflow-wrap: break-word
+}
 
