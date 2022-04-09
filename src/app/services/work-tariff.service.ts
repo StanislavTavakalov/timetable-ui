@@ -4,7 +4,6 @@ import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {WorkTariff} from '../model/additionals/work-tariff';
-import {AcademicTitle} from '../model/additionals/academic-title';
 
 @Injectable({
   providedIn: 'root'

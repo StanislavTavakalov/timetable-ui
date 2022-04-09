@@ -43,5 +43,4 @@ export class AcademicDegreeDeleteComponent implements OnInit, OnDestroy {
     }
   }
 
-
 }

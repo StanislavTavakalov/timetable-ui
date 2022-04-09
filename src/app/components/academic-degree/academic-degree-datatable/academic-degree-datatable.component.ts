@@ -127,8 +127,8 @@ export class AcademicDegreeDatatableComponent implements OnInit, OnDestroy {
       this.deleteAcademicDegreeDialogSubscription.unsubscribe();
     }
 
-    if (this.editAcademicDegreeDialogSubscription) {
-      this.editAcademicDegreeDialogSubscription.unsubscribe();
+    if (this.addAcademicDegreeDialogSubscription) {
+      this.addAcademicDegreeDialogSubscription.unsubscribe();
     }
   }
 
