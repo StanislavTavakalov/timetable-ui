@@ -86,7 +86,7 @@ export class UniversitiesDatatableComponent implements OnInit, OnDestroy {
 
   private openAddUniversityDialog(): void {
     const dialogRef = this.dialog.open(UniversityAddEditComponent, {
-      data: {title: 'Создать научную степень'}
+      data: {title: 'Создать университет'}
     });
 
     this.addUniversityDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
@@ -102,7 +102,7 @@ export class UniversitiesDatatableComponent implements OnInit, OnDestroy {
 
   private openEditUniversityDialog(university: University): void {
     const dialogRef = this.dialog.open(UniversityAddEditComponent, {
-      data: {title: 'Редактировать научную степень', university}
+      data: {title: 'Редактировать университет', university}
     });
 
     this.editUniversityDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {

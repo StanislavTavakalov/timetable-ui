@@ -14,22 +14,22 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addLoad()" style="cursor: pointer"
-              matTooltip="Добавить учебную нагрузку">
-              add_circle
-         </span>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addLoad()"
+                matTooltip="Добавить учебную нагрузку">
+          <mat-icon> add_circle</mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let load">
-         <span class="material-icons" (click)="editLoad(load)" style="cursor: pointer"
-               matTooltip="Редактировать учебную нагрузку">
-             edit
-         </span>
-        <span class="material-icons" (click)="deleteLoad(load)" style="cursor: pointer"
-              matTooltip="Удалить учебную нагрузку">
-             delete
-        </span>
+        <button mat-icon-button (click)="editLoad(load)"
+                matTooltip="Редактировать учебную нагрузку">
+          <mat-icon> edit</mat-icon>
+        </button>
 
+        <button mat-icon-button (click)="deleteLoad(load)"
+                matTooltip="Удалить учебную нагрузку">
+          <mat-icon> delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 

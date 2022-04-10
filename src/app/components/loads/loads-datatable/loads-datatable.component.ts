@@ -86,7 +86,7 @@ export class LoadsDatatableComponent implements OnInit {
 
   private openAddLoadDialog(): void {
     const dialogRef = this.dialog.open(LoadAddEditComponent, {
-      data: {title: 'Создать научную степень'}
+      data: {title: 'Создать учебную нагрузку'}
     });
 
     this.addLoadDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
@@ -102,7 +102,7 @@ export class LoadsDatatableComponent implements OnInit {
 
   private openEditLoadDialog(load: Load): void {
     const dialogRef = this.dialog.open(LoadAddEditComponent, {
-      data: {title: 'Редактировать научную степень', load}
+      data: {title: 'Редактировать учебную нагрузку', load}
     });
 
     this.editLoadDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {

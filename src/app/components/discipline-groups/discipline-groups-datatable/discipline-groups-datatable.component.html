@@ -14,22 +14,22 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addDisciplineGroup()" style="cursor: pointer"
-              matTooltip="Добавить группу дисциплин">
-              add_circle
-         </span>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addDisciplineGroup()"
+                matTooltip="Добавить группу дисциплин">
+          <mat-icon> add_circle </mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let disciplineGroup">
-         <span class="material-icons" (click)="editDisciplineGroup(disciplineGroup)" style="cursor: pointer"
-               matTooltip="Редактировать группу дисциплин">
-             edit
-         </span>
-        <span class="material-icons" (click)="deleteDisciplineGroup(disciplineGroup)" style="cursor: pointer"
-              matTooltip="Удалить группу дисциплин">
-             delete
-        </span>
+        <button mat-icon-button (click)="editDisciplineGroup(disciplineGroup)"
+                matTooltip="Редактировать группу дисциплин">
+          <mat-icon> edit</mat-icon>
+        </button>
 
+        <button mat-icon-button (click)="deleteDisciplineGroup(disciplineGroup)"
+                matTooltip="Удалить группу дисциплин">
+          <mat-icon> delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 

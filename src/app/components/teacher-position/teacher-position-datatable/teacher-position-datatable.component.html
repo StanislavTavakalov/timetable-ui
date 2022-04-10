@@ -14,22 +14,22 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addTeacherPosition()" style="cursor: pointer"
-              matTooltip="Добавить должность">
-              add_circle
-         </span>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addTeacherPosition()"
+                matTooltip="Добавить должность">
+          <mat-icon> add_circle</mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let teacherPosition">
-         <span class="material-icons" (click)="editTeacherPosition(teacherPosition)" style="cursor: pointer"
-               matTooltip="Редактировать должность">
-             edit
-         </span>
-        <span class="material-icons" (click)="deleteTeacherPosition(teacherPosition)" style="cursor: pointer"
-              matTooltip="Удалить должность">
-             delete
-        </span>
+        <button mat-icon-button (click)="editTeacherPosition(teacherPosition)"
+                matTooltip="Редактировать должность">
+          <mat-icon> edit</mat-icon>
+        </button>
 
+        <button mat-icon-button (click)="deleteTeacherPosition(teacherPosition)"
+                matTooltip="Удалить должность">
+          <mat-icon> delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 

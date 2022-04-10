@@ -14,21 +14,22 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addAcademicDegree()" style="cursor: pointer"
-              matTooltip="Добавить научную степень">
-              add_circle
-         </span>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addAcademicDegree()"
+                matTooltip="Добавить научную степень">
+          <mat-icon> add_circle </mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let academicDegree">
-         <span class="material-icons" (click)="editAcademicDegree(academicDegree)" style="cursor: pointer"
-               matTooltip="Редактировать научную степень">
-             edit
-         </span>
-        <span class="material-icons" (click)="deleteAcademicDegree(academicDegree)" style="cursor: pointer"
-              matTooltip="Удалить научную степень">
-             delete
-        </span>
+        <button mat-icon-button (click)="editAcademicDegree(academicDegree)"
+                matTooltip="Редактировать научную степень">
+          <mat-icon> edit</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="deleteAcademicDegree(academicDegree)"
+                matTooltip="Удалить научную степень">
+          <mat-icon> delete</mat-icon>
+        </button>
 
       </td>
     </ng-container>

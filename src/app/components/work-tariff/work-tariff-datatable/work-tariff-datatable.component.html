@@ -14,22 +14,22 @@
 
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-        <span class="material-icons" (click)="addWorkTariff()" style="cursor: pointer"
-              matTooltip="Добавить рабочую ставку">
-              add_circle
-         </span>
+        <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addWorkTariff()"
+                matTooltip="Добавить рабочую ставку">
+          <mat-icon> add_circle</mat-icon>
+        </button>
       </th>
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let workTariff">
-         <span class="material-icons" (click)="editWorkTariff(workTariff)" style="cursor: pointer"
-               matTooltip="Редактировать рабочую ставку">
-             edit
-         </span>
-        <span class="material-icons" (click)="deleteWorkTariff(workTariff)" style="cursor: pointer"
-              matTooltip="Удалить рабочую ставку">
-             delete
-        </span>
+        <button mat-icon-button (click)="editWorkTariff(workTariff)"
+                matTooltip="Редактировать рабочую ставку">
+          <mat-icon> edit</mat-icon>
+        </button>
 
+        <button mat-icon-button (click)="deleteWorkTariff(workTariff)"
+                matTooltip="Удалить рабочую ставкуу">
+          <mat-icon> delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 
