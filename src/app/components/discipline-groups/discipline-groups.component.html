@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isDisciplineGroupLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="disciplineGroupTableVisible" class="table-content">
+      <app-discipline-groups-datatable [disciplineGroups]="disciplineGroups"></app-discipline-groups-datatable>
+    </div>
+  </div>
+</ng-template>

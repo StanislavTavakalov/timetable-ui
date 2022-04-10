@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isLoadLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="loadTableVisible" class="table-content">
+      <app-loads-datatable [loads]="loads"></app-loads-datatable>
+    </div>
+  </div>
+</ng-template>

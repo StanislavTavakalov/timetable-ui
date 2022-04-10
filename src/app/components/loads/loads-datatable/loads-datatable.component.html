@@ -1,0 +1,42 @@
+<h2> Учебные нагрузки </h2>
+<mat-form-field>
+  <mat-label>Фильтр</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Учебные нагрузки...">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table #loadTable mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icons">
+      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+        <span class="material-icons" (click)="addLoad()" style="cursor: pointer"
+              matTooltip="Добавить учебную нагрузку">
+              add_circle
+         </span>
+      </th>
+
+      <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let load">
+         <span class="material-icons" (click)="editLoad(load)" style="cursor: pointer"
+               matTooltip="Редактировать учебную нагрузку">
+             edit
+         </span>
+        <span class="material-icons" (click)="deleteLoad(load)" style="cursor: pointer"
+              matTooltip="Удалить учебную нагрузку">
+             delete
+        </span>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
