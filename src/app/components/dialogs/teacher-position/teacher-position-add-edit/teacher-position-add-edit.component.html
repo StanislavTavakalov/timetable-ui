@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="teacherPositionForm" class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Название:" [formControlName]="'name'" required>
+      <mat-error *ngIf="name.hasError('maxlength')"> Количество символов не должно превышать 1000!
+      </mat-error>
+      <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="teacherPositionForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>

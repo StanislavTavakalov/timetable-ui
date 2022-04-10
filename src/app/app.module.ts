@@ -52,6 +52,16 @@ import {TeachersTableComponent} from './components/teachers/teachers-table/teach
 import {GroupsAndFlowsComponent} from './components/groups-and-flows/groups-and-flows.component';
 import {DisciplinesComponent} from './components/disciplines/disciplines.component';
 import {DisciplinesTableComponent} from './components/disciplines/disciplines-table/disciplines-table.component';
+import { UniversitiesComponent } from './components/universities/universities.component';
+import { UniversitiesDatatableComponent } from './components/universities/universities-datatable/universities-datatable.component';
+import { UniversityAddEditComponent } from './components/dialogs/universities/university-add-edit/university-add-edit.component';
+import { UniversityDeleteComponent } from './components/dialogs/universities/university-delete/university-delete.component';
+import { LoadsComponent } from './components/loads/loads.component';
+import { LoadsDatatableComponent } from './components/loads/loads-datatable/loads-datatable.component';
+import { SemesterLoadsComponent } from './components/semester-loads/semester-loads.component';
+import { SemesterLoadsDatatableComponent } from './components/semester-loads/semester-loads-datatable/semester-loads-datatable.component';
+import { DisciplineGroupsComponent } from './components/discipline-groups/discipline-groups.component';
+import { DisciplineGroupsDatatableComponent } from './components/discipline-groups/discipline-groups-datatable/discipline-groups-datatable.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +104,16 @@ import {DisciplinesTableComponent} from './components/disciplines/disciplines-ta
     GroupsAndFlowsComponent,
     DisciplinesComponent,
     DisciplinesTableComponent,
+    UniversitiesComponent,
+    UniversitiesDatatableComponent,
+    UniversityAddEditComponent,
+    UniversityDeleteComponent,
+    LoadsComponent,
+    LoadsDatatableComponent,
+    SemesterLoadsComponent,
+    SemesterLoadsDatatableComponent,
+    DisciplineGroupsComponent,
+    DisciplineGroupsDatatableComponent,
   ],
   imports: [
     BrowserModule,

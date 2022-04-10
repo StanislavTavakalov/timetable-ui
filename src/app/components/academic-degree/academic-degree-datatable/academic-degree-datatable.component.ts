@@ -5,8 +5,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {AcademicDegreeService} from '../../../services/academic-degree.service';
 import {AcademicDegree} from '../../../model/additionals/academic-degree';
+import {OperationResult} from '../../../model/operation-result';
+import {AcademicDegreeDeleteComponent} from '../../dialogs/academic-degree/academic-degree-delete/academic-degree-delete.component';
+import {AcademicDegreeAddEditComponent} from '../../dialogs/academic-degree/academic-degree-add-edit/academic-degree-add-edit.component';
 
 @Component({
   selector: 'app-academic-degree-datatable',
@@ -16,8 +18,7 @@ import {AcademicDegree} from '../../../model/additionals/academic-degree';
 export class AcademicDegreeDatatableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
-              private notifierService: NotifierService,
-              private academicDegreeService: AcademicDegreeService) {
+              private notifierService: NotifierService) {
   }
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -25,7 +26,7 @@ export class AcademicDegreeDatatableComponent implements OnInit, OnDestroy {
   @ViewChild('academicDegreeTable', {static: false}) academicDegreeTable: MatTable<AcademicDegree>;
 
   @Input() academicDegrees: AcademicDegree[];
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name', 'icons'];
   dataSource: MatTableDataSource<AcademicDegree>;
 
   editAcademicDegreeDialogSubscription: Subscription;
@@ -48,14 +49,69 @@ export class AcademicDegreeDatatableComponent implements OnInit, OnDestroy {
   }
 
   public editAcademicDegree(academicDegree: AcademicDegree): void {
+    this.openAcademicDegreeDialog(true, academicDegree);
+  }
+
+  private openAcademicDegreeDialog(isEdit: boolean, academicDegree: AcademicDegree): void {
+    if (isEdit) {
+      this.openEditAcademicDegreeDialog(academicDegree);
+    } else {
+      this.openAddAcademicDegreeDialog();
+    }
   }
 
   public deleteAcademicDegree(academicDegree: AcademicDegree): void {
+    const dialogRef = this.dialog.open(AcademicDegreeDeleteComponent, {
+      data: academicDegree.id,
+      disableClose: true
+    });
 
+    this.deleteAcademicDegreeDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.academicDegrees.indexOf(academicDegree, 0);
+        if (index > -1) {
+          this.academicDegrees.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Научная степень была удалена');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
   public addAcademicDegree(): void {
+    this.openAcademicDegreeDialog(false, new AcademicDegree());
+  }
 
+  private openAddAcademicDegreeDialog(): void {
+    const dialogRef = this.dialog.open(AcademicDegreeAddEditComponent, {
+      data: {title: 'Создать научную степень'}
+    });
+
+    this.addAcademicDegreeDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.academicDegrees.unshift(operationResult.object);
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Научная степень была успешно создана.');
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
+
+  private openEditAcademicDegreeDialog(academicDegree: AcademicDegree): void {
+    const dialogRef = this.dialog.open(AcademicDegreeAddEditComponent, {
+      data: {title: 'Редактировать научную степень', academicDegree}
+    });
+
+    this.editAcademicDegreeDialogSubscription = dialogRef.afterClosed().subscribe((operationResponse: OperationResult) => {
+      if (operationResponse.isCompleted && operationResponse.errorMessage === null) {
+        this.notifierService.notify('success', 'Научная степень была успешна изменена');
+      } else if (operationResponse.isCompleted && operationResponse.errorMessage !== null) {
+        this.notifierService.notify('error', operationResponse.errorMessage);
+      }
+    });
   }
 
   public refreshDataTableContent(): void {
@@ -69,6 +125,10 @@ export class AcademicDegreeDatatableComponent implements OnInit, OnDestroy {
 
     if (this.deleteAcademicDegreeDialogSubscription) {
       this.deleteAcademicDegreeDialogSubscription.unsubscribe();
+    }
+
+    if (this.addAcademicDegreeDialogSubscription) {
+      this.addAcademicDegreeDialogSubscription.unsubscribe();
     }
   }
 

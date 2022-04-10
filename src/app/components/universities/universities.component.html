@@ -1,0 +1,10 @@
+<mat-spinner *ngIf="isUniversityLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
+
+<ng-template #mainContent>
+  <div style="display: flex">
+    <div *ngIf="universityTableVisible" class="table-content">
+      <app-universities-datatable [universities]="universities"></app-universities-datatable>
+    </div>
+  </div>
+</ng-template>

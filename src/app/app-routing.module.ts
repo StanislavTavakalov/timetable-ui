@@ -19,6 +19,10 @@ import {FlowsComponent} from './components/flows/flows.component';
 import {TeachersComponent} from './components/teachers/teachers.component';
 import {GroupsAndFlowsComponent} from './components/groups-and-flows/groups-and-flows.component';
 import {DisciplinesComponent} from './components/disciplines/disciplines.component';
+import {UniversitiesComponent} from './components/universities/universities.component';
+import {LoadsComponent} from './components/loads/loads.component';
+import {SemesterLoadsComponent} from './components/semester-loads/semester-loads.component';
+import {DisciplineGroupsComponent} from './components/discipline-groups/discipline-groups.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -26,6 +30,10 @@ const routes: Routes = [
   {path: 'roles', component: RolesComponent},
   {path: 'positions', component: TeacherPositionComponent},
   {path: 'degrees', component: AcademicDegreeComponent},
+  {path: 'universities', component: UniversitiesComponent},
+  {path: 'loads', component: LoadsComponent},
+  {path: 'semester_loads', component: SemesterLoadsComponent},
+  {path: 'discipline_groups', component: DisciplineGroupsComponent},
   {path: 'academic_titles', component: AcademicTitleComponent},
   {path: 'work_tariffs', component: WorkTariffComponent},
   {path: 'departments', component: DepartmentsComponent},
