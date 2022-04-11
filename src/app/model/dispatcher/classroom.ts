@@ -39,4 +39,6 @@ export class Classroom {
   assignmentType: AssignmentType;
   department: Department;
   deanery: Deanery;
+  createdWhen: Date;
+  updatedWhen: Date;
 }

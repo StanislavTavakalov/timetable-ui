@@ -24,4 +24,6 @@ export class Teacher {
   workTariff: WorkTariff;
   hours: number;
   disciplineGroups: DisciplineGroup[];
+  createdWhen: Date;
+  updatedWhen: Date;
 }

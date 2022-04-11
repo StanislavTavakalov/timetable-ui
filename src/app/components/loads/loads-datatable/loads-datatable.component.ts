@@ -6,7 +6,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {OperationResult} from '../../../model/operation-result';
-import {Load} from '../../../model/additionals/load';
+import {Load} from '../../../model/study-plan/structure/load';
 import {LoadDeleteComponent} from '../../dialogs/loads/load-delete/load-delete.component';
 import {LoadAddEditComponent} from '../../dialogs/loads/load-add-edit/load-add-edit.component';
 

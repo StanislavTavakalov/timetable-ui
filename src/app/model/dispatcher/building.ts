@@ -5,4 +5,6 @@ export class Building {
   number: number;
   description: string;
   floors: Floor[];
+  createdWhen: Date;
+  updatedWhen: Date;
 }

@@ -11,4 +11,6 @@ export class Discipline {
   creditUnits: string;
   university: string;
   description: string;
+  createdWhen: Date;
+  updatedWhen: Date;
 }

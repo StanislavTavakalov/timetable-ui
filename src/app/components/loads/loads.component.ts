@@ -5,7 +5,7 @@ import {LocalStorageService} from '../../services/local-storage.service';
 import {Subscription} from 'rxjs';
 import {HeaderType} from '../../model/header-type';
 import {LoadService} from '../../services/load.service';
-import {Load} from '../../model/additionals/load';
+import {Load} from '../../model/study-plan/structure/load';
 
 @Component({
   selector: 'app-loads',

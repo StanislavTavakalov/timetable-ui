@@ -6,4 +6,6 @@ export class Flow {
   name: string;
   deanery: Deanery;
   groups: Group[];
+  createdWhen: Date;
+  updatedWhen: Date;
 }

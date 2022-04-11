@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {LoadService} from '../../../../services/load.service';
-import {Load} from '../../../../model/additionals/load';
+import {Load} from '../../../../model/study-plan/structure/load';
 
 @Component({
   selector: 'app-loads-add-edit',

@@ -5,4 +5,6 @@ export class Floor {
   number: number;
   isAddedOrChanged: boolean;
   wings: Wing[];
+  createdWhen: Date;
+  updatedWhen: Date;
 }

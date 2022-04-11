@@ -10,4 +10,6 @@ export class Group {
   flows: Flow[];
   subgroups: Subgroup[];
   speciality: Speciality;
+  createdWhen: Date;
+  updatedWhen: Date;
 }

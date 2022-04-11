@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {SemesterLoadService} from '../../../../services/semester-load.service';
-import {SemesterLoad} from '../../../../model/additionals/semester-load';
+import {SemesterLoad} from '../../../../model/study-plan/structure/semester-load';
 
 @Component({
   selector: 'app-semester-load-add-edit',

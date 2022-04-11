@@ -1,6 +1,7 @@
 import {Department} from './department';
 import {Group} from '../deanery/group';
-import {StudyPlan} from './study-plan';
+import {StudyPlan} from '../study-plan/study-plan';
+
 
 export class Speciality {
   id: string;
@@ -16,4 +17,6 @@ export class Speciality {
   department: Department;
   studyPlans: StudyPlan[] = [];
   groups: Group[] = [];
+  createdWhen: Date;
+  updatedWhen: Date;
 }

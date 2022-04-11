@@ -1,4 +1,4 @@
-export class University {
+export class DiplomaDesign {
   id: string;
   name: string;
   createdWhen: Date;

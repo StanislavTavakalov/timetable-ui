@@ -7,4 +7,6 @@ export class Department {
   code: string;
   description: string;
   deanery: Deanery;
+  createdWhen: Date;
+  updatedWhen: Date;
 }

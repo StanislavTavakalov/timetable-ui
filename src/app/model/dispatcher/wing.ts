@@ -7,4 +7,6 @@ export class Wing {
   isAddedOrChanged: boolean;
   classrooms: Classroom[] = [];
   planImage: string;
+  createdWhen: Date;
+  updatedWhen: Date;
 }

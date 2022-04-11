@@ -4,7 +4,7 @@ import {NotifierService} from 'angular-notifier';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {Subscription} from 'rxjs';
 import {HeaderType} from '../../model/header-type';
-import {SemesterLoad} from '../../model/additionals/semester-load';
+import {SemesterLoad} from '../../model/study-plan/structure/semester-load';
 import {SemesterLoadService} from '../../services/semester-load.service';
 
 @Component({

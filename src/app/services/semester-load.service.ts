@@ -3,7 +3,7 @@ import {BasicHttpService} from './basic-http.service';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {SemesterLoad} from '../model/additionals/semester-load';
+import {SemesterLoad} from '../model/study-plan/structure/semester-load';
 
 @Injectable({
   providedIn: 'root'

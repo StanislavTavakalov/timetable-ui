@@ -3,4 +3,6 @@ export class Deanery {
   fullName: string;
   shortName: string;
   description: string;
+  createdWhen: Date;
+  updatedWhen: Date;
 }
