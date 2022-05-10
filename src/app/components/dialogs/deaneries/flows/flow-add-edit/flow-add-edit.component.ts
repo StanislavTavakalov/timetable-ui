@@ -1,20 +1,17 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {GroupService} from '../../../../../services/group.service';
 import {PrinterService} from '../../../../../services/shared/printer.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Group} from '../../../../../model/deanery/group';
-import {Speciality} from '../../../../../model/department/speciality';
 import {Observable, Subscription} from 'rxjs';
-import {Subgroup} from '../../../../../model/deanery/subgroup';
 import {Flow} from '../../../../../model/deanery/flow';
 import {Department} from '../../../../../model/department/department';
 import {Deanery} from '../../../../../model/deanery/deanery';
 import {FlowService} from '../../../../../services/flow.service';
 import {map, startWith} from 'rxjs/operators';
-import {Permission} from '../../../../../model/users/permission';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {UtilityService} from '../../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-flow-add-edit',
@@ -25,6 +22,7 @@ export class FlowAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private flowService: FlowService,
               public printerService: PrinterService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<FlowAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -222,12 +220,4 @@ export class FlowAddEditComponent implements OnInit, OnDestroy {
       this.flowServiceSubscription.unsubscribe();
     }
   }
-
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
-  }
-
 }

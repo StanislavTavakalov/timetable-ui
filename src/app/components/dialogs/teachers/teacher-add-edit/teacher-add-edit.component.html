@@ -16,7 +16,7 @@
 
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Должность: " [formControlName]="'teacherPosition'"
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Должность: " [formControlName]="'teacherPosition'"
                   required>
         <mat-option *ngFor="let teacherPosition of info.teacherPositions" [value]="teacherPosition">
           {{teacherPosition.name}}
@@ -24,7 +24,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Научное звание: " [formControlName]="'academicTitle'"
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Научное звание: " [formControlName]="'academicTitle'"
                   required>
         <mat-option *ngFor="let academicTitle of info.academicTitles" [value]="academicTitle">
           {{academicTitle.name}}
@@ -32,7 +32,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Научная степень: " [formControlName]="'academicDegree'"
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Научная степень: " [formControlName]="'academicDegree'"
                   required>
         <mat-option *ngFor="let academicDegree of info.academicDegrees" [value]="academicDegree">
           {{academicDegree.name}}
@@ -41,7 +41,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="В штатном составе: " [formControlName]="'staffType'" required>
+      <mat-select [compareWith]="utilityService.compareObjects" placeholder="В штатном составе: " [formControlName]="'staffType'" required>
         <mat-option *ngFor="let staffType of staffTypes" [value]="staffType">
           {{resourceLocalizerService.localizeStaffType(staffType)}}
         </mat-option>
@@ -49,7 +49,7 @@
     </mat-form-field>
 
     <mat-form-field *ngIf="isNeedToShowTariff()">
-      <mat-select [compareWith]="compareObjects" placeholder="Рабочая ставка: " [formControlName]="'workTariff'">
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Рабочая ставка: " [formControlName]="'workTariff'">
         <mat-option *ngFor="let workTariff of info.workTariffs" [value]="workTariff">
           {{workTariff.name}}
         </mat-option>
@@ -62,7 +62,7 @@
 
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Закрепленные предметы: " [formControlName]="'disciplineGroups'"  multiple required>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Закрепленные предметы: " [formControlName]="'disciplineGroups'" multiple required>
         <mat-option *ngFor="let disciplineGroup of disciplineGroups" [value]="disciplineGroup">
           {{disciplineGroup?.name}}
         </mat-option>

@@ -1,0 +1,52 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="cycleForm" class="column">
+
+    <mat-form-field class="full-size">
+      <input matInput placeholder="Название:" [formControlName]="'name'" required>
+      <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-size">
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Тип цикла: "
+                  [formControlName]="'cycleType'"
+                  required>
+        <mat-option *ngFor="let cycleType of cycleTypes" [value]="cycleType">
+          {{resourceLocalizerService.localizedCycleTypeName(cycleType)}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="cycleType.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <div style="display: flex; flex-direction: row">
+      <mat-form-field class="part-size" style="margin-right: 2%" >
+        <input matInput type="number" placeholder="Всего часов:" [formControlName]="'totalHours'" required>
+        <mat-error *ngIf="totalHours.hasError('required')"> Поле должно быть заполнено</mat-error>
+        <mat-error *ngIf="totalHours.hasError('min')"> Значение должно положительным</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="part-size" style="margin-right: 2%">
+        <input matInput type="number" placeholder="Аудиторных часов:" [formControlName]="'classroomHours'" required>
+        <mat-error *ngIf="classroomHours.hasError('required')"> Поле должно быть заполнено</mat-error>
+        <mat-error *ngIf="classroomHours.hasError('min')">Значение должно положительным</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="part-size">
+        <input matInput type="number" placeholder="Зачетных единиц:" [formControlName]="'creditUnits'" required>
+        <mat-error *ngIf="creditUnits.hasError('required')"> Поле должно быть заполнено</mat-error>
+        <mat-error *ngIf="creditUnits.hasError('min')"> Значение должно положительным</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-error *ngIf="cycleForm.hasError('invalidHours')"> Количество аудиторных часов не может превышать общее!</mat-error>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="cycleForm.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+

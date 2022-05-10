@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {Department} from '../../../../model/department/department';
 import {Deanery} from '../../../../model/deanery/deanery';
 import {DepartmentService} from '../../../../services/department.service';
+import {UtilityService} from '../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-department-add-edit',
@@ -14,6 +15,7 @@ import {DepartmentService} from '../../../../services/department.service';
 export class DepartmentAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private departmentService: DepartmentService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<DepartmentAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -138,12 +140,7 @@ export class DepartmentAddEditComponent implements OnInit, OnDestroy {
     return departmentCopy;
   }
 
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
-  }
+
 
   ngOnDestroy(): void {
     if (this.departmentServiceSubscription) {

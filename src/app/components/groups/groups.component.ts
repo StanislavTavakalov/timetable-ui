@@ -7,7 +7,7 @@ import {HeaderType} from '../../model/header-type';
 import {Group} from '../../model/deanery/group';
 import {GroupService} from '../../services/group.service';
 import {ActivatedRoute} from '@angular/router';
-import {UtilityService} from '../../services/utility.service';
+import {UtilityService} from '../../services/shared/utility.service';
 import {SpecialityService} from '../../services/speciality.service';
 
 @Component({

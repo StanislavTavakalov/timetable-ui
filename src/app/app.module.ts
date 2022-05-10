@@ -62,6 +62,12 @@ import { SemesterLoadsComponent } from './components/semester-loads/semester-loa
 import { SemesterLoadsDatatableComponent } from './components/semester-loads/semester-loads-datatable/semester-loads-datatable.component';
 import { DisciplineGroupsComponent } from './components/discipline-groups/discipline-groups.component';
 import { DisciplineGroupsDatatableComponent } from './components/discipline-groups/discipline-groups-datatable/discipline-groups-datatable.component';
+import { StudyPlansComponent } from './components/study-plans/study-plans.component';
+import { StudyPlanTableComponent } from './components/study-plans/study-plan-table/study-plan-table.component';
+import { StandardStudyPlansComponent } from './components/study-plans/standard-study-plans/standard-study-plans.component';
+import { StandardPlanAddDialogComponent } from './components/dialogs/study-plans/standard/standard-plan-add/standard-plan-add-dialog.component';
+import { StandardPlanAddEditComponent } from './components/study-plans/standard-plan-add-edit/standard-plan-add-edit.component';
+import { StandardStudyPlanComponent } from './components/study-plans/standard-study-plan/standard-study-plan.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +120,12 @@ import { DisciplineGroupsDatatableComponent } from './components/discipline-grou
     SemesterLoadsDatatableComponent,
     DisciplineGroupsComponent,
     DisciplineGroupsDatatableComponent,
+    StudyPlansComponent,
+    StudyPlanTableComponent,
+    StandardStudyPlansComponent,
+    StandardPlanAddDialogComponent,
+    StandardPlanAddEditComponent,
+    StandardStudyPlanComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,23 @@
+<h2 mat-dialog-title style="text-align: center"> Создать план </h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column; margin-top: 4%;">
+    <mat-radio-group [(ngModel)]="selectedOption" style="display: flex; flex-direction: column;">
+      <mat-radio-button value="{{options[0]}}" style="margin-bottom: 4%"> {{options[0]}} </mat-radio-button>
+      <mat-radio-button value="{{options[1]}}" style="margin-bottom: 4%" [disabled]="standardStudyPlans === null"> {{options[1]}} </mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field appearance="fill">
+      <mat-label>Выберете план</mat-label>
+      <mat-select [disabled]="selectedOption === options[0]" [(ngModel)]="standardPlan">
+        <mat-option *ngFor="let standardStudyPlan of standardStudyPlans" [value]="standardStudyPlan">
+          {{printerService.printStandardPlanName(standardStudyPlan)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions style="display: flex; justify-content: center">
+  <button mat-button color="primary" (click)="onConfirmClick()">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отменить</button>
+</mat-dialog-actions>

@@ -7,6 +7,7 @@ import {DisciplineGroup} from '../../../../model/discipline/discipline-group';
 import {DisciplineService} from '../../../../services/discipline.service';
 import {Discipline} from '../../../../model/discipline/discipline';
 import {DisciplineType} from '../../../../model/discipline/discipline-type';
+import {UtilityService} from '../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-discipline-add-edit',
@@ -17,6 +18,7 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private disciplineService: DisciplineService,
               public resourceLocalizerService: ResourceLocalizerService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<DisciplineAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -112,19 +114,13 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
     discipline.creditUnits = this.disciplineFormGroup.controls.creditUnits.value;
     discipline.classroomHours = this.disciplineFormGroup.controls.classroomHours.value;
     discipline.university = this.disciplineFormGroup.controls.university.value;
+    discipline.isTemplate = true;
   }
 
   private createCopy(discipline: Discipline): Discipline {
     const disciplineCopy = new Discipline();
     disciplineCopy.id = discipline.id;
     return disciplineCopy;
-  }
-
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
   }
 
   ngOnDestroy(): void {

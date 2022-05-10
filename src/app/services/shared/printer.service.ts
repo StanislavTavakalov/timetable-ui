@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Speciality} from '../../model/department/speciality';
+import {StudyPlan} from '../../model/study-plan/study-plan';
+import {ResourceLocalizerService} from './resource-localizer.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrinterService {
 
-  constructor() {
+  constructor(public resourceLocalizerService: ResourceLocalizerService) {
   }
 
   public printSpecialityFullCode(speciality: Speciality): string {
@@ -25,7 +27,7 @@ export class PrinterService {
   }
 
   public printSpecialityFullCodeWithShortName(speciality: Speciality): string {
-    return speciality.shortName + ' '  + this.printSpecialityFullCode(speciality);
+    return speciality.shortName + ' ' + this.printSpecialityFullCode(speciality);
   }
 
   printListObjects(objects: any[]): string {
@@ -35,4 +37,26 @@ export class PrinterService {
     }
     return result.slice(0, -2);
   }
+
+  public printStandardPlanName(studyPlan: StudyPlan): string {
+    return  'Типовой план специальности ' + this.printSpecialityFullCode(studyPlan.speciality) + ' || '
+      + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + ' || '
+      + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + ' || Год разработки: '
+      + studyPlan.developmentYear;
+  }
+
+  public printStudyPlanName(studyPlan: StudyPlan): string {
+    return 'Регистрационный номер:' + this.printRegisterNumber(studyPlan.registerNumber)
+      + this.printSpecialityFullCode(studyPlan.speciality) + '||'
+      + studyPlan.registerNumber + '||'
+      + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + '||'
+      + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + '||'
+      + studyPlan.developmentYear;
+  }
+
+
+  public printRegisterNumber(registerNumber: string): string {
+    return registerNumber === null ? 'не указан' : registerNumber;
+  }
+
 }

@@ -1,0 +1,101 @@
+<h2 mat-dialog-title style="text-align: center"> {{title}} </h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column; margin-top: 4%;">
+    <div *ngIf="newMode && changedComponent === undefined">
+      <mat-radio-group [(ngModel)]="selectedOption" style="display: flex; flex-direction: column;">
+        <mat-radio-button value="{{options[0]}}" style="margin-bottom: 4%"
+                          (change)="onSelectComponentChoice($event)"> {{options[0]}} </mat-radio-button>
+        <mat-radio-button value="{{options[1]}}" style="margin-bottom: 4%" [disabled]="disciplineTemplates === null"
+                          (change)="onSelectDisciplineChoice()"> {{options[1]}} </mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="fill">
+        <mat-label>Выберете шаблон предмета</mat-label>
+        <mat-select [disabled]="selectedOption===undefined || selectedOption === options[0]" [(ngModel)]="selectedDisciplineTemplate">
+          <mat-option *ngFor="let discipline of disciplineTemplates" [value]="discipline"
+                      (onSelectionChange)="fillForm($event)">
+            {{discipline.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div *ngIf="newMode && changedComponent">
+      <mat-form-field appearance="fill">
+        <mat-label>Выберете шаблон предмета</mat-label>
+        <mat-select [(ngModel)]="selectedDisciplineTemplate">
+          <mat-option *ngFor="let discipline of disciplineTemplates" [value]="discipline"
+                      (onSelectionChange)="fillForm($event)">
+            {{discipline.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <form [formGroup]="form" class="column" *ngIf="selectedOption || editMode || (selectedDisciplineTemplate && changedComponent)">
+
+      <mat-form-field class="full-size">
+        <input matInput placeholder="Название:" [formControlName]="'name'" required>
+        <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-size" *ngIf="selectedOption === options[0] || editMode && component">
+        <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип компоненты: "
+                    [formControlName]="'componentType'"
+                    required>
+          <mat-option *ngFor="let componentType of componentTypes" [value]="componentType">
+            {{resourceLocalizerService.localizedComponentTypeName(componentType)}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="componentType.hasError('required')"> Поле должно быть заполнено</mat-error>
+      </mat-form-field>
+
+      <div style="display: flex; flex-direction: row">
+        <div>
+          <mat-form-field class="part-size" style="margin-right: 2%">
+            <input matInput type="number" placeholder="Всего часов (лимит в {{totalHoursFree}}):" [formControlName]="'totalHours'" required>
+            <mat-error *ngIf="totalHours.hasError('required')"> Поле должно быть заполнено</mat-error>
+            <mat-error *ngIf="totalHours.hasError('min')"> Значение должно положительным</mat-error>
+          </mat-form-field>
+
+        </div>
+
+
+        <mat-form-field class="part-size" style="margin-right: 2%">
+          <input matInput type="number" placeholder="Аудиторных часов:" [formControlName]="'classroomHours'" required>
+          <mat-error *ngIf="classroomHours.hasError('required')"> Поле должно быть заполнено</mat-error>
+          <mat-error *ngIf="classroomHours.hasError('min')">Значение должно положительным</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="part-size">
+          <input matInput type="number" placeholder="Зачетных единиц:" [formControlName]="'creditUnits'" required>
+          <mat-error *ngIf="creditUnits.hasError('required')"> Поле должно быть заполнено</mat-error>
+          <mat-error *ngIf="creditUnits.hasError('min')"> Значение должно положительным</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-error *ngIf="form.hasError('invalidHours')"> Количество аудиторных часов не может превышать общее!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('invalidHoursByLimit')"> Общее количество часов превышает максимально допустимое
+        </mat-error>
+
+      </div>
+      <div class="column" *ngIf="selectedOption === options[1] && selectedDisciplineTemplate">
+        <div style="margin-bottom: 2%"> Группа: {{this.selectedDisciplineTemplate?.disciplineGroup?.name}} </div>
+        <div> Университет: {{this.selectedDisciplineTemplate?.university}} </div>
+      </div>
+      <div class="column" *ngIf="editMode && discipline">
+        <div style="margin-bottom: 2%"> Группа: {{this.discipline?.disciplineGroup?.name}} </div>
+        <div> Университет: {{this.discipline?.university}} </div>
+      </div>
+
+    </form>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions style="display: flex; justify-content: center">
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="this.form.invalid">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отменить</button>
+</mat-dialog-actions>

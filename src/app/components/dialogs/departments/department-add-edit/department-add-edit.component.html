@@ -28,7 +28,7 @@
     </mat-form-field>
 
     <mat-form-field *ngIf="this.deaneryFor === null">
-      <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'" required>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Деканат: " [formControlName]="'deanery'" required>
         <mat-option *ngFor="let deanery of deaneries" [value]="deanery">
           {{getDeaneryName(deanery)}}
         </mat-option>

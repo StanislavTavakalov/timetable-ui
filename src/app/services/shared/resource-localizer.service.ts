@@ -3,6 +3,11 @@ import {AssignmentType, ClassroomStatus} from '../../model/dispatcher/classroom'
 import {RoleCategory} from '../../model/users/role-category';
 import {StaffType} from '../../model/department/teacher';
 import {DisciplineType} from '../../model/discipline/discipline-type';
+import {EducationForm} from '../../model/study-plan/structure/education-form';
+import {StudyPlanStatus} from '../../model/study-plan/study-plan-status';
+import {Cycle} from '../../model/study-plan/structure/cycle';
+import {CycleType} from '../../model/study-plan/structure/cycle-type';
+import {ComponentType} from '../../model/study-plan/structure/component-type';
 
 @Injectable({
   providedIn: 'root'
@@ -109,6 +114,7 @@ export class ResourceLocalizerService {
   localizePermissionName(permission: string): string {
     return this.permissionToDisplayName.get(permission);
   }
+
   localizeClassroomStatus(classroomStatus: ClassroomStatus): string {
     if (classroomStatus === ClassroomStatus.WORKING) {
       return 'Рабочая';
@@ -176,4 +182,68 @@ export class ResourceLocalizerService {
     return '-';
   }
 
+  localizeEducationForm(educationForm: EducationForm): string {
+    switch (educationForm) {
+      case EducationForm.FULLTIME:
+        return 'Очная форма';
+      case EducationForm.EXTRAMURAL:
+        return 'Заочная форма';
+      case educationForm:
+        return 'Не указано';
+    }
+    return '';
+  }
+
+  localizeStudyPlanStatus(studyPlanStatus: StudyPlanStatus): string {
+    switch (studyPlanStatus) {
+      case StudyPlanStatus.TO_REGISTER:
+        return 'На регистрацию';
+      case StudyPlanStatus.TO_REFACTOR:
+        return 'На переработку';
+      case StudyPlanStatus.SUBMITTED:
+        return 'Подтвержен';
+      case StudyPlanStatus.REGISTERED:
+        return 'Зарегистрирован';
+      case StudyPlanStatus.REFACTORED:
+        return 'Переработан';
+      case StudyPlanStatus.IN_DEVELOPMENT:
+        return 'В разработке';
+      case studyPlanStatus:
+        return 'Не указан';
+    }
+    return '';
+  }
+
+
+  localizedCycleTypeName(cycleType: CycleType): string {
+    switch (cycleType) {
+      case CycleType.EXTRA:
+        return 'Дополнительный';
+      case CycleType.BASIC:
+        return 'УВО';
+      case CycleType.COURSE:
+        return 'Курсовой';
+      case CycleType.STANDARD:
+        return 'Государственный';
+      case CycleType.PRACTICE:
+        return 'Практика';
+      case CycleType.DIPLOMA_DESIGN:
+        return 'Дипломное проектирование';
+      case CycleType.FINAL_EXAMINATION:
+        return 'Экзаменационный';
+      case CycleType.FACULTATIVE:
+        return 'Факультативный';
+    }
+    return '';
+  }
+
+  localizedComponentTypeName(componentType: ComponentType): string {
+    switch (componentType) {
+      case ComponentType.STANDARD:
+        return 'Государственный';
+      case ComponentType.BASIC:
+        return 'УВО';
+    }
+    return '';
+  }
 }

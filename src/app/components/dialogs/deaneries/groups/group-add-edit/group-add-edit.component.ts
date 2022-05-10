@@ -7,6 +7,7 @@ import {GroupService} from '../../../../../services/group.service';
 import {Subgroup} from '../../../../../model/deanery/subgroup';
 import {Speciality} from '../../../../../model/department/speciality';
 import {PrinterService} from '../../../../../services/shared/printer.service';
+import {UtilityService} from '../../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-group-add-edit',
@@ -17,6 +18,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private groupService: GroupService,
               public printerService: PrinterService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<GroupAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -211,13 +213,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
   showTotalStudentCount(): string {
     return this.studentCount.value;
-  }
-
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
   }
 
   checkSubgroupsCountIsValid(): boolean {

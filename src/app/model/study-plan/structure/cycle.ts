@@ -1,12 +1,17 @@
-import {ComponentType} from './component-type';
+
 import {Discipline} from '../../discipline/discipline';
 import {Component} from './component';
+import {CycleType} from './cycle-type';
 
 export class Cycle {
   id: string;
   name: string;
-  componentType: ComponentType;
+  cycleType: CycleType;
+  totalHours: number;
+  classroomHours: number;
+  creditUnits: number;
   description;
-  components: Component[];
-  disciplines: Discipline[];
+  components: Component[] = [];
+  position: number;
+  disciplines: Discipline[] = [];
 }

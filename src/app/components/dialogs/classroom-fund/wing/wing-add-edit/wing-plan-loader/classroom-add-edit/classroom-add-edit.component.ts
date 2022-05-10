@@ -11,6 +11,7 @@ import {
 } from '../../../../../../../model/dispatcher/classroom';
 import {ClassroomService} from '../../../../../../../services/dispatcher/classroom.service';
 import {ResourceLocalizerService} from '../../../../../../../services/shared/resource-localizer.service';
+import {UtilityService} from '../../../../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-classroom-add-edit',
@@ -21,6 +22,7 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
               private dialogRef: MatDialogRef<ClassroomAddEditComponent>,
+              public utilityService: UtilityService,
               public resourceLocalizerService: ResourceLocalizerService,
               private classroomService: ClassroomService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -184,13 +186,6 @@ export class ClassroomAddEditComponent implements OnInit, OnDestroy {
 
   showDepartmentField(): boolean {
     return this.classroomForm.controls.assignmentType.value === AssignmentType.DEPARTMENT;
-  }
-
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
   }
 
   getDeaneryOrDepartmentName(object: any): string {

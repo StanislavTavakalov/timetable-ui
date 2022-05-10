@@ -6,6 +6,7 @@ import {HeaderType} from '../model/header-type';
 import {Department} from '../model/department/department';
 import {Deanery} from '../model/deanery/deanery';
 import {AcademicTitle} from '../model/additionals/academic-title';
+import {StudyPlan} from '../model/study-plan/study-plan';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class LocalStorageService {
   private USER_TOKEN_KEY = 'currentUserToken';
   private CURRENT_USER = 'currentUser';
   private SECRET_KEY = 'superSecretKeyBNTU';
+  private SELECTED_STANDARD_PLAN = 'selectedStandardPlan';
+  private PLAN_FOR_EDIT = 'planForEdit';
 
   subscribableCurrentUser: BehaviorSubject<User>;
   subscribableIsNavBarOpened: BehaviorSubject<boolean>;
@@ -71,6 +74,39 @@ export class LocalStorageService {
     } else if (headerType === HeaderType.DEPARTMENT) {
       this.subscribableDeanery.next(null);
     }
+  }
+
+  public getSelectedStandardPlan(): any {
+    if (!localStorage.getItem(this.SELECTED_STANDARD_PLAN)) {
+      return null;
+    }
+    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.SELECTED_STANDARD_PLAN),
+      this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+  }
+
+  public putSelectedStandardPlan(studyPlan: StudyPlan): void {
+    localStorage.setItem(this.SELECTED_STANDARD_PLAN, CryptoJS.AES.encrypt(JSON.stringify(studyPlan), this.SECRET_KEY.trim()).toString());
+  }
+
+  public clearSelectedStandardPlan(): void {
+    localStorage.removeItem(this.SELECTED_STANDARD_PLAN);
+  }
+
+  // TODO: probably all usages could be replaced by simple reloading from DB
+  public getEditPlan(): any {
+    if (!localStorage.getItem(this.PLAN_FOR_EDIT)) {
+      return null;
+    }
+    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.PLAN_FOR_EDIT),
+      this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+  }
+
+  public putEditPlan(studyPlan: StudyPlan): void {
+    localStorage.setItem(this.PLAN_FOR_EDIT, CryptoJS.AES.encrypt(JSON.stringify(studyPlan), this.SECRET_KEY.trim()).toString());
+  }
+
+  public clearEditPlan(): void {
+    localStorage.removeItem(this.PLAN_FOR_EDIT);
   }
 
 }

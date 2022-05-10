@@ -10,5 +10,5 @@ export class Component {
   creditUnits: number;
   description;
   componentType: ComponentType;
-  disciplines: Discipline[];
+  disciplines: Discipline[] = [];
 }

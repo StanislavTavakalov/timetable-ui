@@ -1,0 +1,184 @@
+.main-content {
+  width: 95%;
+  margin: 2%;
+}
+
+h1 {
+  text-align: left;
+}
+
+.column-position {
+  padding: 0 !important;
+  /*width: 400px;*/
+  /*padding-left: 0 !important;*/
+  /*padding-right: 0 !important;*/
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+/*.example-element-row td {*/
+/*  border-bottom-width: 0;*/
+/*}*/
+
+.example-element-detail {
+  overflow: hidden;
+  /*display: flex;*/
+  width: 100%;
+}
+
+/*
+Tables columns styling START
+*/
+
+.cycle-table {
+  width: 100%;
+  /*width: 100%;*/
+  margin-bottom: 1%;
+}
+/*Cycle-columns*/
+.mat-column-position {
+  width: 3%;
+}
+
+.mat-column-name {
+  width: 50%;
+}
+
+.mat-column-totalHours {
+  width: 12%;
+}
+
+.mat-column-classroomHours {
+  width: 12%;
+}
+
+.mat-column-creditUnits {
+  width: 12%;
+}
+
+.mat-column-selfHours {
+  width: 11%;
+}
+
+.mat-column-component-table-details {
+  border-bottom-width: 0;
+}
+/*Component-columns end */
+
+.component-table {
+  /*width: 100%;*/
+  /*margin-bottom: 1%;*/
+  width: 100%;
+}
+
+/*Component-columns*/
+
+.mat-column-position-component {
+  width: 4%;
+  padding: 0 !important;
+}
+
+.mat-column-name-component {
+  width: 48.5%;
+}
+
+.mat-column-totalHours-component {
+  width: 11.6%;
+}
+
+.mat-column-classroomHours-component {
+  width: 11.6%;
+}
+
+.mat-column-selfHours-component {
+  width: 10.5%;
+}
+
+.mat-column-creditUnits-component {
+  width: 12%;
+}
+
+.mat-column-discipline-component-table-details {
+
+}
+/* Component-columns end */
+
+/* Discipline-columns Cycle */
+.mat-column-position-cycle-discipline {
+  width: 4%;
+  padding-left: 35px !important;
+}
+
+.mat-column-name-cycle-discipline {
+  width: 49.5%;
+}
+
+.mat-column-totalHours-cycle-discipline {
+  width: 11.7%;
+}
+
+.mat-column-classroomHours-cycle-discipline {
+  width: 12%;
+}
+
+.mat-column-creditUnits-cycle-discipline {
+  width: 12.3%;
+}
+
+.mat-column-selfHours-cycle-discipline {
+  width: 10.7%;
+}
+
+
+/* Discipline-columns Cycle end*/
+
+.discipline-table{
+  width: 80%;
+  margin-bottom: 1%;
+}
+
+/* Discipline-columns */
+
+.mat-column-position-discipline {
+  width: 4%;
+  padding-left: 35px !important;
+}
+
+.mat-column-name-discipline {
+  width: 49.5%;
+}
+
+.mat-column-totalHours-discipline {
+  width: 11.7%;
+}
+
+.mat-column-classroomHours-discipline {
+  width: 12%;
+}
+
+.mat-column-creditUnits-discipline {
+  width: 12.3%;
+}
+
+.mat-column-selfHours-discipline {
+  width: 10.7%;
+}
+
+
+/* Discipline-columns end */
+
+
+
+/*
+Tables columns styling END
+*/

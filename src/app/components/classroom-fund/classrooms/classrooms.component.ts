@@ -5,7 +5,7 @@ import {ClassroomService} from '../../../services/dispatcher/classroom.service';
 import {Classroom} from '../../../model/dispatcher/classroom';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {UtilityService} from '../../../services/utility.service';
+import {UtilityService} from '../../../services/shared/utility.service';
 import {LocalStorageService} from '../../../services/local-storage.service';
 import {HeaderType} from '../../../model/header-type';
 

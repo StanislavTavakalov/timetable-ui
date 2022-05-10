@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {ActivatedRoute} from '@angular/router';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {UtilityService} from '../../services/utility.service';
+import {UtilityService} from '../../services/shared/utility.service';
 import {Subscription} from 'rxjs';
 import {HeaderType} from '../../model/header-type';
 import {TeacherService} from '../../services/teacher.service';

@@ -24,7 +24,7 @@
 
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Группа дисциплины: "
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Группа дисциплины: "
                   [formControlName]="'disciplineGroup'"
                   required>
         <mat-option *ngFor="let disciplineGroup of disciplineGroups" [value]="disciplineGroup">

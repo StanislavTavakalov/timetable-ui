@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {LocalStorageService} from '../../services/local-storage.service';
-import {UtilityService} from '../../services/utility.service';
+import {UtilityService} from '../../services/shared/utility.service';
 import {ActivatedRoute} from '@angular/router';
 import {GroupService} from '../../services/group.service';
 import {Subscription} from 'rxjs';

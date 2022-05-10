@@ -7,7 +7,7 @@ import {Department} from '../../model/department/department';
 import {HeaderType} from '../../model/header-type';
 import {LocalStorageService} from '../../services/local-storage.service';
 import {ActivatedRoute} from '@angular/router';
-import {UtilityService} from '../../services/utility.service';
+import {UtilityService} from '../../services/shared/utility.service';
 
 @Component({
   selector: 'app-departments',

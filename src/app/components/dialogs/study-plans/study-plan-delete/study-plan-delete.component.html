@@ -1,0 +1,12 @@
+<h2 mat-dialog-title> Удалить план </h2>
+<mat-dialog-content class="text-center" >
+  <p> Вы уверены? </p>
+</mat-dialog-content>
+<mat-dialog-actions class="delete-dialog-controls">
+  <mat-spinner *ngIf="loading" diameter="40" color="primary">
+  </mat-spinner>
+  <button mat-button color="primary" (click)="onConfirmClick()">
+    Да
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Нет</button>
+</mat-dialog-actions>

@@ -8,22 +8,24 @@
   <table #rolesTable mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Название</th>
+      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Название</th>
       <td mat-cell *matCellDef="let row"> {{row.name}} </td>
     </ng-container>
 
     <ng-container matColumnDef="role-category">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Категория</th>
+      <th style="width: 15%" mat-header-cell *matHeaderCellDef mat-sort-header> Категория</th>
       <td mat-cell *matCellDef="let row"> {{resourceLocalizerService.localizeRoleCategory(row.roleCategory)}} </td>
     </ng-container>
 
     <ng-container matColumnDef="permissions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Права</th>
-      <td mat-cell *matCellDef="let row"> {{printPermissions(row.permissions)}} </td>
+      <th style="width: 55%" mat-header-cell *matHeaderCellDef mat-sort-header> Права</th>
+      <td mat-cell *matCellDef="let row" >
+        <div style="max-height: 300px; overflow: hidden">{{printPermissions(row.permissions)}} </div>
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="icons">
-      <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
+    <ng-container matColumnDef="icons" >
+      <th style="text-align: end; width: 5%" mat-header-cell class="icons" *matHeaderCellDef >
         <button mat-icon-button class="material-icons table-mat-icon-element" (click)="addRole()"
                 matTooltip="Добавить роль">
           <mat-icon> add_circle</mat-icon>

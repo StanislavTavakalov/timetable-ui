@@ -31,7 +31,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select [compareWith]="compareObjects" placeholder="Роль: " [formControlName]="'role'" required>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Роль: " [formControlName]="'role'" required>
         <mat-option *ngFor="let role of roleList" [value]="role">
           {{getRoleName(role)}}
         </mat-option>
@@ -40,7 +40,7 @@
 
     <ng-container *ngIf="showDeaneryField(role.value)">
       <mat-form-field>
-        <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'" [required]="showDeaneryField(role.value)">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Деканат: " [formControlName]="'deanery'" [required]="showDeaneryField(role.value)">
           <mat-option *ngFor="let deanery of deaneryList" [value]="deanery">
             {{getDeaneryOrDepartmentName(deanery)}}
           </mat-option>
@@ -50,7 +50,7 @@
     </ng-container>
     <ng-container *ngIf="showDepartmentField(role.value)">
       <mat-form-field>
-        <mat-select [compareWith]="compareObjects" placeholder="Кафедра: " [formControlName]="'department'" [required]="showDepartmentField(role.value)">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Кафедра: " [formControlName]="'department'" [required]="showDepartmentField(role.value)">
           <mat-option *ngFor="let department of departmentList" [value]="department">
             {{getDeaneryOrDepartmentName(department)}}
           </mat-option>

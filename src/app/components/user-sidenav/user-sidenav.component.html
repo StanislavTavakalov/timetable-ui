@@ -19,7 +19,7 @@
       <mat-list-item class="parent" [routerLink]="'/disciplines'">
         <span class="full-width">Дисциплины</span>
       </mat-list-item>
-      <mat-list-item class="parent" [routerLink]="'/'">
+      <mat-list-item class="parent" [routerLink]="'/standard-studyplans'">
         <span class="full-width">Типовые планы</span>
       </mat-list-item>
       <mat-list-item class="parent" [routerLink]="'/users'" *ngIf="currentUser.getValue() !== null && this.permissionCheckService.isAdmin(currentUser.getValue().role)">

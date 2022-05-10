@@ -7,6 +7,7 @@ import {StaffType, Teacher} from '../../../../model/department/teacher';
 import {InfoForTeacherCreation} from '../../../../model/department/info-for-teacher-creation';
 import {ResourceLocalizerService} from '../../../../services/shared/resource-localizer.service';
 import {DisciplineGroup} from '../../../../model/discipline/discipline-group';
+import {UtilityService} from '../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-teacher-add-edit',
@@ -17,6 +18,7 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private teacherService: TeacherService,
               public resourceLocalizerService: ResourceLocalizerService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<TeacherAddEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -142,12 +144,6 @@ export class TeacherAddEditComponent implements OnInit, OnDestroy {
     return teacherCopy;
   }
 
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
-  }
 
   ngOnDestroy(): void {
     if (this.serviceSubscription) {

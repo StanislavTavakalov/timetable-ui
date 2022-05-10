@@ -9,6 +9,7 @@ import {AuthenticationService} from '../../../../services/authentication.service
 import {Department} from '../../../../model/department/department';
 import {Deanery} from '../../../../model/deanery/deanery';
 import {RoleCategory} from '../../../../model/users/role-category';
+import {UtilityService} from '../../../../services/shared/utility.service';
 
 @Component({
   selector: 'app-users-add-edit',
@@ -18,6 +19,7 @@ import {RoleCategory} from '../../../../model/users/role-category';
 export class UserAddEditComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
+              public utilityService: UtilityService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<UserAddEditComponent>,
               private authService: AuthenticationService,
@@ -165,21 +167,6 @@ export class UserAddEditComponent implements OnInit, OnDestroy {
   getDeaneryOrDepartmentName(object: any): string {
     return object.shortName;
   }
-
-
-  compareObjects(o1: any, o2: any): boolean {
-    if (!o2) {
-      return false;
-    }
-    return o1.id === o2.id;
-  }
-
-  // compareDepartmentOrDeaneries(o1: any, o2: any): boolean {
-  //   if (!o2) {
-  //     return false;
-  //   }
-  //   return o1.fullName === o2.fullName && o1.id === o2.id;
-  // }
 
   ngOnDestroy(): void {
     if (this.userServiceSubscription) {

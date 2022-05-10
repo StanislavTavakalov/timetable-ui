@@ -6,10 +6,12 @@ export class Discipline {
   name: string;
   disciplineType: DisciplineType;
   disciplineGroup: DisciplineGroup;
-  totalHours: string;
-  classroomHours: string;
-  creditUnits: string;
+  totalHours: number;
+  classroomHours: number;
+  creditUnits: number;
   university: string;
+  position: number;
+  isTemplate: boolean;
   description: string;
   createdWhen: Date;
   updatedWhen: Date;

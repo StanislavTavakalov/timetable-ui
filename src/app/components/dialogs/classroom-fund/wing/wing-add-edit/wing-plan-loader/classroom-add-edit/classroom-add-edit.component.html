@@ -47,7 +47,7 @@
 
     <ng-container *ngIf="showDeaneryField()">
       <mat-form-field>
-        <mat-select [compareWith]="compareObjects" placeholder="Деканат: " [formControlName]="'deanery'"
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Деканат: " [formControlName]="'deanery'"
                     [required]="showDeaneryField()">
           <mat-option *ngFor="let deanery of deaneries" [value]="deanery">
             {{getDeaneryOrDepartmentName(deanery)}}
@@ -58,7 +58,7 @@
     </ng-container>
     <ng-container *ngIf="showDepartmentField()">
       <mat-form-field>
-        <mat-select [compareWith]="compareObjects" placeholder="Кафедра: " [formControlName]="'department'"
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Кафедра: " [formControlName]="'department'"
                     [required]="showDepartmentField()">
           <mat-option *ngFor="let department of departments" [value]="department">
             {{getDeaneryOrDepartmentName(department)}}

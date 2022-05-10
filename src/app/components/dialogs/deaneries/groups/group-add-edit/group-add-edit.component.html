@@ -18,7 +18,7 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-select [compareWith]="compareObjects" placeholder="Специальность: " [formControlName]="'speciality'"
+          <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Специальность: " [formControlName]="'speciality'"
                       required>
             <mat-option *ngFor="let spec of specialities as Speciality" [value]="spec">
               {{printerService.printSpecialityFullCodeWithShortName(spec)}}
