@@ -31,3 +31,34 @@ export function checkTotalHoursWithinLimit(
     }
   };
 }
+
+export function checkClassroomHoursWithinLimit(
+  classroomHoursControlName: string,
+  limitClassroomHoursControlName: string,
+): ValidatorFn {
+  return (formGroup: FormGroup): ValidationErrors | null => {
+    const classroomHoursControl = formGroup.controls[classroomHoursControlName];
+    const limitClassroomHoursControl = formGroup.controls[limitClassroomHoursControlName];
+    if (limitClassroomHoursControl.value < classroomHoursControl.value) {
+      return {invalidClassroomHoursByLimit: true};
+    } else {
+      return null;
+    }
+  };
+}
+
+
+export function checkCreditUnitsWithinLimit(
+  creditUnitsControlName: string,
+  limitCreditUnitsControlName: string,
+): ValidatorFn {
+  return (formGroup: FormGroup): ValidationErrors | null => {
+    const creditUnitsControl = formGroup.controls[creditUnitsControlName];
+    const limitCreditUnitsControl = formGroup.controls[limitCreditUnitsControlName];
+    if (limitCreditUnitsControl.value < creditUnitsControl.value) {
+      return {invalidCreditUnitsByLimit: true};
+    } else {
+      return null;
+    }
+  };
+}

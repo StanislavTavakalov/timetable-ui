@@ -5,7 +5,6 @@ import * as CryptoJS from 'crypto-js';
 import {HeaderType} from '../model/header-type';
 import {Department} from '../model/department/department';
 import {Deanery} from '../model/deanery/deanery';
-import {AcademicTitle} from '../model/additionals/academic-title';
 import {StudyPlan} from '../model/study-plan/study-plan';
 
 @Injectable({

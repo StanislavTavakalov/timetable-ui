@@ -5,16 +5,14 @@ import {ResourceLocalizerService} from '../../../services/shared/resource-locali
 import {NotifierService} from 'angular-notifier';
 import {UtilityService} from '../../../services/shared/utility.service';
 import {StudyPlanService} from '../../../services/study-plan.service';
-import {MatDialog} from '@angular/material/dialog';
-import {FormBuilder} from '@angular/forms';
 import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
 import {StudyPlan} from '../../../model/study-plan/study-plan';
-import {error} from 'protractor';
 import {Subscription} from 'rxjs';
 import {MatTableDataSource} from '@angular/material/table';
 import {Cycle} from '../../../model/study-plan/structure/cycle';
 import {EducationalScheduleTotalActivity} from '../../../model/study-plan/schedule/educational-schedule-total-activity';
 import {Location} from '@angular/common';
+import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
 
 @Component({
   selector: 'app-standard-study-plan',
@@ -83,5 +81,28 @@ export class StandardStudyPlanComponent implements OnInit, OnDestroy {
   goBack(): void {
     // this.location.back();
     this.router.navigate([`/standard-studyplans/`]);
+  }
+
+  validateHoursInPlan(): void {
+    this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(this.cyclesDataSource.data);
+  }
+
+  submitStudyPlan(): void {
+    this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(this.cyclesDataSource.data);
+    if (this.studyPlanUtilService.isPlanValid(this.standardPlan)) {
+      this.studyPlanService.submitStudyPlan(this.standardPlan).subscribe(result => {
+        this.notifierService.notify('success', 'Учебный план был утвержден');
+        this.standardPlan.status = StudyPlanStatus.SUBMITTED;
+      }, e => {
+        this.notifierService.notify('error', e);
+      });
+    } else {
+      this.notifierService.notify('error', 'Учебный план невалидный. Перепроверьте часы и структуру.');
+    }
+  }
+
+
+  isInDevelopmentStatus(): boolean {
+    return StudyPlanStatus.IN_DEVELOPMENT === this.standardPlan.status;
   }
 }

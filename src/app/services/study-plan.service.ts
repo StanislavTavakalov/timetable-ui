@@ -40,4 +40,9 @@ export class StudyPlanService extends BasicHttpService {
   public loadCommonInfoForPlanCreation(): Observable<CommonInfoForStudyPlan> {
     return this.http.get<CommonInfoForStudyPlan>((`${this.studyPlanEndpoint}/common-info`));
   }
+
+  public submitStudyPlan(studyPlan: StudyPlan): Observable<StudyPlan> {
+    return this.http.put<StudyPlan>(`${this.studyPlanEndpoint}/submit`, studyPlan)
+      .pipe(catchError(this.handleError));
+  }
 }

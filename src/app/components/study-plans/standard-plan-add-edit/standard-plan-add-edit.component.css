@@ -71,7 +71,7 @@ Tables columns styling START
 
 
 .cycle-table {
-  width: 1400px;
+  width: 100%;
   /*width: 100%;*/
   margin-bottom: 1%;
 }
@@ -86,23 +86,22 @@ Tables columns styling START
 }
 
 .mat-column-totalHours {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-classroomHours {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-creditUnits {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-selfHours {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-icons {
-  width: 29%;
   padding: 0 !important;
 }
 
@@ -121,32 +120,31 @@ Tables columns styling START
 /*Component-columns*/
 
 .mat-column-position-component {
-  width: 3.3%;
+  width: 4%;
   padding: 0 !important;
 }
 
 .mat-column-name-component {
-  width: 27.3%;
+  width: 40%;
 }
 
 .mat-column-totalHours-component {
-  width: 5%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-component {
-  width: 4.8%;
+  width: 10%;
 }
 
 .mat-column-selfHours-component {
-  width: 6.2%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-component {
-  width: 5%;
+  width: 10%;
 }
 
 .mat-column-icons-component {
-  width: 20%;
   padding: 0 !important;
 }
 
@@ -160,32 +158,31 @@ Tables columns styling START
 
 /* Discipline-columns Cycle */
 .mat-column-position-cycle-discipline {
-  width: 4.4%;
-  padding-left: 35px !important;
+  width: 4%;
+  padding-left: 2% !important;
 }
 
 .mat-column-name-cycle-discipline {
-  width: 38.5%;
+  width: 40%;
 }
 
 .mat-column-totalHours-cycle-discipline {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-cycle-discipline {
-  width:6.5%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-cycle-discipline {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-selfHours-cycle-discipline {
-  width: 8.8%;
+  width: 10%;
 }
 
 .mat-column-icons-cycle-discipline {
-  width: 29%;
   padding: 0 !important;
 }
 
@@ -199,28 +196,28 @@ Tables columns styling START
 /* Discipline-columns */
 
 .mat-column-position-discipline {
-  width: 4.7%;
-  padding-left: 35px !important;
+  width: 6%;
+  padding-left: 4% !important;
 }
 
 .mat-column-name-discipline {
-  width: 38.2%;
+  width: 38%;
 }
 
 .mat-column-totalHours-discipline {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-discipline {
-  width: 6.5%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-discipline {
-  width: 7%;
+  width: 10%;
 }
 
 .mat-column-selfHours-discipline {
-  width: 8.8%;
+  width: 10%;
 }
 
 .mat-column-icons-discipline {

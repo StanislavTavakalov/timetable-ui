@@ -15,4 +15,7 @@ export class Discipline {
   description: string;
   createdWhen: Date;
   updatedWhen: Date;
+  validTotalHours: boolean;
+  validClassroomHours: boolean;
+  validCreditUnits: boolean;
 }

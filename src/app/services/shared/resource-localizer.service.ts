@@ -201,7 +201,7 @@ export class ResourceLocalizerService {
       case StudyPlanStatus.TO_REFACTOR:
         return 'На переработку';
       case StudyPlanStatus.SUBMITTED:
-        return 'Подтвержен';
+        return 'Утвержден';
       case StudyPlanStatus.REGISTERED:
         return 'Зарегистрирован';
       case StudyPlanStatus.REFACTORED:

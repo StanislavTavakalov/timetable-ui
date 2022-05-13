@@ -46,6 +46,9 @@
       <textarea matInput placeholder="О дисциплине: " [formControlName]="'description'"></textarea>
     </mat-form-field>
 
+    <mat-error *ngIf="disciplineFormGroup.hasError('invalidHours')"> Количество аудиторных часов не может превышать общее!
+    </mat-error>
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions class="controls">

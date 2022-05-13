@@ -107,7 +107,7 @@
 
           <ng-container matColumnDef="totalHours">
             <th mat-header-cell *matHeaderCellDef> Всего часов</th>
-            <td mat-cell *matCellDef="let cycle">
+            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(cycle) }">
               {{cycle.totalHours}}
             </td>
             <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateTotalHours(this.cyclesDataSource.data)}} </td>
@@ -115,7 +115,7 @@
 
           <ng-container matColumnDef="classroomHours">
             <th mat-header-cell *matHeaderCellDef> Аудиторных</th>
-            <td mat-cell *matCellDef="let cycle">
+            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
               {{cycle.classroomHours}}
             </td>
             <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateClassroomHours(this.cyclesDataSource.data)}} </td>
@@ -123,7 +123,7 @@
 
           <ng-container matColumnDef="selfHours">
             <th mat-header-cell *matHeaderCellDef> Самостоятельных</th>
-            <td mat-cell *matCellDef="let cycle">
+            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
               {{cycle.totalHours - cycle.classroomHours}}
             </td>
             <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateSelfHours(this.cyclesDataSource.data)}} </td>
@@ -131,7 +131,7 @@
 
           <ng-container matColumnDef="creditUnits">
             <th mat-header-cell *matHeaderCellDef> Зачетных единиц</th>
-            <td mat-cell *matCellDef="let cycle">
+            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(cycle) }">
               {{cycle.creditUnits}}
             </td>
             <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateCreditUnits(this.cyclesDataSource.data)}} </td>
@@ -184,28 +184,28 @@
 
                   <ng-container matColumnDef="totalHours-component" >
                     <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component">
+                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(component) }">
                       {{component.totalHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="classroomHours-component" >
                     <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component" >
+                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
                       {{component.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="selfHours-component" >
                     <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component">
+                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
                       {{component.totalHours - component.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="creditUnits-component" >
                     <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component">
+                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(component) }">
                       {{component.creditUnits}}
                     </td>
                   </ng-container>
@@ -255,28 +255,28 @@
 
                             <ng-container matColumnDef="totalHours-discipline" >
                               <th mat-header-cell *matHeaderCellDef ></th>
-                              <td mat-cell *matCellDef="let discipline">
+                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
                                 {{discipline.totalHours}}
                               </td>
                             </ng-container>
 
                             <ng-container matColumnDef="classroomHours-discipline" >
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline">
+                              <td mat-cell *matCellDef="let discipline"[ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                                 {{discipline.classroomHours}}
                               </td>
                             </ng-container>
 
                             <ng-container matColumnDef="selfHours-discipline" >
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline">
+                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                                 {{discipline.totalHours - discipline.classroomHours}}
                               </td>
                             </ng-container>
 
                             <ng-container matColumnDef="creditUnits-discipline" >
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline">
+                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
                                 {{discipline.creditUnits}}
                               </td>
                             </ng-container>
@@ -345,30 +345,30 @@
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="totalHours-cycle-discipline">
+                  <ng-container matColumnDef="totalHours-cycle-discipline" s>
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline">
+                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
                       {{discipline.totalHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="classroomHours-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline">
+                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                       {{discipline.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="selfHours-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline">
+                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                       {{discipline.totalHours - discipline.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="creditUnits-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline">
+                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
                       {{discipline.creditUnits}}
                     </td>
                   </ng-container>
@@ -429,6 +429,7 @@
     <button mat-raised-button class="control-button" (click)='isEditCase? edit() : submit()'
             [disabled]="basicPlanParamsForm.invalid || educationalScheduleForm.invalid || totalActivities.invalid"> {{isEditCase ? 'Сохранить' : 'Создать'}}
     </button>
+    <button mat-raised-button class="control-button" (click)="validateHoursInPlan()"> Проверить часы </button>
     <button mat-raised-button class="control-button" (click)='redirectToPlansPage()'> Отмена
     </button>
   </div>

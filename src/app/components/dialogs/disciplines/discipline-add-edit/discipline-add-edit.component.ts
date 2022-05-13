@@ -8,6 +8,7 @@ import {DisciplineService} from '../../../../services/discipline.service';
 import {Discipline} from '../../../../model/discipline/discipline';
 import {DisciplineType} from '../../../../model/discipline/discipline-type';
 import {UtilityService} from '../../../../services/shared/utility.service';
+import {checkTotalAndClassroomHours} from '../../../../validators/hours.validator';
 
 @Component({
   selector: 'app-discipline-add-edit',
@@ -55,8 +56,8 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
       classroomHours: [discipline.classroomHours],
       creditUnits: [discipline.creditUnits],
       description: [discipline.description],
-      university: [discipline.university]
-    });
+      university: [discipline.university],
+    }, {validators: checkTotalAndClassroomHours('totalHours', 'classroomHours')});
   }
 
   onCancelClick(): void {

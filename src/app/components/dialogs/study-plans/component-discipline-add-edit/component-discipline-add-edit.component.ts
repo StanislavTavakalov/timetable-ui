@@ -4,7 +4,11 @@ import {UtilityService} from '../../../../services/shared/utility.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Cycle} from '../../../../model/study-plan/structure/cycle';
-import {checkTotalAndClassroomHours, checkTotalHoursWithinLimit} from '../../../../validators/hours.validator';
+import {
+  checkTotalAndClassroomHours,
+  checkClassroomHoursWithinLimit,
+  checkTotalHoursWithinLimit, checkCreditUnitsWithinLimit
+} from '../../../../validators/hours.validator';
 import {Discipline} from '../../../../model/discipline/discipline';
 import {Component as StudyComponent} from '../../../../model/study-plan/structure/component';
 import {ComponentType} from '../../../../model/study-plan/structure/component-type';
@@ -49,6 +53,8 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
   selectedDisciplineTemplate: Discipline;
 
   totalHoursFree: number;
+  classroomHoursFree: number;
+  creditUnitsFree: number;
   changedComponent: StudyComponent;
   changedCycle: Cycle;
   positionToAdd: number;
@@ -61,6 +67,8 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
     this.component = this.data.component;
     this.cycle = this.data.cycle;
     this.totalHoursFree = this.data.totalHoursFree;
+    this.classroomHoursFree = this.data.classroomHoursFree;
+    this.creditUnitsFree = this.data.creditUnitsFree;
 
     // for discipline add under component cases
     this.changedComponent = this.data.changedComponent;
@@ -91,11 +99,15 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       classroomHours: [discipline.classroomHours, [Validators.required, Validators.min(1)]],
       creditUnits: [discipline.creditUnits, [Validators.required, Validators.min(0.1)]],
       university: [discipline.university, [Validators.required]],
-      totalHoursFree: [this.totalHoursFree]
+      totalHoursFree: [this.totalHoursFree],
+      classroomHoursFree: [this.classroomHoursFree],
+      creditUnitsFree: [this.creditUnitsFree]
     }, {
       validators:
         [checkTotalAndClassroomHours('totalHours', 'classroomHours'),
-          checkTotalHoursWithinLimit('totalHours', 'totalHoursFree')]
+          checkTotalHoursWithinLimit('totalHours', 'totalHoursFree'),
+          checkClassroomHoursWithinLimit('classroomHours', 'classroomHoursFree'),
+          checkCreditUnitsWithinLimit('creditUnits', 'creditUnitsFree')]
     });
   }
 
@@ -106,11 +118,15 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       totalHours: [component.totalHours, [Validators.required, Validators.min(1)]],
       classroomHours: [component.classroomHours, [Validators.required, Validators.min(1)]],
       creditUnits: [component.creditUnits, [Validators.required, Validators.min(0.1)]],
-      totalHoursFree: [this.totalHoursFree]
+      totalHoursFree: [this.totalHoursFree],
+      classroomHoursFree: [this.classroomHoursFree],
+      creditUnitsFree: [this.creditUnitsFree]
     }, {
       validators:
         [checkTotalAndClassroomHours('totalHours', 'classroomHours'),
-          checkTotalHoursWithinLimit('totalHours', 'totalHoursFree')]
+          checkTotalHoursWithinLimit('totalHours', 'totalHoursFree'),
+          checkClassroomHoursWithinLimit('classroomHours', 'classroomHoursFree'),
+          checkCreditUnitsWithinLimit('creditUnits', 'creditUnitsFree')]
     });
   }
 
@@ -122,10 +138,14 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       totalHours: [0, [Validators.required, Validators.min(1)]],
       classroomHours: [0, [Validators.required, Validators.min(1)]],
       creditUnits: [0, [Validators.required, Validators.min(0.1)]],
-      totalHoursFree: [this.totalHoursFree]
+      totalHoursFree: [this.totalHoursFree],
+      classroomHoursFree: [this.classroomHoursFree],
+      creditUnitsFree: [this.creditUnitsFree]
     }, {
       validators: [checkTotalAndClassroomHours('totalHours', 'classroomHours'),
-        checkTotalHoursWithinLimit('totalHours', 'totalHoursFree')]
+        checkTotalHoursWithinLimit('totalHours', 'totalHoursFree'),
+        checkClassroomHoursWithinLimit('classroomHours', 'classroomHoursFree'),
+        checkCreditUnitsWithinLimit('creditUnits', 'creditUnitsFree')]
     });
   }
 

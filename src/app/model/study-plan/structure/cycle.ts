@@ -14,4 +14,7 @@ export class Cycle {
   components: Component[] = [];
   position: number;
   disciplines: Discipline[] = [];
+  validTotalHours: boolean;
+  validClassroomHours: boolean;
+  validCreditUnits: boolean;
 }

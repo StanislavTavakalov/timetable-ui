@@ -11,4 +11,7 @@ export class Component {
   description;
   componentType: ComponentType;
   disciplines: Discipline[] = [];
+  validTotalHours: boolean;
+  validClassroomHours: boolean;
+  validCreditUnits: boolean;
 }

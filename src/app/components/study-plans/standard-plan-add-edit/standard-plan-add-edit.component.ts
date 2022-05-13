@@ -98,6 +98,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     if (planId) {
       this.standardPlan = this.localStorage.getEditPlan();
       this.isEditCase = true;
+      this.studyPlanUtilService.resetValidityForPlan(this.standardPlan);
       this.title = 'Редактирование типового плана';
     } else {
       this.standardPlan = this.localStorage.getSelectedStandardPlan();
@@ -358,8 +359,13 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   addComponentOrDiscipline(cycle: Cycle): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, 0);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, 0);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, 0);
     const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-      data: {title: 'Добавить компоненту/дисциплину', cycle, disciplines: this.disciplines, totalHoursFree},
+      data: {
+        title: 'Добавить компоненту/дисциплину', cycle, disciplines: this.disciplines,
+        totalHoursFree, classroomHoursFree, creditUnitsFree
+      },
       minWidth: '600px'
     });
 
@@ -375,6 +381,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   addDisciplineToComponent(component: StudyComponent, cycle: Cycle): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInComponent(component, 0);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInComponent(component, 0);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInComponent(component, 0);
     const positionToAdd = this.studyPlanUtilService.calculatePositionToAndInComponent(component, cycle);
     const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
       data: {
@@ -383,7 +391,9 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
         changedCycle: cycle,
         positionToAdd,
         disciplines: this.disciplines,
-        totalHoursFree
+        totalHoursFree,
+        classroomHoursFree,
+        creditUnitsFree
       },
       minWidth: '600px'
     });
@@ -400,8 +410,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   editComponent(component: StudyComponent, cycle): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, component.totalHours);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, component.classroomHours);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, component.creditUnits);
     const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-      data: {title: 'Редактировать компоненту', component, totalHoursFree},
+      data: {title: 'Редактировать компоненту', component, totalHoursFree, classroomHoursFree, creditUnitsFree},
       minWidth: '600px'
     });
 
@@ -416,8 +428,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   editDisciplineOfCycle(discipline: Discipline, cycle: Cycle): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, discipline.totalHours);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, discipline.classroomHours);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, discipline.creditUnits);
     const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree},
+      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree, classroomHoursFree, creditUnitsFree},
       minWidth: '600px'
     });
 
@@ -432,8 +446,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   editDisciplineOfComponent(discipline: Discipline, component: StudyComponent): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInComponent(component, discipline.totalHours);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInComponent(component, discipline.classroomHours);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInComponent(component, discipline.creditUnits);
     const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree},
+      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree, classroomHoursFree, creditUnitsFree},
       minWidth: '600px'
     });
 
@@ -524,6 +540,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
       cycle.components[i] = temp;
       cycle.components[i].position = i + 1;
     }
+
+    this.reorderDisciplinesInCycle(cycle);
     this.refreshCycleTableContent();
   }
 
@@ -550,6 +568,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
       cycle.components[i] = temp;
       cycle.components[i].position = i + 1;
     }
+    this.reorderDisciplinesInCycle(cycle);
     this.refreshCycleTableContent();
   }
 
@@ -654,6 +673,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
       cycle.disciplines[i].position = tempPosition;
     }
     this.refreshCycleTableContent();
+  }
+
+  validateHoursInPlan(): void {
+    this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(this.cyclesDataSource.data);
   }
 
 

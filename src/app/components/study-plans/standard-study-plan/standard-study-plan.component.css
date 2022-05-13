@@ -151,27 +151,27 @@ Tables columns styling START
 
 .mat-column-position-discipline {
   width: 4%;
-  padding-left: 35px !important;
+  padding-left: 70px !important;
 }
 
 .mat-column-name-discipline {
-  width: 49.5%;
+  width: 41.6%;
 }
 
 .mat-column-totalHours-discipline {
-  width: 11.7%;
+  width: 10.2%;
 }
 
 .mat-column-classroomHours-discipline {
-  width: 12%;
+  width: 10.5%;
 }
 
 .mat-column-creditUnits-discipline {
-  width: 12.3%;
+  width: 10.5%;
 }
 
 .mat-column-selfHours-discipline {
-  width: 10.7%;
+  width: 9.2%;
 }
 
 
