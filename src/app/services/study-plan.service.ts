@@ -12,12 +12,12 @@ import {CommonInfoForStudyPlan} from '../model/study-plan/common-info-for-study-
 export class StudyPlanService extends BasicHttpService {
   private studyPlanEndpoint = environment.domain + 'api/v1/studyplans';
 
-  public getStudyPlans(): Observable<StudyPlan[]> {
-    return this.http.get<StudyPlan[]>(this.studyPlanEndpoint).pipe(catchError(this.handleError));
+  public getStudyPlans(standardPlan: boolean): Observable<StudyPlan[]> {
+    const params: any = {standardPlan};
+    return this.http.get<StudyPlan[]>(this.studyPlanEndpoint, {params}).pipe(catchError(this.handleError));
   }
 
   public createStudyPlan(studyPlan: StudyPlan): Observable<StudyPlan> {
-    console.log(studyPlan);
     return this.http.post<StudyPlan>(`${this.studyPlanEndpoint}`, studyPlan)
       .pipe(catchError(this.handleError));
   }

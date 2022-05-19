@@ -7,7 +7,7 @@ import {Cycle} from './structure/cycle';
 
 export class StudyPlan {
   id: number;
-  isStandardPlan: boolean;
+  standardPlan: boolean;
   registerNumber: string;
   semestersCount: number;
   developmentYear: number;
@@ -16,7 +16,8 @@ export class StudyPlan {
   educationForm: EducationForm;
   qualification: Qualification;
   speciality: Speciality;
-  createdWhen: Date;
-  updatedWhen: Date;
+  createdWhen: number;
+  updatedWhen: number;
+  statusChangeDate: number;
   cycles: Cycle[] = [];
 }

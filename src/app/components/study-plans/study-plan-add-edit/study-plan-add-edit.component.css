@@ -1,10 +1,31 @@
-.main-content {
-  width: 95%;
-  margin: 2%;
+mat-vertical-stepper {
+  background: transparent;
 }
 
-h1 {
-  text-align: left;
+.container {
+  margin: 2%;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  width: 300px;
+  margin-right: 2%;
+}
+
+.submitButton {
+  width: 200px;
+}
+
+.controls-container {
+  margin-top: 1%;
+}
+
+
+
+.control-button {
+  margin-right: 1%;
+  min-width: 200px;
 }
 
 .column-position {
@@ -26,6 +47,7 @@ tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
 }
 
+
 /*.example-element-row td {*/
 /*  border-bottom-width: 0;*/
 /*}*/
@@ -36,44 +58,58 @@ tr.example-element-row:not(.example-expanded-row):active {
   width: 100%;
 }
 
+
+
+.swap {
+  width: 3%;
+}
+
+
 /*
 Tables columns styling START
 */
+
 
 .cycle-table {
   width: 100%;
   /*width: 100%;*/
   margin-bottom: 1%;
 }
+
 /*Cycle-columns*/
 .mat-column-position {
   width: 3%;
 }
 
 .mat-column-name {
-  width: 50%;
+  width: 40%;
 }
 
 .mat-column-totalHours {
-  width: 12%;
+  width: 10%;
 }
 
 .mat-column-classroomHours {
-  width: 12%;
+  width: 10%;
 }
 
 .mat-column-creditUnits {
-  width: 12%;
+  width: 10%;
 }
 
 .mat-column-selfHours {
-  width: 11%;
+  width: 10%;
+}
+
+.mat-column-icons {
+  padding: 0 !important;
 }
 
 .mat-column-component-table-details {
   border-bottom-width: 0;
 }
 /*Component-columns end */
+
 
 .component-table {
   /*width: 100%;*/
@@ -89,24 +125,31 @@ Tables columns styling START
 }
 
 .mat-column-name-component {
-  width: 48.5%;
+  width: 40%;
 }
 
 .mat-column-totalHours-component {
-  width: 11.6%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-component {
-  width: 11.6%;
+  width: 10%;
 }
 
 .mat-column-selfHours-component {
-  width: 10.5%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-component {
-  width: 12%;
+  width: 10%;
 }
+
+.mat-column-icons-component {
+  padding: 0 !important;
+}
+
+
+
 
 .mat-column-discipline-component-table-details {
 
@@ -116,29 +159,32 @@ Tables columns styling START
 /* Discipline-columns Cycle */
 .mat-column-position-cycle-discipline {
   width: 4%;
-  padding-left: 35px !important;
+  padding-left: 2% !important;
 }
 
 .mat-column-name-cycle-discipline {
-  width: 49.5%;
+  width: 40%;
 }
 
 .mat-column-totalHours-cycle-discipline {
-  width: 11.7%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-cycle-discipline {
-  width: 12%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-cycle-discipline {
-  width: 12.3%;
+  width: 10%;
 }
 
 .mat-column-selfHours-cycle-discipline {
-  width: 10.7%;
+  width: 10%;
 }
 
+.mat-column-icons-cycle-discipline {
+  padding: 0 !important;
+}
 
 /* Discipline-columns Cycle end*/
 
@@ -150,30 +196,34 @@ Tables columns styling START
 /* Discipline-columns */
 
 .mat-column-position-discipline {
-  width: 4.8%;
-  padding-left: 70px !important;
+  width: 6%;
+  padding-left: 4% !important;
 }
 
 .mat-column-name-discipline {
-  width: 41.2%;
+  width: 38%;
 }
 
 .mat-column-totalHours-discipline {
-  width: 10.2%;
+  width: 10%;
 }
 
 .mat-column-classroomHours-discipline {
-  width: 10.2%;
+  width: 10%;
 }
 
 .mat-column-creditUnits-discipline {
-  width: 10.5%;
+  width: 10%;
 }
 
 .mat-column-selfHours-discipline {
-  width: 9.2%;
+  width: 10%;
 }
 
+.mat-column-icons-discipline {
+  /*width: 4.7%;*/
+  padding: 0 !important;
+}
 
 /* Discipline-columns end */
 

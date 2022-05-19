@@ -93,6 +93,7 @@ export class StandardStudyPlanComponent implements OnInit, OnDestroy {
       this.studyPlanService.submitStudyPlan(this.standardPlan).subscribe(result => {
         this.notifierService.notify('success', 'Учебный план был утвержден');
         this.standardPlan.status = StudyPlanStatus.SUBMITTED;
+        this.standardPlan.statusChangeDate = Date.now();
       }, e => {
         this.notifierService.notify('error', e);
       });

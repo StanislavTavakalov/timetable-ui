@@ -9,29 +9,51 @@
   <table #studyPlansTable mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="name">
-      <th style="width: 90%" mat-header-cell *matHeaderCellDef mat-sort-header> Название</th>
-      <td mat-cell *matCellDef="let studyPlan"> <div (click)="goToPlan(studyPlan)" style="cursor: pointer">{{printerService.printStandardPlanName(studyPlan)}} </div> </td>
+      <th mat-header-cell *matHeaderCellDef> Название</th>
+      <td mat-cell *matCellDef="let studyPlan">
+        <div (click)="goToPlan(studyPlan)" style="cursor: pointer">
+          {{printerService.printStandardPlanName(studyPlan)}}
+        </div>
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание</th>
-      <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+    <ng-container matColumnDef="createdWhen">
+      <th mat-header-cell *matHeaderCellDef> Дата создания</th>
+      <td mat-cell *matCellDef="let studyPlan"> {{studyPlan?.createdWhen | date: 'medium'}}  </td>
     </ng-container>
+
+    <ng-container matColumnDef="updatedWhen">
+      <th mat-header-cell *matHeaderCellDef> Дата изменения</th>
+      <td mat-cell *matCellDef="let studyPlan"> {{studyPlan?.updatedWhen | date: 'medium'}}  </td>
+    </ng-container>
+
+
+    <!--    <ng-container matColumnDef="description">-->
+    <!--      <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание</th>-->
+    <!--      <td mat-cell *matCellDef="let row"> {{row.description}} </td>-->
+    <!--    </ng-container>-->
     <ng-container matColumnDef="icons">
       <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
         <button class="material-icons table-mat-icon-element" mat-icon-button (click)="addStudyPlan()"
-                matTooltip="Создать новый типовой план">
-          <mat-icon> add_circle </mat-icon>
+                matTooltip="{{addIconTooltip}}">
+          <mat-icon> add_circle</mat-icon>
         </button>
       </th>
 
+
+
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let studyPlan">
+        <button mat-icon-button class="material-icons"
+                matTooltip="{{openIconTooltip}}" (click)="goToPlan(studyPlan)">
+          <mat-icon> open_in_new </mat-icon>
+        </button>
+
         <button mat-icon-button (click)="editStudyPlan(studyPlan)"
-                matTooltip="Редактировать план">
+                matTooltip="{{editIconTooltip}}">
           <mat-icon> edit</mat-icon>
         </button>
         <button mat-icon-button (click)="deleteStudyPlan(studyPlan)"
-                matTooltip="Удалить план">
+                matTooltip="{{deleteIconTooltip}}">
           <mat-icon> delete</mat-icon>
         </button>
       </td>

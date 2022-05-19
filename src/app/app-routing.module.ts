@@ -27,6 +27,7 @@ import {StudyPlansComponent} from './components/study-plans/study-plans.componen
 import {StandardStudyPlansComponent} from './components/study-plans/standard-study-plans/standard-study-plans.component';
 import {StandardPlanAddEditComponent} from './components/study-plans/standard-plan-add-edit/standard-plan-add-edit.component';
 import {StandardStudyPlanComponent} from './components/study-plans/standard-study-plan/standard-study-plan.component';
+import {StudyPlanAddEditComponent} from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -52,11 +53,13 @@ const routes: Routes = [
   {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},
   {path: 'departments/:departmentId/groups-and-flows', component: GroupsAndFlowsComponent},
   {path: 'departments/:departmentId/teachers', component: TeachersComponent},
+  {path: 'departments/:departmentId/studyplans', component: StudyPlansComponent},
+  {path: 'departments/:departmentId/studyplans/create', component: StudyPlanAddEditComponent},
+  {path: 'departments/:departmentId/studyplans/:id/edit', component: StudyPlansComponent},
   {path: 'standard-studyplans', component: StandardStudyPlansComponent},
   {path: 'standard-studyplans/create', component: StandardPlanAddEditComponent},
   {path: 'standard-studyplans/:id/edit', component: StandardPlanAddEditComponent},
   {path: 'standard-studyplans/:id', component: StandardStudyPlanComponent},
-  {path: 'studyplans', component: StudyPlansComponent},
   {path: 'disciplines', component: DisciplinesComponent},
   {path: 'classroom-fund', component: ClassroomFundComponent},
   {path: 'classroom-type-palette', component: ClassroomTypeColorPaletteComponent},

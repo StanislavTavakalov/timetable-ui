@@ -12,7 +12,8 @@ import {StudyPlanService} from '../../../services/study-plan.service';
 import {StudyPlan} from '../../../model/study-plan/study-plan';
 import {StudyPlanDeleteComponent} from '../../dialogs/study-plans/study-plan-delete/study-plan-delete.component';
 import {StandardPlanAddDialogComponent} from '../../dialogs/study-plans/standard/standard-plan-add/standard-plan-add-dialog.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {StudyPlanAddComponent} from '../../dialogs/study-plans/study-plan-add/study-plan-add.component';
 
 @Component({
   selector: 'app-study-plan-table',
@@ -22,6 +23,7 @@ import {Router} from '@angular/router';
 export class StudyPlanTableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
+              private activatedRoute: ActivatedRoute,
               private notifierService: NotifierService,
               private studyPlanService: StudyPlanService,
               private router: Router,
@@ -35,7 +37,7 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   @ViewChild('studyPlansTable', {static: false}) studyPlansTable: MatTable<StudyPlan>;
 
   @Input() studyPlans: StudyPlan[];
-  displayedColumns: string[] = ['name', 'icons'];
+  displayedColumns: string[] = ['name', 'createdWhen', 'updatedWhen', 'icons'];
   dataSource: MatTableDataSource<StudyPlan>;
 
   editDialogSubscription: Subscription;
@@ -43,11 +45,17 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   addStandardDialogSubscription: Subscription;
 
   @Input() isStandard: boolean;
-  title;
+  departmentId: string;
+  title: string;
+
+  openIconTooltip: string;
+  editIconTooltip: string;
+  addIconTooltip: string;
+  deleteIconTooltip: string;
 
   ngOnInit(): void {
-    this.title = this.isStandard ? 'Типовые планы' : 'Учебные планы';
-
+    this.fillLabels();
+    this.departmentId = this.activatedRoute.snapshot.paramMap.get('departmentId');
     this.dataSource = new MatTableDataSource(this.studyPlans);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -83,15 +91,19 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   }
 
   public editStudyPlan(studyPlan: StudyPlan): void {
+    this.localStorageService.putEditPlan(studyPlan);
     if (this.isStandard) {
-      this.localStorageService.putEditPlan(studyPlan);
       this.router.navigate([`/standard-studyplans/${studyPlan.id}/edit`]);
+    } else {
+      this.router.navigate([`/departments/${this.departmentId}/studyplans/${studyPlan.id}/edit`]);
     }
   }
 
   public addStudyPlan(): void {
     if (this.isStandard) {
       this.openAddStandardPlanDialog();
+    } else {
+      this.openAddStudyPlanDialog();
     }
   }
 
@@ -104,7 +116,17 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
         this.notifierService.notify('error', operationResult.errorMessage);
       }
     });
+  }
 
+  private openAddStudyPlanDialog(): void {
+    const dialogRef = this.dialog.open(StudyPlanAddComponent, {minWidth: '600px'});
+    this.addStandardDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.router.navigate([`/departments/${this.departmentId}/studyplans/create`]);
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
 
@@ -126,9 +148,17 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToPlan(studyPlan): void {
+  goToPlan(studyPlan: StudyPlan): void {
     if (this.isStandard) {
       this.router.navigate([`/standard-studyplans/${studyPlan.id}`]);
     }
+  }
+
+  private fillLabels(): void {
+    this.title = this.isStandard ? 'Типовые планы' : 'Учебные планы';
+    this.openIconTooltip = this.isStandard ? 'Перейти к типовому плану' : 'Перейти к учебному плану';
+    this.addIconTooltip = this.isStandard ? 'Создать типовой план' : 'Создать учебный план';
+    this.deleteIconTooltip = this.isStandard ? 'Удалить типовой план' : 'Удалить учебный план';
+    this.editIconTooltip = this.isStandard ? 'Редактировать типовой план' : 'Редактировать учебный план';
   }
 }

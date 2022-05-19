@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -22,7 +22,7 @@ import {DeaneriesComponent} from './components/deaneries/deaneries.component';
 import {DepartmentsComponent} from './components/departments/departments.component';
 import {DepartmentsTableComponent} from './components/departments/departments-table/departments-table.component';
 import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {DeaneriesTableComponent} from './components/deaneries/deaneries-table/deaneries-table.component';
 import {ClassroomFundComponent} from './components/classroom-fund/classroom-fund.component';
@@ -68,7 +68,9 @@ import { StandardStudyPlansComponent } from './components/study-plans/standard-s
 import { StandardPlanAddDialogComponent } from './components/dialogs/study-plans/standard/standard-plan-add/standard-plan-add-dialog.component';
 import { StandardPlanAddEditComponent } from './components/study-plans/standard-plan-add-edit/standard-plan-add-edit.component';
 import { StandardStudyPlanComponent } from './components/study-plans/standard-study-plan/standard-study-plan.component';
-
+import '@angular/common/locales/global/ru';
+import {getRuPaginatorIntl} from './general/ru-paginator-intl';
+import { StudyPlanAddEditComponent } from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -126,6 +128,7 @@ import { StandardStudyPlanComponent } from './components/study-plans/standard-st
     StandardPlanAddDialogComponent,
     StandardPlanAddEditComponent,
     StandardStudyPlanComponent,
+    StudyPlanAddEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -144,6 +147,9 @@ import { StandardStudyPlanComponent } from './components/study-plans/standard-st
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: MatPaginatorIntl,  useValue: getRuPaginatorIntl() }
+
   ],
   bootstrap: [AppComponent]
 })

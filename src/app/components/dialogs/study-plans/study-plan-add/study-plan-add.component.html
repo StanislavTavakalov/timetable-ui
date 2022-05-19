@@ -1,0 +1,56 @@
+<h2 mat-dialog-title style="text-align: center"> Создать учебный план </h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column; margin-top: 4%;">
+    <mat-radio-group [(ngModel)]="selectedOption" style="display: flex; flex-direction: column;">
+      <mat-radio-button value="{{options[0]}}" style="margin-bottom: 4%"> {{options[0]}} </mat-radio-button>
+      <mat-radio-button value="{{options[1]}}" style="margin-bottom: 4%"
+                        [disabled]="studyPlans === null"> {{options[1]}} </mat-radio-button>
+    </mat-radio-group>
+
+
+    <div *ngIf="selectedOption === options[0]">
+      <div style="margin-bottom: 1%">Критерии:</div>
+      <div class="row" style="margin: 0">
+        <mat-form-field appearance="fill">
+          <mat-label>Специальность</mat-label>
+          <mat-select [(ngModel)]="speciality" (selectionChange)="filterStandardPlansBySpeciality($event.value)">
+            <mat-option *ngFor="let speciality of specialities" [value]="speciality">
+              {{speciality.shortName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="margin-left: 2%">
+          <mat-label>Форма обучения</mat-label>
+          <mat-select [(ngModel)]="educationForm" (selectionChange)="filterStandardPlansByEducationForm($event.value)">
+            <mat-option *ngFor="let educationForm of educationForms" [value]="educationForm">
+              {{printerService.resourceLocalizerService.localizeEducationForm(educationForm)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="fill" >
+        <mat-label>Типовой план</mat-label>
+        <mat-select [(ngModel)]="standardStudyPlan" required>
+          <mat-option *ngFor="let standardStudyPlan of filteredPlans" [value]="standardStudyPlan">
+            {{printerService.printStandardPlanName(standardStudyPlan)}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill" *ngIf="selectedOption === options[1]">
+      <mat-label>Учебный план</mat-label>
+      <mat-select [(ngModel)]="studyPlan">
+        <mat-option *ngFor="let studyPlan of studyPlans" [value]="studyPlan">
+          {{printerService.printStandardPlanName(studyPlan)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions style="display: flex; justify-content: center">
+  <button mat-button color="primary" (click)="onConfirmClick()">
+    Подтвердить
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отменить</button>
+</mat-dialog-actions>

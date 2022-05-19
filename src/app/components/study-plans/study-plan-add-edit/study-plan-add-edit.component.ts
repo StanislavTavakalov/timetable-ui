@@ -1,56 +1,49 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {LocalStorageService} from '../../../services/local-storage.service';
-import {StudyPlanService} from '../../../services/study-plan.service';
-import {StudyPlan} from '../../../model/study-plan/study-plan';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {EducationalSchedule} from '../../../model/study-plan/schedule/educational-schedule';
+import {Location} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ResourceLocalizerService} from '../../../services/shared/resource-localizer.service';
+import {NotifierService} from 'angular-notifier';
 import {UtilityService} from '../../../services/shared/utility.service';
+import {StudyPlanService} from '../../../services/study-plan.service';
+import {MatDialog} from '@angular/material/dialog';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
+import {Subscription} from 'rxjs';
+import {StudyPlan} from '../../../model/study-plan/study-plan';
 import {Speciality} from '../../../model/department/speciality';
 import {Qualification} from '../../../model/additionals/qualification';
-import {Subscription} from 'rxjs';
-import {EducationForm} from '../../../model/study-plan/structure/education-form';
-import {ResourceLocalizerService} from '../../../services/shared/resource-localizer.service';
-import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
 import {Activity} from '../../../model/study-plan/schedule/activity';
-import {MatSelectChange} from '@angular/material/select';
+import {EducationForm} from '../../../model/study-plan/structure/education-form';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Cycle} from '../../../model/study-plan/structure/cycle';
 import {Component as StudyComponent} from '../../../model/study-plan/structure/component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {NotifierService} from 'angular-notifier';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Discipline} from '../../../model/discipline/discipline';
-import {OperationResult} from '../../../model/operation-result';
-import {MatDialog} from '@angular/material/dialog';
+import {EducationalSchedule} from '../../../model/study-plan/schedule/educational-schedule';
+import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
+import {MatSelectChange} from '@angular/material/select';
 import {CycleAddEditComponent} from '../../dialogs/study-plans/cycle-add-edit/cycle-add-edit.component';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {OperationResult} from '../../../model/operation-result';
 import {ComponentDisciplineAddEditComponent} from '../../dialogs/study-plans/component-discipline-add-edit/component-discipline-add-edit.component';
-import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
-import {Location} from '@angular/common';
 
 @Component({
-  selector: 'app-standard-plan-add',
-  templateUrl: './standard-plan-add-edit.component.html',
-  styleUrls: ['./standard-plan-add-edit.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  selector: 'app-study-plan-add-edit',
+  templateUrl: './study-plan-add-edit.component.html',
+  styleUrls: ['./study-plan-add-edit.component.css']
 })
-export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
+export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
 
   studyPlanServiceSubscription: Subscription;
 
   dialogSubscription: Subscription;
 
-  standardPlan: StudyPlan;
+  studyPlan: StudyPlan;
   title: string;
 
   basicPlanParamsForm: FormGroup;
   educationalScheduleForm: FormGroup;
-  structureStudyPlanFrom: FormGroup;
+  structureStudyPlanForm: FormGroup;
+  studyPlanHoursLoadForm: FormGroup;
   educationalScheduleTotalActivities: FormArray;
 
   specialities: Speciality[];
@@ -78,6 +71,11 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   disciplines: Discipline[];
 
+  speciality: Speciality;
+  qualification: Qualification;
+  semesterCount: number;
+  educationForm: EducationForm;
+
   constructor(private localStorage: LocalStorageService,
               private location: Location,
               private router: Router,
@@ -96,18 +94,18 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     this.loadCommonInfo();
     const planId = this.route.snapshot.paramMap.get('id');
     if (planId) {
-      this.standardPlan = this.localStorage.getEditPlan();
+      this.studyPlan = this.localStorage.getEditPlan();
       this.isEditCase = true;
-      this.studyPlanUtilService.resetValidityForPlan(this.standardPlan);
-      this.title = 'Редактирование типового плана';
+      this.studyPlanUtilService.resetValidityForPlan(this.studyPlan);
+      this.title = 'Редактирование учебного плана';
     } else {
-      this.standardPlan = this.localStorage.getSelectedStandardPlan();
-      if (this.standardPlan === null) {
-        this.standardPlan = new StudyPlan();
+      this.studyPlan = this.localStorage.getSelectedStandardPlan();
+      if (this.studyPlan === null) {
+        this.studyPlan = new StudyPlan();
       }
-      this.title = 'Создание типового плана';
+      this.title = 'Создание учебного плана';
     }
-    this.initializeForms(this.standardPlan);
+    this.initializeForms(this.studyPlan);
   }
 
   private loadCommonInfo(): void {
@@ -128,12 +126,13 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   private initBasicPlanParamsFrom(studyPlan: StudyPlan): void {
     this.basicPlanParamsForm = this.fb.group({
       developmentYear: [studyPlan.developmentYear],
-      qualification: [studyPlan.qualification],
-      speciality: [studyPlan.speciality],
-      semestersCount: [studyPlan.semestersCount],
-      educationForm: [studyPlan.educationForm],
       status: [studyPlan.status],
     });
+
+    this.speciality = this.studyPlan.speciality;
+    this.educationForm = this.studyPlan.educationForm;
+    this.semesterCount = this.studyPlan.semestersCount;
+    this.qualification = this.studyPlan.qualification;
   }
 
   private initStudyScheduleForm(educationalSchedule: EducationalSchedule): void {
@@ -145,7 +144,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   private initStructureStudyPlanFrom(studyPlan: StudyPlan): void {
-    this.structureStudyPlanFrom = this.fb.group({});
+    this.structureStudyPlanForm = this.fb.group({});
     this.cyclesDataSource = new MatTableDataSource(studyPlan.cycles);
   }
 
@@ -237,8 +236,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   private fillStructure(studyPlan: StudyPlan): void {
-    if (this.standardPlan.cycles) {
-      studyPlan.cycles = this.standardPlan.cycles;
+    if (this.studyPlan.cycles) {
+      studyPlan.cycles = this.studyPlan.cycles;
     }
   }
 
@@ -250,8 +249,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
       if (operationResult.isCompleted && operationResult.object && operationResult.errorMessage === null) {
         const addedCycle = operationResult.object;
-        addedCycle.position = this.standardPlan.cycles.length + 1;
-        this.standardPlan.cycles.push(addedCycle);
+        addedCycle.position = this.studyPlan.cycles.length + 1;
+        this.studyPlan.cycles.push(addedCycle);
         this.refreshCycleTableContent();
       } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
         this.notifierService.notify('error', operationResult.errorMessage);
@@ -266,7 +265,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   public refreshCycleTableContent(): void {
-    this.cyclesDataSource = new MatTableDataSource(this.standardPlan.cycles);
+    this.cyclesDataSource = new MatTableDataSource(this.studyPlan.cycles);
   }
 
   edit(): void {
@@ -295,9 +294,9 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   removeCycle(index: number): void {
-    this.standardPlan.cycles.splice(index, 1);
-    for (let i = index; i < this.standardPlan.cycles.length; i++) {
-      this.standardPlan.cycles[i].position = i + 1;
+    this.studyPlan.cycles.splice(index, 1);
+    for (let i = index; i < this.studyPlan.cycles.length; i++) {
+      this.studyPlan.cycles[i].position = i + 1;
     }
     this.refreshCycleTableContent();
   }
@@ -327,8 +326,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   removeDisciplineFromComponent(index: number, component: StudyComponent, cycle: Cycle): void {
     component.disciplines.splice(index, 1);
-    for (let i = index; i < this.standardPlan.cycles.length; i++) {
-      this.standardPlan.cycles[i].position = i + 1;
+    for (let i = index; i < this.studyPlan.cycles.length; i++) {
+      this.studyPlan.cycles[i].position = i + 1;
     }
     this.reorderDisciplinesInCycle(cycle);
     this.refreshCycleTableContent();
@@ -463,54 +462,54 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   swapWithUpperCycle(i: number): void {
-    const cycleCount = this.standardPlan.cycles.length;
+    const cycleCount = this.studyPlan.cycles.length;
     if (cycleCount === 1) {
       return;
     }
 
     let temp;
     if (i === 0) {
-      temp = this.standardPlan.cycles[cycleCount - 1];
-      this.standardPlan.cycles[cycleCount - 1] = this.standardPlan.cycles[0];
-      this.standardPlan.cycles[cycleCount - 1].position = cycleCount;
+      temp = this.studyPlan.cycles[cycleCount - 1];
+      this.studyPlan.cycles[cycleCount - 1] = this.studyPlan.cycles[0];
+      this.studyPlan.cycles[cycleCount - 1].position = cycleCount;
 
-      this.standardPlan.cycles[0] = temp;
-      this.standardPlan.cycles[0].position = 1;
+      this.studyPlan.cycles[0] = temp;
+      this.studyPlan.cycles[0].position = 1;
     } else {
-      temp = this.standardPlan.cycles[i - 1];
+      temp = this.studyPlan.cycles[i - 1];
 
-      this.standardPlan.cycles[i - 1] = this.standardPlan.cycles[i];
-      this.standardPlan.cycles[i - 1].position = i;
+      this.studyPlan.cycles[i - 1] = this.studyPlan.cycles[i];
+      this.studyPlan.cycles[i - 1].position = i;
 
-      this.standardPlan.cycles[i] = temp;
-      this.standardPlan.cycles[i].position = i + 1;
+      this.studyPlan.cycles[i] = temp;
+      this.studyPlan.cycles[i].position = i + 1;
     }
 
     this.refreshCycleTableContent();
   }
 
   swapWithLowerCycle(i: number): void {
-    const cycleCount = this.standardPlan.cycles.length;
+    const cycleCount = this.studyPlan.cycles.length;
     if (cycleCount === 1) {
       return;
     }
 
     let temp;
     if (i === cycleCount - 1) {
-      temp = this.standardPlan.cycles[0];
-      this.standardPlan.cycles[0] = this.standardPlan.cycles[i];
-      this.standardPlan.cycles[0].position = 1;
+      temp = this.studyPlan.cycles[0];
+      this.studyPlan.cycles[0] = this.studyPlan.cycles[i];
+      this.studyPlan.cycles[0].position = 1;
 
-      this.standardPlan.cycles[i] = temp;
-      this.standardPlan.cycles[i].position = i + 1;
+      this.studyPlan.cycles[i] = temp;
+      this.studyPlan.cycles[i].position = i + 1;
 
     } else {
-      temp = this.standardPlan.cycles[i + 1];
-      this.standardPlan.cycles[i + 1] = this.standardPlan.cycles[i];
-      this.standardPlan.cycles[i + 1].position = i + 2;
+      temp = this.studyPlan.cycles[i + 1];
+      this.studyPlan.cycles[i + 1] = this.studyPlan.cycles[i];
+      this.studyPlan.cycles[i + 1].position = i + 2;
 
-      this.standardPlan.cycles[i] = temp;
-      this.standardPlan.cycles[i].position = i + 1;
+      this.studyPlan.cycles[i] = temp;
+      this.studyPlan.cycles[i].position = i + 1;
 
     }
 

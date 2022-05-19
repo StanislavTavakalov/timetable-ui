@@ -77,7 +77,7 @@ export class UtilityService {
 
 
   private copyCommonBaseParams(sourcePlan: StudyPlan, targetPlan: StudyPlan): void {
-    targetPlan.isStandardPlan = sourcePlan.isStandardPlan;
+    targetPlan.standardPlan = sourcePlan.standardPlan;
     targetPlan.developmentYear = sourcePlan.developmentYear;
     targetPlan.qualification = sourcePlan.qualification;
     targetPlan.speciality = sourcePlan.speciality;

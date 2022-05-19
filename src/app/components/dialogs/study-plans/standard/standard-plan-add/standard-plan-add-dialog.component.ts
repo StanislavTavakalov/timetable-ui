@@ -31,7 +31,7 @@ export class StandardPlanAddDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.serviceSubscription = this.studyPlanService.getStudyPlans().subscribe(studyPlans => {
+    this.serviceSubscription = this.studyPlanService.getStudyPlans(true).subscribe(studyPlans => {
       this.standardStudyPlans = studyPlans;
     });
   }

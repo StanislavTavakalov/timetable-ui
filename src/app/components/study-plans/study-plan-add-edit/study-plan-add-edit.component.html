@@ -1,92 +1,42 @@
 <div class="container">
   <h2> {{title}}</h2>
 
-<!--   BASIC FORM START-->
+  <!--   BASIC FORM START-->
   <form [formGroup]="basicPlanParamsForm">
-    <div>
-      <mat-form-field>
-        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Специализация: "
-                    [formControlName]="'speciality'" required>
-          <mat-option *ngFor="let spec of specialities" [value]="spec">
-            {{spec.shortName}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="row" style="font-size: 16px">
+      <div><b> Специализация: </b>  {{this.studyPlan.speciality.shortName}} </div>
+      <div style="margin-left: 2%"><b> Квалификация: </b>   {{this.studyPlan.qualification.name}} </div>
+      <div style="margin-left: 2%"><b> Форма
+        обучения:</b>    {{resourceLocalizer.localizeEducationForm(this.studyPlan.educationForm)}}</div>
 
-      <mat-form-field>
-        <mat-select [compareWith]="utilityService.compareObjects" placeholder="Форма обучения: "
-                    [formControlName]="'educationForm'" required>
-          <mat-option *ngFor="let educationForm of educationForms" [value]="educationForm">
-            {{resourceLocalizer.localizeEducationForm(educationForm)}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Квалификации: "
-                    [formControlName]="'qualification'" required>
-          <mat-option *ngFor="let qualification of qualifications" [value]="qualification">
-            {{qualification.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
-    <div>
 
-      <mat-form-field>
-        <input matInput type="number" placeholder="Количество семестров:"
-               [formControlName]="'semestersCount'" required value="10">
-      </mat-form-field>
-
-      <mat-form-field>
+    <div class="row" style="font-size: 16px">
+      <div><b> Количество семестров: </b> {{this.studyPlan.semestersCount}} </div>
+      <mat-form-field style="margin-left: 2%">
         <input matInput type="number" placeholder="Год разработки:"
                [formControlName]="'developmentYear'" required value="2022">
       </mat-form-field>
-
-      Статус: {{resourceLocalizer.localizeStudyPlanStatus(status)}}
-
     </div>
+
   </form>
-<!--  BASIC FORM END -->
+  <!--  BASIC FORM END -->
 
   <mat-vertical-stepper #stepper>
- <!--  EDUCATIONAL SCHEDULE FORM START -->
+    <!--  EDUCATIONAL SCHEDULE FORM START -->
     <mat-step [stepControl]='educationalScheduleForm'>
       <form [formGroup]="educationalScheduleForm">
-        <ng-template matStepLabel> Требования к графику образовательного процесса</ng-template>
-
-        <div formArrayName="educationalScheduleTotalActivities"
-             *ngFor="let e of educationalScheduleForm.get('educationalScheduleTotalActivities')['controls']; let ind = index;">
-          <div [formGroupName]="ind">
-            <mat-form-field>
-              <mat-select [compareWith]="utilityService.compareObjectsByIds" [formControlName]="'activity'"
-                          placeholder="Вид деятельности" (selectionChange)="removeActivityFromSelectionList($event)"
-                          required>
-                <mat-option *ngFor="let activity of activities" [value]="activity">
-                  {{activity.name}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput type="number" [formControlName]="'totalWeekCount'" placeholder="Всего недель" required>
-            </mat-form-field>
-            <button mat-icon-button (click)="removeTotalActivity(ind, e);">
-              <mat-icon> clear</mat-icon>
-            </button>
-          </div>
-        </div>
-        <button mat-raised-button (click)="addTotalActivity()"> Добавить вид деятельности</button>
+        <ng-template matStepLabel> График образовательного процесса</ng-template>
       </form>
     </mat-step>
- <!--  EDUCATIONAL SCHEDULE FORM END -->
+    <!--  EDUCATIONAL SCHEDULE FORM END -->
 
+    <!--  STRUCTURE STUDY PLAN FORM START -->
+    <mat-step [stepControl]='structureStudyPlanForm'>
+      <form [formGroup]="structureStudyPlanForm">
+        <ng-template matStepLabel> Структура плана</ng-template>
 
-  <!--  STRUCTURE STUDY PLAN FORM START -->
-    <mat-step [stepControl]='structureStudyPlanFrom'>
-      <form [formGroup]="structureStudyPlanFrom">
-        <ng-template matStepLabel> Требования к структуре плана</ng-template>
-
- <!--  CYCLES TABLE START      -->
+        <!--  CYCLES TABLE START      -->
         <table #cyclesTable mat-table class="cycle-table" [dataSource]="cyclesDataSource" matSort multiTemplateDataRows>
 
           <ng-container matColumnDef="position">
@@ -107,34 +57,42 @@
 
           <ng-container matColumnDef="totalHours">
             <th mat-header-cell *matHeaderCellDef> Всего часов</th>
-            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(cycle) }">
+            <td mat-cell *matCellDef="let cycle"
+                [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(cycle) }">
               {{cycle.totalHours}}
             </td>
-            <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateTotalHours(this.cyclesDataSource.data)}} </td>
+            <td mat-footer-cell
+                *matFooterCellDef> {{this.studyPlanUtilService.calculateTotalHours(this.cyclesDataSource.data)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="classroomHours">
             <th mat-header-cell *matHeaderCellDef> Аудиторных</th>
-            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
+            <td mat-cell *matCellDef="let cycle"
+                [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
               {{cycle.classroomHours}}
             </td>
-            <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateClassroomHours(this.cyclesDataSource.data)}} </td>
+            <td mat-footer-cell
+                *matFooterCellDef> {{this.studyPlanUtilService.calculateClassroomHours(this.cyclesDataSource.data)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="selfHours">
             <th mat-header-cell *matHeaderCellDef> Самостоятельных</th>
-            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
+            <td mat-cell *matCellDef="let cycle"
+                [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(cycle) }">
               {{cycle.totalHours - cycle.classroomHours}}
             </td>
-            <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateSelfHours(this.cyclesDataSource.data)}} </td>
+            <td mat-footer-cell
+                *matFooterCellDef> {{this.studyPlanUtilService.calculateSelfHours(this.cyclesDataSource.data)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="creditUnits">
             <th mat-header-cell *matHeaderCellDef> Зачетных единиц</th>
-            <td mat-cell *matCellDef="let cycle" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(cycle) }">
+            <td mat-cell *matCellDef="let cycle"
+                [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(cycle) }">
               {{cycle.creditUnits}}
             </td>
-            <td mat-footer-cell *matFooterCellDef> {{this.studyPlanUtilService.calculateCreditUnits(this.cyclesDataSource.data)}} </td>
+            <td mat-footer-cell
+                *matFooterCellDef> {{this.studyPlanUtilService.calculateCreditUnits(this.cyclesDataSource.data)}} </td>
           </ng-container>
 
 
@@ -165,139 +123,161 @@
             <td mat-footer-cell *matFooterCellDef></td>
           </ng-container>
 
- <!--  COMPONENTS START  -->
+          <!--  COMPONENTS START  -->
           <ng-container matColumnDef="component-table-details">
-            <td mat-cell *matCellDef="let cycle" [attr.colspan]="this.displayedCycleColumns.length" style="padding: 0 !important;" >
+            <td mat-cell *matCellDef="let cycle" [attr.colspan]="this.displayedCycleColumns.length"
+                style="padding: 0 !important;">
               <div class="example-element-detail"
                    [@detailExpand]="'expanded'">
                 <table #componentsTable mat-table class="component-table"
                        [dataSource]="createDataSource(cycle.components)" matSort
                        multiTemplateDataRows *ngIf="cycle.components && cycle.components.length !== 0">
 
-                  <ng-container matColumnDef="position-component" >
-                    <th mat-header-cell *matHeaderCellDef > №</th>
-                    <td mat-cell *matCellDef="let component"> </td>
+                  <ng-container matColumnDef="position-component">
+                    <th mat-header-cell *matHeaderCellDef> №</th>
+                    <td mat-cell *matCellDef="let component"></td>
                   </ng-container>
 
                   <ng-container matColumnDef="name-component">
-                    <th mat-header-cell *matHeaderCellDef > Название</th>
+                    <th mat-header-cell *matHeaderCellDef> Название</th>
                     <td mat-cell *matCellDef="let component">
                       {{component.name}}
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="totalHours-component" >
-                    <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(component) }">
+                  <ng-container matColumnDef="totalHours-component">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let component"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(component) }">
                       {{component.totalHours}}
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="classroomHours-component" >
-                    <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
+                  <ng-container matColumnDef="classroomHours-component">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let component"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
                       {{component.classroomHours}}
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="selfHours-component" >
-                    <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
+                  <ng-container matColumnDef="selfHours-component">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let component"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(component) }">
                       {{component.totalHours - component.classroomHours}}
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="creditUnits-component" >
-                    <th mat-header-cell *matHeaderCellDef ></th>
-                    <td mat-cell *matCellDef="let component" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(component) }">
+                  <ng-container matColumnDef="creditUnits-component">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let component"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(component) }">
                       {{component.creditUnits}}
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="icons-component" >
+                  <ng-container matColumnDef="icons-component">
                     <th mat-header-cell *matHeaderCellDef class="column-position"></th>
                     <td mat-cell *matCellDef="let component; let i = dataIndex">
                       <div style="display: flex; justify-content: end">
-                        <button mat-icon-button matTooltip="Добавить дисциплину" (click)="addDisciplineToComponent(component, cycle)">
+                        <button mat-icon-button matTooltip="Добавить дисциплину"
+                                (click)="addDisciplineToComponent(component, cycle)">
                           <mat-icon> add_circle</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="Редактировать компоненту" (click)="editComponent(component, cycle)">
+                        <button mat-icon-button matTooltip="Редактировать компоненту"
+                                (click)="editComponent(component, cycle)">
                           <mat-icon> edit</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="Удалить компоненту"  (click)="removeComponent(i, cycle)">
+                        <button mat-icon-button matTooltip="Удалить компоненту" (click)="removeComponent(i, cycle)">
                           <mat-icon> delete</mat-icon>
                         </button>
                         <div class="column" style="justify-content: center; align-items: center; align-content: center">
-                          <mat-icon (click)="swapWithUpperComponent(i, cycle)" style="cursor: pointer"> expand_less</mat-icon>
-                          <mat-icon (click)="swapWithLowerComponent(i, cycle)" style="cursor: pointer"> expand_more</mat-icon>
+                          <mat-icon (click)="swapWithUpperComponent(i, cycle)" style="cursor: pointer"> expand_less
+                          </mat-icon>
+                          <mat-icon (click)="swapWithLowerComponent(i, cycle)" style="cursor: pointer"> expand_more
+                          </mat-icon>
                         </div>
                       </div>
                     </td>
                   </ng-container>
- <!--  COMPONENT DISCIPLINES TABLE START  -->
+                  <!--  COMPONENT DISCIPLINES TABLE START  -->
                   <ng-container matColumnDef="discipline-component-table-details">
-                    <td mat-cell *matCellDef="let component" [attr.colspan]="this.displayedComponentsColumns.length" style="padding: 0 !important;">
+                    <td mat-cell *matCellDef="let component" [attr.colspan]="this.displayedComponentsColumns.length"
+                        style="padding: 0 !important;">
                       <div class="example-element-detail"
                            [@detailExpand]="'expanded'">
                         <div *ngIf="component.disciplines && component.disciplines.length !== 0">
 
                           <table #componentDisciplinesTable mat-table class="component-table"
                                  [dataSource]="createDataSource(component.disciplines)" matSort
-                                 multiTemplateDataRows *ngIf="component.disciplines && component.disciplines.length !== 0">
+                                 multiTemplateDataRows
+                                 *ngIf="component.disciplines && component.disciplines.length !== 0">
 
-                            <ng-container matColumnDef="position-discipline" >
+                            <ng-container matColumnDef="position-discipline">
                               <th mat-header-cell *matHeaderCellDef> №</th>
                               <td mat-cell *matCellDef="let discipline"> {{cycle.position}}.{{discipline.position}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="name-discipline">
-                              <th mat-header-cell *matHeaderCellDef > Название</th>
+                              <th mat-header-cell *matHeaderCellDef> Название</th>
                               <td mat-cell *matCellDef="let discipline">
                                 {{discipline.name}}
                               </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="totalHours-discipline" >
-                              <th mat-header-cell *matHeaderCellDef ></th>
-                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
+                            <ng-container matColumnDef="totalHours-discipline">
+                              <th mat-header-cell *matHeaderCellDef></th>
+                              <td mat-cell *matCellDef="let discipline"
+                                  [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
                                 {{discipline.totalHours}}
                               </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="classroomHours-discipline" >
+                            <ng-container matColumnDef="classroomHours-discipline">
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline"[ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
+                              <td mat-cell *matCellDef="let discipline"
+                                  [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                                 {{discipline.classroomHours}}
                               </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="selfHours-discipline" >
+                            <ng-container matColumnDef="selfHours-discipline">
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
+                              <td mat-cell *matCellDef="let discipline"
+                                  [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                                 {{discipline.totalHours - discipline.classroomHours}}
                               </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="creditUnits-discipline" >
+                            <ng-container matColumnDef="creditUnits-discipline">
                               <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
+                              <td mat-cell *matCellDef="let discipline"
+                                  [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
                                 {{discipline.creditUnits}}
                               </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="icons-discipline" >
+                            <ng-container matColumnDef="icons-discipline">
                               <th mat-header-cell *matHeaderCellDef></th>
                               <td mat-cell *matCellDef="let discipline; let i = dataIndex">
                                 <div style="display: flex; justify-content: end">
-                                  <button mat-icon-button matTooltip="Редактировать дисциплину" (click)="editDisciplineOfComponent(discipline, component)">
+                                  <button mat-icon-button matTooltip="Редактировать дисциплину"
+                                          (click)="editDisciplineOfComponent(discipline, component)">
                                     <mat-icon> edit</mat-icon>
                                   </button>
-                                  <button mat-icon-button matTooltip="Удалить дисциплину"  (click)="removeDisciplineFromComponent(i, component, cycle)">
+                                  <button mat-icon-button matTooltip="Удалить дисциплину"
+                                          (click)="removeDisciplineFromComponent(i, component, cycle)">
                                     <mat-icon> delete</mat-icon>
                                   </button>
-                                  <div class="column" style="justify-content: center; align-items: center; align-content: center">
-                                    <mat-icon (click)="swapWithUpperComponentDiscipline(i, component)" style="cursor: pointer"> expand_less</mat-icon>
-                                    <mat-icon (click)="swapWithLowerComponentDiscipline(i, component)" style="cursor: pointer"> expand_more</mat-icon>
+                                  <div class="column"
+                                       style="justify-content: center; align-items: center; align-content: center">
+                                    <mat-icon (click)="swapWithUpperComponentDiscipline(i, component)"
+                                              style="cursor: pointer"> expand_less
+                                    </mat-icon>
+                                    <mat-icon (click)="swapWithLowerComponentDiscipline(i, component)"
+                                              style="cursor: pointer"> expand_more
+                                    </mat-icon>
                                   </div>
                                 </div>
                               </td>
@@ -312,23 +292,25 @@
                       </div>
                     </td>
                   </ng-container>
-  <!--  COMPONENT DISCIPLINES TABLE END  -->
-<!--                  <tr mat-header-row *matHeaderRowDef="displayedComponentsColumns"></tr>-->
+                  <!--  COMPONENT DISCIPLINES TABLE END  -->
+                  <!--                  <tr mat-header-row *matHeaderRowDef="displayedComponentsColumns"></tr>-->
                   <tr mat-row *matRowDef="let component; columns: displayedComponentsColumns;"
                       class="example-element-row">
                   </tr>
-                  <tr mat-row *matRowDef="let component; columns: ['discipline-component-table-details']" class="example-detail-row"></tr>
+                  <tr mat-row *matRowDef="let component; columns: ['discipline-component-table-details']"
+                      class="example-detail-row"></tr>
                 </table>
 
               </div>
             </td>
           </ng-container>
- <!-- COMPONENTS END -->
+          <!-- COMPONENTS END -->
 
 
-  <!-- CYCLES DISCIPLINES TABLE START -->
+          <!-- CYCLES DISCIPLINES TABLE START -->
           <ng-container matColumnDef="disciplines-table-details-cycle">
-            <td mat-cell *matCellDef="let cycle" [attr.colspan]="this.displayedCycleColumns.length" style="padding: 0 !important;">
+            <td mat-cell *matCellDef="let cycle" [attr.colspan]="this.displayedCycleColumns.length"
+                style="padding: 0 !important;">
               <div class="example-element-detail"
                    [@detailExpand]="'expanded'" *ngIf="cycle.disciplines && cycle.disciplines.length !== 0">
                 <table #cycleDisciplinesTable mat-table class="component-table"
@@ -351,28 +333,32 @@
 
                   <ng-container matColumnDef="totalHours-cycle-discipline" s>
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
+                    <td mat-cell *matCellDef="let discipline"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidTotalHoursTextColor(discipline) }">
                       {{discipline.totalHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="classroomHours-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
+                    <td mat-cell *matCellDef="let discipline"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                       {{discipline.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="selfHours-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
+                    <td mat-cell *matCellDef="let discipline"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidClassroomHoursTextColor(discipline) }">
                       {{discipline.totalHours - discipline.classroomHours}}
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="creditUnits-cycle-discipline">
                     <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let discipline" [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
+                    <td mat-cell *matCellDef="let discipline"
+                        [ngStyle]="{'color': this.studyPlanUtilService.selectValidCreditUnitHoursTextColor(discipline) }">
                       {{discipline.creditUnits}}
                     </td>
                   </ng-container>
@@ -381,15 +367,21 @@
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let discipline; let i = dataIndex">
                       <div style="display: flex; justify-content: end">
-                        <button mat-icon-button matTooltip="Редактировать дисциплину" (click)="editDisciplineOfCycle(discipline, cycle)">
+                        <button mat-icon-button matTooltip="Редактировать дисциплину"
+                                (click)="editDisciplineOfCycle(discipline, cycle)">
                           <mat-icon> edit</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="Удалить дисциплину" (click)="removeDisciplineFromCycle(i, cycle)">
+                        <button mat-icon-button matTooltip="Удалить дисциплину"
+                                (click)="removeDisciplineFromCycle(i, cycle)">
                           <mat-icon> delete</mat-icon>
                         </button>
                         <div class="column" style="justify-content: center; align-items: center; align-content: center">
-                          <mat-icon (click)="swapWithUpperCycleDiscipline(i, cycle)" style="cursor: pointer"> expand_less</mat-icon>
-                          <mat-icon (click)="swapWithLowerCycleDiscipline(i, cycle)" style="cursor: pointer"> expand_more</mat-icon>
+                          <mat-icon (click)="swapWithUpperCycleDiscipline(i, cycle)" style="cursor: pointer">
+                            expand_less
+                          </mat-icon>
+                          <mat-icon (click)="swapWithLowerCycleDiscipline(i, cycle)" style="cursor: pointer">
+                            expand_more
+                          </mat-icon>
                         </div>
                       </div>
                     </td>
@@ -404,7 +396,7 @@
             </td>
           </ng-container>
 
-<!-- CYCLES DISCIPLINES TABLE END -->
+          <!-- CYCLES DISCIPLINES TABLE END -->
 
 
           <tr mat-header-row *matHeaderRowDef="displayedCycleColumns"></tr>
@@ -413,14 +405,22 @@
           </tr>
 
           <!--          <tr mat-row *matRowDef="let cycle; columns: ['icons']" class="example-element-row"  [class.example-expanded-row]="expandedCycle === cycle"></tr>-->
-          <tr mat-row *matRowDef="let cycle; columns: ['component-table-details']" class="example-detail-row" ></tr>
-          <tr mat-row *matRowDef="let cycle; columns: ['disciplines-table-details-cycle']" class="example-detail-row"></tr>
+          <tr mat-row *matRowDef="let cycle; columns: ['component-table-details']" class="example-detail-row"></tr>
+          <tr mat-row *matRowDef="let cycle; columns: ['disciplines-table-details-cycle']"
+              class="example-detail-row"></tr>
           <tr mat-footer-row *matFooterRowDef="displayedCycleColumns"></tr>
 
         </table>
         <!-- CYCLES TABLE END -->
       </form>
-  <!--  STRUCTURE STUDY PLAN FORM START -->
+      <!--  STRUCTURE STUDY PLAN FORM START -->
+    </mat-step>
+
+
+    <mat-step [stepControl]='studyPlanHoursLoadForm'>
+      <form [formGroup]="studyPlanHoursLoadForm">
+        <ng-template matStepLabel> Распределение нагрузок</ng-template>
+      </form>
     </mat-step>
   </mat-vertical-stepper>
 
@@ -431,7 +431,7 @@
     <button mat-raised-button class="control-button" (click)='isEditCase? edit() : submit()'
             [disabled]="basicPlanParamsForm.invalid || educationalScheduleForm.invalid || totalActivities.invalid"> {{isEditCase ? 'Сохранить' : 'Создать'}}
     </button>
-    <button mat-raised-button class="control-button" (click)="validateHoursInPlan()"> Проверить часы </button>
+    <button mat-raised-button class="control-button" (click)="validateHoursInPlan()"> Проверить часы</button>
     <button mat-raised-button class="control-button" (click)='redirectToPlansPage()'> Отмена
     </button>
   </div>

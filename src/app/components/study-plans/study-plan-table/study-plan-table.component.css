@@ -7,3 +7,22 @@ table {
   font-size: 14px;
   width: 100%;
 }
+
+
+.mat-column-name {
+  width: 66%;
+}
+
+
+.mat-column-createdWhen {
+  width: 12%;
+}
+
+.mat-column-updatedWhen {
+  width: 12%;
+}
+
+.mat-column-icons {
+  width: 10%;
+}
+

@@ -55,7 +55,7 @@ export class Constants {
     label: 'Группы и потоки',
     isActive: true
   }, {
-    path: '/study-plans',
+    path: '/studyplans',
     label: 'Учебные планы',
     isActive: true
   }, {

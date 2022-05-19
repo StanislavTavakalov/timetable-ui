@@ -37,7 +37,7 @@ export class StandardStudyPlansComponent implements OnInit, OnDestroy {
   }
 
   private loadStudyPlans(): void {
-    this.serviceSubscription = this.studyPlanService.getStudyPlans().subscribe(studyPlans => {
+    this.serviceSubscription = this.studyPlanService.getStudyPlans(true).subscribe(studyPlans => {
       this.studyPlans = studyPlans;
       this.isLoading = false;
       this.isTableVisible = true;
