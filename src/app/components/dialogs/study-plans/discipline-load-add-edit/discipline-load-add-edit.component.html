@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="loadForm" class="column">
+
+    <mat-form-field class="full-size">
+      <mat-select [compareWith]="utilityService.compareObjects" placeholder="Нагрузка: "
+                  [formControlName]="'load'" [disabled]="this.loads.length === 0" required>
+        <mat-option *ngFor="let load of loads" [value]="load">
+          {{load.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="load.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-size">
+      <input matInput type="number" placeholder="Часы (лимит в {{this.hoursLimit}}):" [formControlName]="'hours'" [disabled]="this.loads.length === 0" required>
+      <mat-error *ngIf="hours.hasError('required')"> Поле должно быть заполнено</mat-error>
+      <mat-error *ngIf="hours.hasError('max')"> Превышен лимит часов</mat-error>
+      <mat-error *ngIf="hours.hasError('min')"> Значение должно положительным</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="loadForm.invalid">
+    {{this.disciplineLoad? 'Сохранить' : 'Подтвердить'}}
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+

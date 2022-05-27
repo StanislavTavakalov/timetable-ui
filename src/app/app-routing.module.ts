@@ -55,7 +55,7 @@ const routes: Routes = [
   {path: 'departments/:departmentId/teachers', component: TeachersComponent},
   {path: 'departments/:departmentId/studyplans', component: StudyPlansComponent},
   {path: 'departments/:departmentId/studyplans/create', component: StudyPlanAddEditComponent},
-  {path: 'departments/:departmentId/studyplans/:id/edit', component: StudyPlansComponent},
+  {path: 'departments/:departmentId/studyplans/:id/edit', component: StudyPlanAddEditComponent},
   {path: 'standard-studyplans', component: StandardStudyPlansComponent},
   {path: 'standard-studyplans/create', component: StandardPlanAddEditComponent},
   {path: 'standard-studyplans/:id/edit', component: StandardPlanAddEditComponent},

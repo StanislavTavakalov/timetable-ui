@@ -50,13 +50,37 @@
 <!--  BASIC FORM END -->
 
   <mat-vertical-stepper #stepper>
+
+<!--    &lt;!&ndash; SEMESTERS FORM START &ndash;&gt;-->
+<!--    <mat-step [stepControl]='semestersForm'>-->
+<!--      <form [formGroup]="semestersForm">-->
+<!--        <ng-template matStepLabel> Семестры </ng-template>-->
+
+<!--        <div formArrayName="semesters"-->
+<!--             *ngFor="let s of semestersForm.get('semesters')['controls']; let ind = index;">-->
+<!--          <div [formGroupName]="ind">-->
+<!--            <span style="margin-right: 1%"> Семестр {{ind + 1}}: </span>-->
+<!--            <mat-form-field style="width: 60px;">-->
+<!--              <input matInput type="number" [formControlName]="'weekCount'" placeholder="Недель" required>-->
+<!--            </mat-form-field>-->
+<!--            <button mat-icon-button (click)="removeSemester(ind)">-->
+<!--              <mat-icon> clear</mat-icon>-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <button mat-raised-button (click)="addSemester()"> Добавить семестер </button>-->
+<!--      </form>-->
+<!--    </mat-step>-->
+<!--    &lt;!&ndash;  SEMESTERS FORM END &ndash;&gt;-->
+
+
  <!--  EDUCATIONAL SCHEDULE FORM START -->
-    <mat-step [stepControl]='educationalScheduleForm'>
-      <form [formGroup]="educationalScheduleForm">
+    <mat-step [stepControl]='scheduleForm'>
+      <form [formGroup]="scheduleForm">
         <ng-template matStepLabel> Требования к графику образовательного процесса</ng-template>
 
-        <div formArrayName="educationalScheduleTotalActivities"
-             *ngFor="let e of educationalScheduleForm.get('educationalScheduleTotalActivities')['controls']; let ind = index;">
+        <div formArrayName="scheduleTotalActivities"
+             *ngFor="let e of scheduleForm.get('scheduleTotalActivities')['controls']; let ind = index;">
           <div [formGroupName]="ind">
             <mat-form-field>
               <mat-select [compareWith]="utilityService.compareObjectsByIds" [formControlName]="'activity'"
@@ -429,7 +453,7 @@
                  class="spinner">
     </mat-spinner>
     <button mat-raised-button class="control-button" (click)='isEditCase? edit() : submit()'
-            [disabled]="basicPlanParamsForm.invalid || educationalScheduleForm.invalid || totalActivities.invalid"> {{isEditCase ? 'Сохранить' : 'Создать'}}
+            [disabled]="basicPlanParamsForm.invalid || scheduleForm.invalid || totalActivities.invalid"> {{isEditCase ? 'Сохранить' : 'Создать'}}
     </button>
     <button mat-raised-button class="control-button" (click)="validateHoursInPlan()"> Проверить часы </button>
     <button mat-raised-button class="control-button" (click)='redirectToPlansPage()'> Отмена

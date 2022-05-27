@@ -3,7 +3,6 @@ import {LocalStorageService} from '../../../services/local-storage.service';
 import {StudyPlanService} from '../../../services/study-plan.service';
 import {StudyPlan} from '../../../model/study-plan/study-plan';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {EducationalSchedule} from '../../../model/study-plan/schedule/educational-schedule';
 import {UtilityService} from '../../../services/shared/utility.service';
 import {Speciality} from '../../../model/department/speciality';
 import {Qualification} from '../../../model/additionals/qualification';
@@ -26,6 +25,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ComponentDisciplineAddEditComponent} from '../../dialogs/study-plans/component-discipline-add-edit/component-discipline-add-edit.component';
 import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
 import {Location} from '@angular/common';
+import {Semester} from '../../../model/study-plan/schedule/semester';
 
 @Component({
   selector: 'app-standard-plan-add',
@@ -49,9 +49,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   title: string;
 
   basicPlanParamsForm: FormGroup;
-  educationalScheduleForm: FormGroup;
+  scheduleForm: FormGroup;
+  // semestersForm: FormGroup;
   structureStudyPlanFrom: FormGroup;
-  educationalScheduleTotalActivities: FormArray;
+  scheduleTotalActivities: FormArray;
 
   specialities: Speciality[];
   qualifications: Qualification[];
@@ -121,7 +122,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   private initializeForms(studyPlan: StudyPlan): void {
     this.initBasicPlanParamsFrom(studyPlan);
-    this.initStudyScheduleForm(studyPlan.educationalSchedule);
+    // this.initSemestersForm(studyPlan);
+    this.initStudyScheduleForm(studyPlan);
     this.initStructureStudyPlanFrom(studyPlan);
   }
 
@@ -130,18 +132,38 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
       developmentYear: [studyPlan.developmentYear],
       qualification: [studyPlan.qualification],
       speciality: [studyPlan.speciality],
-      semestersCount: [studyPlan.semestersCount],
+      semestersCount: [studyPlan.semesters.length],
       educationForm: [studyPlan.educationForm],
       status: [studyPlan.status],
     });
   }
 
-  private initStudyScheduleForm(educationalSchedule: EducationalSchedule): void {
-    this.educationalScheduleForm = this.fb.group({
-      educationalScheduleTotalActivities: this.fb.array([], Validators.minLength(1)),
+  // private initSemestersForm(studyPlan: StudyPlan): void {
+  //   this.semestersForm = this.fb.group({
+  //     semesters: this.fb.array([], Validators.minLength(1)),
+  //   });
+  //
+  //   this.fillSemestersForm(studyPlan);
+  // }
+  //
+  // private fillSemestersForm(studyPlan: StudyPlan): void {
+  //   if (studyPlan !== null && studyPlan.semesters !== null) {
+  //     studyPlan.semesters.forEach(semester => {
+  //       this.semesters.push(this.fb.group({
+  //         id: semester.id,
+  //         weekCount: [semester.weekCount, Validators.required]
+  //       }));
+  //     });
+  //   }
+  // }
+
+
+  private initStudyScheduleForm(studyPlan: StudyPlan): void {
+    this.scheduleForm = this.fb.group({
+      scheduleTotalActivities: this.fb.array([], Validators.minLength(1)),
     });
 
-    this.fillScheduleTotalActivities(educationalSchedule);
+    this.fillScheduleTotalActivities(studyPlan);
   }
 
   private initStructureStudyPlanFrom(studyPlan: StudyPlan): void {
@@ -149,9 +171,9 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     this.cyclesDataSource = new MatTableDataSource(studyPlan.cycles);
   }
 
-  private fillScheduleTotalActivities(educationalSchedule: EducationalSchedule): void {
-    if (educationalSchedule !== null && educationalSchedule.educationalScheduleTotalActivities !== null) {
-      educationalSchedule.educationalScheduleTotalActivities.forEach(scheduleTotalActivity => {
+  private fillScheduleTotalActivities(studyPlan: StudyPlan): void {
+    if (studyPlan !== null && studyPlan.scheduleTotalActivities !== null) {
+      studyPlan.scheduleTotalActivities.forEach(scheduleTotalActivity => {
         this.totalActivities.push(this.fb.group({
           id: scheduleTotalActivity.id,
           totalWeekCount: [scheduleTotalActivity.totalWeekCount, Validators.required],
@@ -162,13 +184,22 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
   get totalActivities(): FormArray {
-    return this.educationalScheduleForm.get('educationalScheduleTotalActivities') as FormArray;
+    return this.scheduleForm.get('scheduleTotalActivities') as FormArray;
+  }
+
+  get semesterCount(): FormArray {
+    return this.basicPlanParamsForm.get('semestersCount') as FormArray;
   }
 
   addTotalActivity(): void {
-    const educationalScheduleTotalActivities = this.totalActivities;
-    educationalScheduleTotalActivities.push(this.createTotalActivity());
+    const scheduleTotalActivities = this.totalActivities;
+    scheduleTotalActivities.push(this.createTotalActivity());
   }
+
+  // addSemester(): void {
+  //   const semesters = this.semesters;
+  //   semesters.push(this.createSemester());
+  // }
 
   private createTotalActivity(): FormGroup {
     return this.fb.group({
@@ -177,10 +208,21 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  // private createSemester(): FormGroup {
+  //   return this.fb.group({
+  //     weekCount: ['', Validators.required]
+  //   });
+  // }
+
   removeTotalActivity(index: number, totalActivity: FormGroup): void {
-    const educationalScheduleTotalActivities = this.totalActivities;
-    educationalScheduleTotalActivities.removeAt(index);
+    const scheduleTotalActivities = this.totalActivities;
+    scheduleTotalActivities.removeAt(index);
   }
+
+  // removeSemester(index: number): void {
+  //   const semesters = this.semesters;
+  //   semesters.removeAt(index);
+  // }
 
   get status(): StudyPlanStatus {
     return this.basicPlanParamsForm.get('status').value;
@@ -213,7 +255,8 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   private fillStandardStudyPlan(studyPlan: StudyPlan): void {
     this.fillCommonParams(studyPlan);
-    this.fillSchedule(studyPlan.educationalSchedule);
+    this.fillSemesters(studyPlan);
+    this.fillSchedule(studyPlan);
     this.fillStructure(studyPlan);
     studyPlan.standardPlan = true;
   }
@@ -223,15 +266,39 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
     studyPlan.qualification = this.basicPlanParamsForm.controls.qualification.value;
     studyPlan.educationForm = this.basicPlanParamsForm.controls.educationForm.value;
     studyPlan.speciality = this.basicPlanParamsForm.controls.speciality.value;
-    studyPlan.semestersCount = this.basicPlanParamsForm.controls.semestersCount.value;
     studyPlan.status = this.basicPlanParamsForm.controls.status.value;
   }
 
-  private fillSchedule(schedule: EducationalSchedule): void {
+  // private fillSemesters(studyPlan: StudyPlan): void {
+  //   if (this.semesters.value) {
+  //     studyPlan.semesters = [];
+  //     let semNum = 1;
+  //     for (const semester of this.semesters.value) {
+  //       semester.semesterNum = semNum;
+  //       semNum = semNum + 1;
+  //       studyPlan.semesters.push(semester);
+  //     }
+  //   }
+  // }
+
+  private fillSemesters(studyPlan: StudyPlan): void {
+    if (this.semesterCount.value) {
+      studyPlan.semesters = [];
+      for (let i = 0; i < this.semesterCount.value; i++) {
+        const sem = new Semester();
+        sem.semesterNum = i + 1;
+        sem.weekCount = 26;
+        sem.scheduleActivities = [];
+        studyPlan.semesters.push(sem);
+      }
+    }
+  }
+
+  private fillSchedule(studyPlan: StudyPlan): void {
     if (this.totalActivities.value) {
-      schedule.educationalScheduleTotalActivities = [];
+      studyPlan.scheduleTotalActivities = [];
       for (const totalActivity of this.totalActivities.value) {
-        schedule.educationalScheduleTotalActivities.push(totalActivity);
+        studyPlan.scheduleTotalActivities.push(totalActivity);
       }
     }
   }
@@ -261,7 +328,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   editCycle(cycle): void {
     this.dialog.open(CycleAddEditComponent, {
-      data: {title: 'Создать цикл', cycle}
+      data: {title: 'Редактировать цикл', cycle}
     });
   }
 

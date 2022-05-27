@@ -26,6 +26,7 @@ export class CycleAddEditComponent implements OnInit {
   cycleForm: FormGroup;
   loading = false;
   editMode: boolean;
+  disableTypeChange = false;
 
   cycleTypes: CycleType[] = [CycleType.BASIC, CycleType.EXTRA, CycleType.COURSE, CycleType.STANDARD,
     CycleType.FACULTATIVE, CycleType.FINAL_EXAMINATION, CycleType.PRACTICE, CycleType.DIPLOMA_DESIGN];
@@ -33,6 +34,9 @@ export class CycleAddEditComponent implements OnInit {
   ngOnInit(): void {
     this.title = this.data.title;
     this.cycle = this.data.cycle;
+    if (this.data.disableTypeChange) {
+      this.disableTypeChange = this.data.disableTypeChange;
+    }
 
     if (this.cycle != null) {
       this.editMode = true;
@@ -75,15 +79,19 @@ export class CycleAddEditComponent implements OnInit {
   get name(): FormControl {
     return this.cycleForm.get('name') as FormControl;
   }
+
   get cycleType(): FormControl {
     return this.cycleForm.get('cycleType') as FormControl;
   }
+
   get totalHours(): FormControl {
     return this.cycleForm.get('totalHours') as FormControl;
   }
+
   get classroomHours(): FormControl {
     return this.cycleForm.get('classroomHours') as FormControl;
   }
+
   get creditUnits(): FormControl {
     return this.cycleForm.get('creditUnits') as FormControl;
   }

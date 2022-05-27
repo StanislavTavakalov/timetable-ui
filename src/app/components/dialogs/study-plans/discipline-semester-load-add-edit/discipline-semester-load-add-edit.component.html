@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="semesterLoadForm" class="column">
+
+    <mat-form-field class="full-size">
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Нагрузка: "
+                  [formControlName]="'load'" [disabled]="this.semesterLoads.length === 0" required>
+        <mat-option *ngFor="let load of semesterLoads" [value]="load">
+          {{load.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="load.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <div>
+      Семестры:
+      <div class="row " *ngFor="let semCheckBox of semestersCheckBoxes">
+        <mat-checkbox class="example-margin" [checked]="semCheckBox[0]" (change)="makeChecked($event,  semCheckBox)" >
+          <span  style="font-size: 17px;"> {{ semCheckBox[1].semesterNum}} </span></mat-checkbox>
+      </div>
+
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+
+  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="semesterLoadForm.invalid">
+    {{this.semesterDisciplineLoad? 'Сохранить' : 'Подтвердить'}}
+  </button>
+  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+</mat-dialog-actions>
+

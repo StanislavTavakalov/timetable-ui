@@ -5,11 +5,11 @@ import {HeaderType} from '../../model/header-type';
 import {LocalStorageService} from '../local-storage.service';
 import {NotifierService} from 'angular-notifier';
 import {StudyPlan} from '../../model/study-plan/study-plan';
-import {EducationalSchedule} from '../../model/study-plan/schedule/educational-schedule';
-import {EducationalScheduleTotalActivity} from '../../model/study-plan/schedule/educational-schedule-total-activity';
+import {ScheduleTotalActivity} from '../../model/study-plan/schedule/schedule-total-activity';
 import {Cycle} from '../../model/study-plan/structure/cycle';
 import {Component} from '../../model/study-plan/structure/component';
 import {Discipline} from '../../model/discipline/discipline';
+import {Semester} from '../../model/study-plan/schedule/semester';
 
 @Injectable({
   providedIn: 'root'
@@ -77,26 +77,32 @@ export class UtilityService {
 
 
   private copyCommonBaseParams(sourcePlan: StudyPlan, targetPlan: StudyPlan): void {
-    targetPlan.standardPlan = sourcePlan.standardPlan;
+    if (sourcePlan.standardPlan) {
+      targetPlan.standardPlan = sourcePlan.standardPlan;
+    }
     targetPlan.developmentYear = sourcePlan.developmentYear;
     targetPlan.qualification = sourcePlan.qualification;
     targetPlan.speciality = sourcePlan.speciality;
     targetPlan.educationForm = sourcePlan.educationForm;
-    targetPlan.semestersCount = sourcePlan.semestersCount;
   }
 
   private copySchedule(sourcePlan: StudyPlan, targetPlan: StudyPlan): void {
-    targetPlan.educationalSchedule = new EducationalSchedule();
-    if (!sourcePlan.educationalSchedule) {
-      return;
-    }
-
-    if (sourcePlan.educationalSchedule.educationalScheduleTotalActivities) {
-      for (const totalActivity of sourcePlan.educationalSchedule.educationalScheduleTotalActivities) {
-        const copyOfTotalActivity = new EducationalScheduleTotalActivity();
+    if (sourcePlan.scheduleTotalActivities) {
+      for (const totalActivity of sourcePlan.scheduleTotalActivities) {
+        const copyOfTotalActivity = new ScheduleTotalActivity();
         copyOfTotalActivity.totalWeekCount = totalActivity.totalWeekCount;
         copyOfTotalActivity.activity = totalActivity.activity;
-        targetPlan.educationalSchedule.educationalScheduleTotalActivities.push(copyOfTotalActivity);
+        targetPlan.scheduleTotalActivities.push(copyOfTotalActivity);
+      }
+    }
+
+    if (sourcePlan.semesters) {
+      for (const semester of sourcePlan.semesters) {
+        const copyOfSemester = new Semester();
+        copyOfSemester.weekCount = semester.weekCount;
+        copyOfSemester.semesterNum = semester.semesterNum;
+        copyOfSemester.scheduleActivities = semester.scheduleActivities;
+        targetPlan.semesters.push(copyOfSemester);
       }
     }
 

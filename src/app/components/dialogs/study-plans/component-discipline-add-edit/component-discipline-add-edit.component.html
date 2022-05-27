@@ -39,9 +39,9 @@
         <mat-error *ngIf="name.hasError('required')"> Поле должно быть заполнено</mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-size" *ngIf="selectedOption === options[0] || editMode && component">
+      <mat-form-field class="full-size" *ngIf="selectedOption === options[0] || editMode && component" >
         <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип компоненты: "
-                    [formControlName]="'componentType'"
+                    [formControlName]="'componentType'" [disabled]="disableTypeChange"
                     required>
           <mat-option *ngFor="let componentType of componentTypes" [value]="componentType">
             {{resourceLocalizerService.localizedComponentTypeName(componentType)}}

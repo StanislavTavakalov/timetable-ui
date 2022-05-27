@@ -10,7 +10,7 @@ import {StudyPlan} from '../../../model/study-plan/study-plan';
 import {Subscription} from 'rxjs';
 import {MatTableDataSource} from '@angular/material/table';
 import {Cycle} from '../../../model/study-plan/structure/cycle';
-import {EducationalScheduleTotalActivity} from '../../../model/study-plan/schedule/educational-schedule-total-activity';
+import {ScheduleTotalActivity} from '../../../model/study-plan/schedule/schedule-total-activity';
 import {Location} from '@angular/common';
 import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
 
@@ -46,17 +46,19 @@ export class StandardStudyPlanComponent implements OnInit, OnDestroy {
     'classroomHours-cycle-discipline', 'selfHours-cycle-discipline', 'creditUnits-cycle-discipline'];
 
   cyclesDataSource: MatTableDataSource<Cycle>;
-  activityDataSource: MatTableDataSource<EducationalScheduleTotalActivity>;
+  activityDataSource: MatTableDataSource<ScheduleTotalActivity>;
   activityColumns = ['activity', 'weekCount'];
+  semesterCount: number;
 
   ngOnInit(): void {
     const planId = this.route.snapshot.paramMap.get('id');
     this.serviceSubscription = this.studyPlanService.getStudyPlan(planId).subscribe(plan => {
       this.standardPlan = plan;
       this.isLoading = false;
+      this.semesterCount = plan.semesters.length;
       this.cyclesDataSource = new MatTableDataSource<Cycle>(this.standardPlan.cycles);
-      this.activityDataSource = new MatTableDataSource<EducationalScheduleTotalActivity>
-      (this.standardPlan.educationalSchedule.educationalScheduleTotalActivities);
+      this.activityDataSource = new MatTableDataSource<ScheduleTotalActivity>
+      (this.standardPlan.scheduleTotalActivities);
     }, err => {
       this.notifierService.notify('error', err);
       this.isLoading = false;

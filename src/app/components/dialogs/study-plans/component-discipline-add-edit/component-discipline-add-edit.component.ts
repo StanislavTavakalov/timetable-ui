@@ -5,9 +5,10 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Cycle} from '../../../../model/study-plan/structure/cycle';
 import {
-  checkTotalAndClassroomHours,
   checkClassroomHoursWithinLimit,
-  checkTotalHoursWithinLimit, checkCreditUnitsWithinLimit
+  checkCreditUnitsWithinLimit,
+  checkTotalAndClassroomHours,
+  checkTotalHoursWithinLimit
 } from '../../../../validators/hours.validator';
 import {Discipline} from '../../../../model/discipline/discipline';
 import {Component as StudyComponent} from '../../../../model/study-plan/structure/component';
@@ -15,6 +16,7 @@ import {ComponentType} from '../../../../model/study-plan/structure/component-ty
 import {DisciplineType} from '../../../../model/discipline/discipline-type';
 import {MatOptionSelectionChange} from '@angular/material/core';
 import {MatRadioChange} from '@angular/material/radio';
+import {CycleType} from '../../../../model/study-plan/structure/cycle-type';
 
 @Component({
   selector: 'app-component-add-edit',
@@ -58,11 +60,14 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
   changedComponent: StudyComponent;
   changedCycle: Cycle;
   positionToAdd: number;
+  disableTypeChange = false;
 
   ngOnInit(): void {
     this.title = this.data.title;
     this.disciplineTemplates = this.data.disciplines;
-
+    if (this.data.disableTypeChange) {
+      this.disableTypeChange = this.data.disableTypeChange;
+    }
     this.discipline = this.data.discipline;
     this.component = this.data.component;
     this.cycle = this.data.cycle;
@@ -79,6 +84,8 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       this.addToComponentMode = true;
     }
 
+
+
     if (this.discipline != null) {
       this.editMode = true;
       this.initializeDisciplineForm(this.discipline);
@@ -86,6 +93,7 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       this.editMode = true;
       this.initializeComponentForm(this.component);
     } else {
+      this.filterDisciplineTemplates();
       this.newMode = true;
       this.initializeGeneralForm();
     }
@@ -282,6 +290,8 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
     if ($event.value === this.options[0]) {
       this.form.reset();
       this.form.get('totalHoursFree').setValue(this.totalHoursFree);
+      this.form.get('classroomHoursFree').setValue(this.classroomHoursFree);
+      this.form.get('creditUnitsFree').setValue(this.creditUnitsFree);
     }
   }
 
@@ -293,6 +303,29 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
       this.classroomHours.setValue(this.selectedDisciplineTemplate.classroomHours);
       this.creditUnits.setValue(this.selectedDisciplineTemplate.creditUnits);
     }
+  }
+
+  private filterDisciplineTemplates(): void {
+    this.disciplineTemplates = this.disciplineTemplates.filter(disc => {
+      if (this.cycle) {
+        switch (this.cycle.cycleType) {
+          case CycleType.EXTRA:
+            return disc.disciplineType === DisciplineType.EXTRA;
+          case CycleType.BASIC:
+            return disc.disciplineType === DisciplineType.BASIC;
+          case CycleType.STANDARD:
+            return disc.disciplineType === DisciplineType.STANDARD;
+        }
+      } else if (this.component) {
+        switch (this.component.componentType) {
+          case ComponentType.BASIC:
+            return disc.disciplineType === DisciplineType.BASIC;
+          case ComponentType.STANDARD:
+            return disc.disciplineType === DisciplineType.STANDARD;
+        }
+      }
+      return false;
+    });
   }
 }
 

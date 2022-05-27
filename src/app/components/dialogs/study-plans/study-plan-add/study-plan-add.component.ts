@@ -10,6 +10,7 @@ import {Speciality} from '../../../../model/department/speciality';
 import {EducationForm} from '../../../../model/study-plan/structure/education-form';
 import {SpecialityService} from '../../../../services/speciality.service';
 import {ActivatedRoute} from '@angular/router';
+import {StudyPlanStatus} from '../../../../model/study-plan/study-plan-status';
 
 @Component({
   selector: 'app-study-plan-add',
@@ -52,8 +53,8 @@ export class StudyPlanAddComponent implements OnInit, OnDestroy {
     });
 
     this.serviceSubscription2 = this.studyPlanService.getStudyPlans(true).subscribe(standardPlans => {
-      this.standardPlans = standardPlans;
-      this.filteredPlans = standardPlans;
+      this.standardPlans = standardPlans.filter(studyPlan => studyPlan.status === StudyPlanStatus.SUBMITTED);
+      this.filteredPlans = this.standardPlans;
     });
 
     this.serviceSubscription3 = this.specialityService.getSpecialities(departmentId, null).subscribe(specialities => {
@@ -69,7 +70,7 @@ export class StudyPlanAddComponent implements OnInit, OnDestroy {
     if (this.selectedOption === Options.NEW) {
       this.localeStorage.putSelectedStandardPlan(this.utilService.copyPlanCommon(this.standardStudyPlan));
     } else if (this.selectedOption === Options.EXISTING) {
-      this.localeStorage.putSelectedStandardPlan(this.utilService.copyPlanCommon(this.standardStudyPlan));
+      this.localeStorage.putSelectedStandardPlan(this.utilService.copyPlanCommon(this.studyPlan));
     }
     this.dialogRef.close({isCompleted: true, object: null, errorMessage: null});
   }

@@ -76,39 +76,39 @@ Tables columns styling START
   margin-bottom: 1%;
 }
 
-/*Cycle-columns*/
-.mat-column-position {
-  width: 3%;
-}
+/*!*Cycle-columns*!*/
+/*.mat-column-position {*/
+/*  width: 3%;*/
+/*}*/
 
-.mat-column-name {
-  width: 40%;
-}
+/*.mat-column-name {*/
+/*  width: 40%;*/
+/*}*/
 
-.mat-column-totalHours {
-  width: 10%;
-}
+/*.mat-column-totalHours {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-classroomHours {
-  width: 10%;
-}
+/*.mat-column-classroomHours {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-creditUnits {
-  width: 10%;
-}
+/*.mat-column-creditUnits {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-selfHours {
-  width: 10%;
-}
+/*.mat-column-selfHours {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-icons {
-  padding: 0 !important;
-}
+/*.mat-column-icons {*/
+/*  padding: 0 !important;*/
+/*}*/
 
-.mat-column-component-table-details {
-  border-bottom-width: 0;
-}
-/*Component-columns end */
+/*.mat-column-component-table-details {*/
+/*  border-bottom-width: 0;*/
+/*}*/
+/*!*Component-columns end *!*/
 
 
 .component-table {
@@ -117,115 +117,136 @@ Tables columns styling START
   width: 100%;
 }
 
-/*Component-columns*/
+/*!*Component-columns*!*/
 
-.mat-column-position-component {
-  width: 4%;
-  padding: 0 !important;
-}
+/*.mat-column-position-component {*/
+/*  width: 4%;*/
+/*  padding: 0 !important;*/
+/*}*/
 
-.mat-column-name-component {
-  width: 40%;
-}
+/*.mat-column-name-component {*/
+/*  width: 40%;*/
+/*}*/
 
-.mat-column-totalHours-component {
-  width: 10%;
-}
+/*.mat-column-totalHours-component {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-classroomHours-component {
-  width: 10%;
-}
+/*.mat-column-classroomHours-component {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-selfHours-component {
-  width: 10%;
-}
+/*.mat-column-selfHours-component {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-creditUnits-component {
-  width: 10%;
-}
+/*.mat-column-creditUnits-component {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-icons-component {
-  padding: 0 !important;
-}
-
-
+/*.mat-column-icons-component {*/
+/*  padding: 0 !important;*/
+/*}*/
 
 
-.mat-column-discipline-component-table-details {
 
-}
-/* Component-columns end */
 
-/* Discipline-columns Cycle */
-.mat-column-position-cycle-discipline {
-  width: 4%;
-  padding-left: 2% !important;
-}
+/*.mat-column-discipline-component-table-details {*/
 
-.mat-column-name-cycle-discipline {
-  width: 40%;
-}
+/*}*/
+/*!* Component-columns end *!*/
 
-.mat-column-totalHours-cycle-discipline {
-  width: 10%;
-}
+/*!* Discipline-columns Cycle *!*/
+/*.mat-column-position-cycle-discipline {*/
+/*  width: 4%;*/
+/*  padding-left: 2% !important;*/
+/*}*/
 
-.mat-column-classroomHours-cycle-discipline {
-  width: 10%;
-}
+/*.mat-column-name-cycle-discipline {*/
+/*  width: 40%;*/
+/*}*/
 
-.mat-column-creditUnits-cycle-discipline {
-  width: 10%;
-}
+/*.mat-column-totalHours-cycle-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-selfHours-cycle-discipline {
-  width: 10%;
-}
+/*.mat-column-classroomHours-cycle-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-icons-cycle-discipline {
-  padding: 0 !important;
-}
+/*.mat-column-creditUnits-cycle-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-/* Discipline-columns Cycle end*/
+/*.mat-column-selfHours-cycle-discipline {*/
+/*  width: 10%;*/
+/*}*/
+
+/*.mat-column-icons-cycle-discipline {*/
+/*  padding: 0 !important;*/
+/*}*/
+
+/*!* Discipline-columns Cycle end*!*/
 
 .discipline-table{
-  width: 80%;
+  width: 100%;
   margin-bottom: 1%;
 }
 
-/* Discipline-columns */
+/*!* Discipline-columns *!*/
 
-.mat-column-position-discipline {
-  width: 6%;
-  padding-left: 4% !important;
-}
+/*.mat-column-position-discipline {*/
+/*  width: 6%;*/
+/*  padding-left: 4% !important;*/
+/*}*/
 
-.mat-column-name-discipline {
-  width: 38%;
-}
+/*.mat-column-name-discipline {*/
+/*  width: 38%;*/
+/*}*/
 
-.mat-column-totalHours-discipline {
-  width: 10%;
-}
+/*.mat-column-totalHours-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-classroomHours-discipline {
-  width: 10%;
-}
+/*.mat-column-classroomHours-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-creditUnits-discipline {
-  width: 10%;
-}
+/*.mat-column-creditUnits-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-selfHours-discipline {
-  width: 10%;
-}
+/*.mat-column-selfHours-discipline {*/
+/*  width: 10%;*/
+/*}*/
 
-.mat-column-icons-discipline {
-  /*width: 4.7%;*/
-  padding: 0 !important;
-}
+/*.mat-column-icons-discipline {*/
+/*  !*width: 4.7%;*!*/
+/*  padding: 0 !important;*/
+/*}*/
 
 /* Discipline-columns end */
+
+.row {
+  display: flex;
+  margin: 0;
+}
+
+table.schedule-table td {
+  min-width: 20px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+mat-select {
+  min-width: 30px;
+}
+
+table.schedule-table {
+  text-align: center;
+  font-size: 18px;
+  background: white;
+}
 
 
 

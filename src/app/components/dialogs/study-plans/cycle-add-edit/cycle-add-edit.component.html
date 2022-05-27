@@ -8,8 +8,8 @@
     </mat-form-field>
 
     <mat-form-field class="full-size">
-      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Тип цикла: "
-                  [formControlName]="'cycleType'"
+      <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип цикла: "
+                  [formControlName]="'cycleType'" [disabled]="disableTypeChange"
                   required>
         <mat-option *ngFor="let cycleType of cycleTypes" [value]="cycleType">
           {{resourceLocalizerService.localizedCycleTypeName(cycleType)}}

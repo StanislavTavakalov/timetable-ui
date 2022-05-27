@@ -1,9 +1,10 @@
+
 import {Activity} from './activity';
 
-export class EducationalScheduleTotalActivity {
+export class ScheduleActivity {
   id: number;
   activity: Activity;
-  totalWeekCount: number;
+  weekNumbers: number[] = [];
   createdWhen: Date;
   updatedWhen: Date;
 }
