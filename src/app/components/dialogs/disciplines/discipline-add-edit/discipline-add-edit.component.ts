@@ -32,7 +32,7 @@ export class DisciplineAddEditComponent implements OnInit, OnDestroy {
   serviceSubscription: Subscription;
   editMode: boolean;
   disciplineGroups: DisciplineGroup[];
-  disciplineTypes = [DisciplineType.BASIC, DisciplineType.STANDARD, DisciplineType.EXTRA];
+  disciplineTypes = [DisciplineType.BASIC, DisciplineType.STANDARD, DisciplineType.EXTRA, DisciplineType.FACULTATIVE];
 
   ngOnInit(): void {
     this.title = this.data.title;

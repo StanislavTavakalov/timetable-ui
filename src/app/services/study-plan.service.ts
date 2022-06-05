@@ -45,4 +45,14 @@ export class StudyPlanService extends BasicHttpService {
     return this.http.put<StudyPlan>(`${this.studyPlanEndpoint}/submit`, studyPlan)
       .pipe(catchError(this.handleError));
   }
+
+  public sendToRegisterStudyPlan(studyPlan: StudyPlan): Observable<StudyPlan> {
+    return this.http.put<StudyPlan>(`${this.studyPlanEndpoint}/to_register`, studyPlan)
+      .pipe(catchError(this.handleError));
+  }
+
+  public registerStudyPlan(studyPlan: StudyPlan): Observable<StudyPlan> {
+    return this.http.put<StudyPlan>(`${this.studyPlanEndpoint}/register`, studyPlan)
+      .pipe(catchError(this.handleError));
+  }
 }

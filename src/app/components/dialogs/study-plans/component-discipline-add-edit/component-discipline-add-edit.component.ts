@@ -316,8 +316,8 @@ export class ComponentDisciplineAddEditComponent implements OnInit {
           case CycleType.STANDARD:
             return disc.disciplineType === DisciplineType.STANDARD;
         }
-      } else if (this.component) {
-        switch (this.component.componentType) {
+      } else if (this.changedComponent) {
+        switch (this.changedComponent.componentType) {
           case ComponentType.BASIC:
             return disc.disciplineType === DisciplineType.BASIC;
           case ComponentType.STANDARD:

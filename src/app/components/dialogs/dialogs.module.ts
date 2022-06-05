@@ -49,6 +49,8 @@ import {StudyPlanAddComponent} from './study-plans/study-plan-add/study-plan-add
 import {StudyDisciplineAddEditComponent} from './study-plans/study-discipline-add-edit/study-discipline-add-edit.component';
 import {DisciplineLoadAddEditComponent} from './study-plans/discipline-load-add-edit/discipline-load-add-edit.component';
 import {DisciplineSemesterLoadAddEditComponent} from './study-plans/discipline-semester-load-add-edit/discipline-semester-load-add-edit.component';
+import {SpecificDisciplineAddEditComponent} from './study-plans/specific-disipline-add-edit/specific-discipline-add-edit.component';
+import { RegisterNumberPopupComponent } from './study-plans/register-number-popup/register-number-popup.component';
 
 @NgModule({
   imports: [
@@ -104,7 +106,9 @@ import {DisciplineSemesterLoadAddEditComponent} from './study-plans/discipline-s
     StudyPlanAddComponent,
     StudyDisciplineAddEditComponent,
     DisciplineLoadAddEditComponent,
-    DisciplineSemesterLoadAddEditComponent
+    DisciplineSemesterLoadAddEditComponent,
+    SpecificDisciplineAddEditComponent,
+    RegisterNumberPopupComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -116,7 +120,8 @@ import {DisciplineSemesterLoadAddEditComponent} from './study-plans/discipline-s
     AcademicTitleDeleteComponent, AcademicDegreeAddEditComponent, AcademicDegreeDeleteComponent,
     TeacherPositionAddEditComponent, TeacherPositionDeleteComponent, WorkTariffAddEditComponent, WorkTariffDeleteComponent,
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
-    StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent
+    StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
+    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -128,7 +133,8 @@ import {DisciplineSemesterLoadAddEditComponent} from './study-plans/discipline-s
     AcademicTitleDeleteComponent, AcademicDegreeAddEditComponent, AcademicDegreeDeleteComponent,
     TeacherPositionAddEditComponent, TeacherPositionDeleteComponent, WorkTariffAddEditComponent, WorkTariffDeleteComponent,
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
-    StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent
+    StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
+    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent
   ]
 })
 export class DialogsModule {

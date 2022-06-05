@@ -171,7 +171,7 @@
             <td mat-cell *matCellDef="let cycle; let i = dataIndex">
               <div style="display: flex; justify-content: end">
                 <button mat-icon-button matTooltip="Добавить компоненту/дисциплину"
-                        (click)="addComponentOrDiscipline(cycle)">
+                        (click)="addComponentOrDiscipline(cycle)" *ngIf="isAddComponentOrDisciplineIsAvailable(cycle)">
                   <mat-icon> add_circle</mat-icon>
                 </button>
                 <button mat-icon-button matTooltip="Редактировать" (click)="editCycle(cycle)">
@@ -242,7 +242,8 @@
                     <th mat-header-cell *matHeaderCellDef class="column-position"></th>
                     <td mat-cell *matCellDef="let component; let i = dataIndex">
                       <div style="display: flex; justify-content: end">
-                        <button mat-icon-button matTooltip="Добавить дисциплину" (click)="addDisciplineToComponent(component, cycle)">
+                        <button mat-icon-button matTooltip="Добавить дисциплину"
+                                (click)="addDisciplineToComponent(component, cycle)" *ngIf="isDisciplineAddIsAvailable(component)" >
                           <mat-icon> add_circle</mat-icon>
                         </button>
                         <button mat-icon-button matTooltip="Редактировать компоненту" (click)="editComponent(component, cycle)">

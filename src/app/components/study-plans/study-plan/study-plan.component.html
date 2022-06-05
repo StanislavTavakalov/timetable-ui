@@ -1,39 +1,41 @@
-<div class="container">
-  <h2 style="font-size: 28px"> {{title}}</h2>
+<mat-spinner *ngIf="isLoading;else mainContent" diameter="150" mode="indeterminate" color="primary" class="spinner">
+</mat-spinner>
 
-  <!--   BASIC FORM START-->
-  <form [formGroup]="basicPlanParamsForm" style="margin-top: 2%">
-    <div class="row" style="font-size: 16px">
-      <div><b> Специализация: </b>  {{this.studyPlan.speciality.shortName}} </div>
-      <div style="margin-left: 2%"><b> Квалификация: </b>   {{this.studyPlan.qualification.name}} </div>
+<ng-template #mainContent>
+  <div class="main-content" *ngIf="studyPlan" class="column">
+    <h1 style="font-size: 30px; margin-left: 1%"> Учебный план </h1>
+    <div class="row" style="font-size: 16px; margin-top: 1%">
+      <div><b> Специализация: </b>  {{studyPlan.speciality.shortName}} </div>
+      <div style="margin-left: 2%"><b> Квалификация: </b>   {{studyPlan.qualification.name}} </div>
       <div style="margin-left: 2%"><b> Форма
-        обучения:</b>    {{resourceLocalizer.localizeEducationForm(this.studyPlan.educationForm)}}</div>
+        обучения:</b>    {{resourceLocalizer.localizeEducationForm(studyPlan.educationForm)}}</div>
 
     </div>
 
-    <div class="row" style="font-size: 16px; margin-top: 2%">
-      <div><b> Количество семестров: </b> {{this.studyPlan.semesters.length}} </div>
-      <mat-form-field style="margin-left: 2%">
-        <input matInput type="number" placeholder="Год разработки:"
-               [formControlName]="'developmentYear'" required [min]="2000" [max]="2100">
-      </mat-form-field>
+    <div class="row" style="font-size: 16px;  margin-top: 1%">
+      <div><b> Количество семестров: </b> {{semesterCount}} </div>
+      <div style="margin-left: 2%"><b> Год разработки: </b> {{studyPlan.developmentYear}} </div>
+      <div style="margin-left: 2%"><b> Статус:</b>  {{resourceLocalizer.localizeStudyPlanStatus(studyPlan.status)}}
+      </div>
+      <div style="margin-left: 2%"><b> Дата изменения статуса:</b>  {{studyPlan.statusChangeDate | date:'medium'}}
+      </div>
+    </div>
+    <div class="row" style="font-size: 16px;  margin-top: 1%">
+      <div><b>Дата создания: </b>   {{studyPlan.createdWhen | date: 'medium'}} </div>
+      <div style="margin-left: 2%"><b>Дата изменения: </b>   {{studyPlan.updatedWhen | date: 'medium'}} </div>
+      <div style="margin-left: 2%"><b>Регистрационный
+        номер: </b>   {{this.printerService.printRegisterNumber(studyPlan.registerNumber)}} </div>
     </div>
 
-  </form>
-  <!--  BASIC FORM END -->
 
-  <mat-vertical-stepper #stepper [linear]="true">
-    <!--  EDUCATIONAL SCHEDULE FORM START -->
-    <mat-step [stepControl]='scheduleForm'>
-      <form [formGroup]="scheduleForm">
-        <ng-template matStepLabel> График образовательного процесса</ng-template>
-
-        <mat-spinner
-          *ngIf="isScheduleLoading; else schedule"
-          diameter="75" mode="indeterminate" color="primary">
-        </mat-spinner>
-
-        <ng-template #schedule>
+    <div style=" margin-top: 1%">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-size: 16px">
+              График образовательного процесса
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <div style="overflow: auto">
             <table class="schedule-table" *ngIf="!isScheduleLoading">
               <tbody>
@@ -177,20 +179,7 @@
               <tr *ngFor="let course of studyPlan.courses">
                 <td>{{studyPlan.courses.indexOf(course, 0) + 1}} </td>
                 <td *ngFor="let week of course?.weeks" [attr.colspan]="week.colspan">
-                  <select matNativeControl *ngIf="studyPlan.scheduleTotalActivities?.length" style="padding-top: 0"
-                          (change)="onActivityChange(week, course, $event)"
-                          [disabled]="checkSecondSemester(week, course.secondSemester)">
-                    <option *ngFor="let scheduleTotalActivity of studyPlan.scheduleTotalActivities"
-                            value="{{scheduleTotalActivity.activity.id}}"
-                            [selected]="week.activity && week.activity.symbol==scheduleTotalActivity.activity.symbol">{{scheduleTotalActivity.activity.symbol}}</option>
-                    <option [selected]="week.activity === undefined || week.activity === null" [value]="null"> n
-                    </option>
-                  </select>
-                  <!--                <mat-select [value]="week.activity">-->
-                  <!--                  <mat-option *ngFor="let activity of this.activities" [value]="activity" >-->
-                  <!--                    {{activity.symbol}}-->
-                  <!--                  </mat-option>-->
-                  <!--                </mat-select>-->
+                  {{this.printerService.printWeekActivity(week)}}
                 </td>
                 <td
                   *ngFor="let scheduleTotalActivity of studyPlan.scheduleTotalActivities">{{this.studyPlanUtilService.calculateActivityPerCourse(scheduleTotalActivity.activity, course)}}</td>
@@ -210,43 +199,13 @@
               </tbody>
             </table>
           </div>
-
-
-          <div class="row">
-            <div style="margin-right: 1%"> Обозначения:</div>
-            <div *ngFor="let scheduleTotalActivity of this.studyPlan.scheduleTotalActivities" class="row">
-              <div style="display: flex; border: 0.2px solid;min-width: 20px; margin-right: 5px; align-items: center;
-justify-content: center;"> {{scheduleTotalActivity.activity.symbol}}</div>
-              <span style="margin-right: 5px"> - </span>
-              <div style="margin-right: 5px">  {{scheduleTotalActivity.activity.name}}  </div>
-            </div>
-            <div class="row">
-              <div style="display: flex; border: 0.2px solid;min-width: 20px; margin-right: 5px; align-items: center;
-justify-content: center;"> n
-              </div>
-              <span style="margin-right: 5px"> - </span>
-              <div style="margin-right: 5px"> Не определено</div>
-            </div>
-          </div>
-        </ng-template>
-
-
-      </form>
-    </mat-step>
-    <!--  EDUCATIONAL SCHEDULE FORM END -->
-
-    <!--  STRUCTURE STUDY PLAN FORM START -->
-    <mat-step [stepControl]='structureStudyPlanForm'>
-      <form [formGroup]="structureStudyPlanForm">
-        <ng-template matStepLabel> Структура плана</ng-template>
-
-        <mat-spinner
-          *ngIf="isSemesterLoadLoading || isLoadLoading; else planStructure"
-          diameter="75" mode="indeterminate" color="primary">
-        </mat-spinner>
-
-        <ng-template #planStructure>
-          <!--  CYCLES TABLE START      -->
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-size: 16px">
+              Структура плана
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <div>
             <table #cyclesTable mat-table class="cycle-table" [dataSource]="cyclesDataSource" matSort
                    multiTemplateDataRows>
@@ -331,31 +290,10 @@ justify-content: center;"> n
               </ng-container>
 
 
-              <ng-container matColumnDef="icons">
-                <th style="text-align: end" mat-header-cell class="icons" *matHeaderCellDef>
-                  <!--                <button mat-icon-button class="material-icons table-mat-icon-element" (click)="addCycle()"-->
-                  <!--                        matTooltip="Добавить цикл">-->
-                  <!--                  <mat-icon> add_circle</mat-icon>-->
-                  <!--                </button>-->
-                <td mat-cell *matCellDef="let cycle; let i = dataIndex">
-                  <div style="display: flex; justify-content: end">
-                    <button mat-icon-button matTooltip="{{specificDisciplineAddTooltip(cycle)}}"
-                            (click)="addSpecificDiscipline(cycle)" *ngIf="isSpecificAddIsAvailable(cycle)">
-                      <mat-icon> add_circle</mat-icon>
-                    </button>
-
-                    <button mat-icon-button matTooltip="Редактировать" (click)="editCycle(cycle)">
-                      <mat-icon> edit</mat-icon>
-                    </button>
-                  </div>
-                </td>
-                <td mat-footer-cell *matFooterCellDef></td>
-              </ng-container>
-
               <!--  COMPONENTS START  -->
               <ng-container matColumnDef="component-table-details">
                 <td mat-cell *matCellDef="let cycle"
-                    [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsComponent(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
+                    [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsComponentWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
                     style="padding: 0 !important;">
                   <div class="example-element-detail"
                        [@detailExpand]="'expanded'" *ngIf="cycle.components && cycle.components.length !== 0">
@@ -423,26 +361,10 @@ justify-content: center;"> n
                         </td>
                       </ng-container>
 
-                      <ng-container matColumnDef="icons">
-                        <th mat-header-cell *matHeaderCellDef class="column-position"></th>
-                        <td mat-cell *matCellDef="let component; let i = dataIndex">
-                          <div style="display: flex; justify-content: end">
-                            <button mat-icon-button matTooltip="Добавить дисциплину"
-                                    (click)="addStudyDiscipline(component, cycle)"
-                                    *ngIf="this.studyPlanUtilService.isComponentMatchType(component, this.basicComponentType)">
-                              <mat-icon> add_circle</mat-icon>
-                            </button>
-                            <button mat-icon-button matTooltip="Редактировать компоненту"
-                                    (click)="editComponent(component, cycle)">
-                              <mat-icon> edit</mat-icon>
-                            </button>
-                          </div>
-                        </td>
-                      </ng-container>
                       <!--  COMPONENT DISCIPLINES TABLE START  -->
                       <ng-container matColumnDef="discipline-component-table-details">
                         <td mat-cell *matCellDef="let component"
-                            [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsDiscipline(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
+                            [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsDisciplineWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
                             style="padding: 0 !important;">
                           <div class="example-element-detail"
                                [@detailExpand]="'expanded'"
@@ -516,36 +438,8 @@ justify-content: center;"> n
                                   </td>
                                 </ng-container>
 
-                                <ng-container matColumnDef="icons">
-                                  <th mat-header-cell *matHeaderCellDef></th>
-                                  <td mat-cell *matCellDef="let discipline; let i = dataIndex">
-                                    <div style="display: flex; justify-content: end">
-                                      <button mat-icon-button matTooltip="Редактировать дисциплину"
-                                              (click)="editStudyDiscipline(discipline, component)">
-                                        <mat-icon> edit</mat-icon>
-                                      </button>
-                                      <button mat-icon-button matTooltip="Удалить дисциплину"
-                                              (click)="removeDisciplineFromComponent(i, component, cycle)"
-                                              *ngIf="isRemoveIsAvailable(discipline)"
-                                      >
-                                        <mat-icon> delete</mat-icon>
-                                      </button>
-                                      <!--                                    <div class="column"-->
-                                      <!--                                         style="justify-content: center; align-items: center; align-content: center">-->
-                                      <!--                                      <mat-icon (click)="swapWithUpperComponentDiscipline(i, component)"-->
-                                      <!--                                                style="cursor: pointer"> expand_less-->
-                                      <!--                                      </mat-icon>-->
-                                      <!--                                      <mat-icon (click)="swapWithLowerComponentDiscipline(i, component)"-->
-                                      <!--                                                style="cursor: pointer"> expand_more-->
-                                      <!--                                      </mat-icon>-->
-                                      <!--                                    </div>-->
-                                    </div>
-                                  </td>
-                                </ng-container>
-
-                                <!--                              <tr mat-header-row *matHeaderRowDef="getDisplayedColumnsDiscipline()"></tr>-->
                                 <tr mat-row
-                                    *matRowDef="let component; columns: this.studyPlanUtilService.getDisplayedColumnsDiscipline(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
+                                    *matRowDef="let component; columns: this.studyPlanUtilService.getDisplayedColumnsDisciplineWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
                                     class="example-element-row">
                                 </tr>
                               </table>
@@ -554,9 +448,8 @@ justify-content: center;"> n
                         </td>
                       </ng-container>
                       <!--  COMPONENT DISCIPLINES TABLE END  -->
-                      <!--                    <tr mat-header-row *matHeaderRowDef="getDisplayedColumnsComponent()"></tr>-->
                       <tr mat-row
-                          *matRowDef="let component; columns: this.studyPlanUtilService.getDisplayedColumnsComponent(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
+                          *matRowDef="let component; columns: this.studyPlanUtilService.getDisplayedColumnsComponentWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
                           class="example-element-row">
                       </tr>
                       <tr mat-row *matRowDef="let component; columns: ['discipline-component-table-details']"
@@ -572,7 +465,7 @@ justify-content: center;"> n
               <!-- CYCLES DISCIPLINES TABLE START -->
               <ng-container matColumnDef="disciplines-table-details-cycle">
                 <td mat-cell *matCellDef="let cycle"
-                    [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsCycleDiscipline(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
+                    [attr.colspan]="this.studyPlanUtilService.getDisplayedColumnsCycleDisciplineWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns).length"
                     style="padding: 0 !important;">
                   <div class="example-element-detail"
                        [@detailExpand]="'expanded'" *ngIf="cycle.disciplines && cycle.disciplines.length !== 0">
@@ -642,41 +535,8 @@ justify-content: center;"> n
                         </td>
                       </ng-container>
 
-                      <ng-container matColumnDef="icons">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let discipline; let i = dataIndex">
-                          <div style="display: flex; justify-content: end">
-                            <button mat-icon-button matTooltip="Редактировать дисциплину"
-                                    (click)="editDisciplineOfCycle(discipline, cycle)"
-                                    *ngIf="!isSpecificAddIsAvailable(cycle)">
-                              <mat-icon> edit</mat-icon>
-                            </button>
-                            <button mat-icon-button matTooltip="Редактировать дисциплину"
-                                    (click)="editSpecificDiscipline(discipline, cycle)"
-                                    *ngIf="isSpecificAddIsAvailable(cycle)">
-                              <mat-icon> edit</mat-icon>
-                            </button>
-                            <button mat-icon-button matTooltip="Удалить дисциплину"
-                                    (click)="removeDisciplineFromCycle(discipline, cycle)"
-                                    *ngIf="isSpecificAddIsAvailable(cycle)">
-                              <mat-icon> delete</mat-icon>
-                            </button>
-                            <div class="column"
-                                 style="justify-content: center; align-items: center; align-content: center">
-                              <mat-icon (click)="swapWithUpperCycleDiscipline(i, cycle)" style="cursor: pointer">
-                                expand_less
-                              </mat-icon>
-                              <mat-icon (click)="swapWithLowerCycleDiscipline(i, cycle)" style="cursor: pointer">
-                                expand_more
-                              </mat-icon>
-                            </div>
-                          </div>
-                        </td>
-                      </ng-container>
-
-                      <!--                    <tr mat-header-row *matHeaderRowDef="getDisplayedColumnsCycleDiscipline()"></tr>-->
                       <tr mat-row
-                          *matRowDef="let discipline; columns: this.studyPlanUtilService.getDisplayedColumnsCycleDiscipline(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
+                          *matRowDef="let discipline; columns: this.studyPlanUtilService.getDisplayedColumnsCycleDisciplineWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
                           class="example-element-row">
                       </tr>
                     </table>
@@ -688,9 +548,9 @@ justify-content: center;"> n
 
 
               <tr mat-header-row
-                  *matHeaderRowDef=" this.studyPlanUtilService.getDisplayedColumnsCycle(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"></tr>
+                  *matHeaderRowDef=" this.studyPlanUtilService.getDisplayedColumnsCycleWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"></tr>
               <tr mat-row
-                  *matRowDef="let cycle; columns:  this.studyPlanUtilService.getDisplayedColumnsCycle(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
+                  *matRowDef="let cycle; columns:  this.studyPlanUtilService.getDisplayedColumnsCycleWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"
                   class="example-element-row">
               </tr>
 
@@ -699,139 +559,128 @@ justify-content: center;"> n
               <tr mat-row *matRowDef="let cycle; columns: ['disciplines-table-details-cycle']"
                   class="example-detail-row"></tr>
               <tr mat-footer-row
-                  *matFooterRowDef=" this.studyPlanUtilService.getDisplayedColumnsCycle(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"></tr>
+                  *matFooterRowDef=" this.studyPlanUtilService.getDisplayedColumnsCycleWithoutIcons(this.displayedSeverityLoadColumns, this.displayedLoadColumns);"></tr>
 
             </table>
+
+            <div style="margin-top: 1%">
+              <button mat-raised-button style="margin-left: 1%" (click)="validateHoursInPlan()"> Проверить часы</button>
+            </div>
           </div>
-          <!-- CYCLES TABLE END -->
-        </ng-template>
-      </form>
-      <button mat-raised-button class="control-button" (click)="validateHoursInPlan()"> Проверить часы</button>
-      <!--  STRUCTURE STUDY PLAN FORM START -->
-    </mat-step>
-
-
-    <mat-step [stepControl]='studyPlanHoursLoadForm'>
-      <form [formGroup]="studyPlanHoursLoadForm">
-        <ng-template matStepLabel> Распределение нагрузок</ng-template>
-        <div class="timetable-container" style="margin-top: 1%; overflow: auto;">
-          <table class="timetable" id="timetable" style="width: 80%"
-                 *ngIf="this.studyPlan.courses">
-            <tbody>
-            <tr>
-              <td rowspan="6">№</td>
-              <td class="vertical1" rowspan="6" colspan="2">Название</td>
-              <td [attr.colspan]="this.studyPlan.courses.length * 2">Распределение по курсам и семестрам</td>
-              <td class="vertical" rowspan="6">Кафедра</td>
-            </tr>
-            <tr>
-              <td colspan="2"
-                  *ngFor="let dummy of ' '.repeat(studyPlan.courses.length).split(''), let i = index">{{i + 1}}</td>
-            </tr>
-            <tr>
-              <td *ngFor="let dummy of ' '.repeat(studyPlan.courses.length * 2).split(''), let i = index">{{i + 1}}</td>
-            </tr>
-            <tr>
-              <td [attr.colspan]="studyPlan.courses.length * 2">Недель в семестре</td>
-            </tr>
-            <tr>
-              <td
-                *ngFor="let semester of studyPlan.semesters, let i = index"> {{this.getTheoreticalStudyWeekCountAsString(semester)}}</td>
-              <td *ngIf="studyPlan.semesters.length % 2 === 1">
-                -
-              </td>
-            </tr>
-            <tr>
-              <td *ngFor="let dummy of ' '.repeat(studyPlan.courses.length * 2).split(''), let i = index"> всего часов
-                / ауд. часов /
-                з.ед.
-              </td>
-
-            </tr>
-
-            <tr *ngFor="let discipline of this.getAllStudyDisciplinesInCurrentPlan(); let i = index">
-              <td>{{i + 1}}</td>
-              <td colspan="2">{{discipline.name}}</td>
-              <td *ngFor="let semester of studyPlan.semesters ">
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.totalHours"
-                       (change)="changeTotalDisciplineHoursPerSemester($event, discipline, semester)"
-                       [value]="this.studyPlanUtilService.getTotalHoursPerSemester(discipline, semester)"> /
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.classroomHours"
-                       (change)="changeClassroomDisciplineHoursPerSemester($event, discipline, semester)"
-                       [value]="this.studyPlanUtilService.getClassroomHoursPerSemester(discipline, semester)"> /
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.creditUnits"
-                       (change)="changeDisciplineCreditUnitsPerSemester($event, discipline, semester)"
-                       [value]="this.studyPlanUtilService.getCreditUnitsPerSemester(discipline, semester)">
-              </td>
-              <td *ngIf="studyPlan.semesters.length % 2 === 1">
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.totalHours"
-                       disabled> /
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.classroomHours"
-                       disabled
-
-                > /
-                <input type="number" class="input1"
-                       [min]="0"
-                       [max]="discipline.creditUnits"
-                       disabled>
-              </td>
-              <!--              <td *ngFor="let dummy of ' '.repeat(semsLost).split(''), let i = index"></td>-->
-              <td>{{this.localStorage.subscribableDepartment.getValue()?.shortName}}</td>
-            </tr>
-
-            </tbody>
-          </table>
-
-          <div style="margin-left: 2%;">
-
-            <table class="timetable">
-
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title style="font-size: 16px">
+              Распределение нагрузок
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="timetable-container" style="margin-top: 1%; overflow: auto;">
+            <table class="timetable" id="timetable" style="width: 80%"
+                   *ngIf="this.studyPlan.courses">
+              <tbody>
               <tr>
-                <td colspan="4" style="height: 170px">
-                  Сводобные часы
+                <td rowspan="6">№</td>
+                <td class="vertical1" rowspan="6" colspan="2">Название</td>
+                <td [attr.colspan]="this.studyPlan.courses.length * 2">Распределение по курсам и семестрам</td>
+                <td class="vertical" rowspan="6">Кафедра</td>
+              </tr>
+              <tr>
+                <td colspan="2"
+                    *ngFor="let dummy of ' '.repeat(studyPlan.courses.length).split(''), let i = index">{{i + 1}}</td>
+              </tr>
+              <tr>
+                <td
+                  *ngFor="let dummy of ' '.repeat(studyPlan.courses.length * 2).split(''), let i = index">{{i + 1}}</td>
+              </tr>
+              <tr>
+                <td [attr.colspan]="studyPlan.courses.length * 2">Недель в семестре</td>
+              </tr>
+              <tr>
+                <td
+                  *ngFor="let semester of studyPlan.semesters, let i = index"> {{this.getTheoreticalStudyWeekCountAsString(semester)}}</td>
+                <td *ngIf="studyPlan.semesters.length % 2 === 1">
+                  -
                 </td>
               </tr>
-
               <tr>
-                <td>Дисциплина</td>
-                <td>Всего часов</td>
-                <td>Аудиторных часов</td>
-                <td>Зачетных единиц</td>
+                <td *ngFor="let dummy of ' '.repeat(studyPlan.courses.length * 2).split(''), let i = index"> всего часов
+                  / ауд. часов /
+                  з.ед.
+                </td>
+
               </tr>
-              <tr *ngFor="let discipline of getAllStudyDisciplinesInCurrentPlan()">
-                <td>{{discipline.name}}</td>
-                <td>{{this.studyPlanUtilService.calculateFreeTotalHours(discipline)}}</td>
-                <td>{{this.studyPlanUtilService.calculateFreeClassroomHours(discipline)}}</td>
-                <td>{{this.studyPlanUtilService.calculateFreeCreditUnits(discipline)}}</td>
+
+              <tr
+                *ngFor="let discipline of this.studyPlanUtilService.getAllDisciplinesInPlan(this.studyPlan); let i = index">
+                <td>{{i + 1}}</td>
+                <td colspan="2">{{discipline.name}}</td>
+                <td *ngFor="let semester of studyPlan.semesters ">
+                  {{this.studyPlanUtilService.getTotalHoursPerSemester(discipline, semester)}}/
+                  {{this.studyPlanUtilService.getClassroomHoursPerSemester(discipline, semester)}}/
+                  {{this.studyPlanUtilService.getCreditUnitsPerSemester(discipline, semester)}}
+                </td>
+                <td *ngIf="studyPlan.semesters.length % 2 === 1">
+                  <input type="number" class="input1"
+                         [min]="0"
+                         [max]="discipline.totalHours"
+                         disabled> /
+                  <input type="number" class="input1"
+                         [min]="0"
+                         [max]="discipline.classroomHours"
+                         disabled
+
+                  > /
+                  <input type="number" class="input1"
+                         [min]="0"
+                         [max]="discipline.creditUnits"
+                         disabled>
+                </td>
+                <!--              <td *ngFor="let dummy of ' '.repeat(semsLost).split(''), let i = index"></td>-->
+                <td>{{this.localStorageService.subscribableDepartment.getValue()?.shortName}}</td>
               </tr>
+
+              </tbody>
             </table>
 
+            <div style="margin-left: 2%;">
+
+              <table class="timetable">
+                <tr>
+                  <td colspan="4" style="height: 180px">
+                    Сводобные часы
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Дисциплина</td>
+                  <td>Всего часов</td>
+                  <td>Аудиторных часов</td>
+                  <td>Зачетных единиц</td>
+                </tr>
+                <tr *ngFor="let discipline of this.studyPlanUtilService.getAllDisciplinesInPlan(this.studyPlan)">
+                  <td>{{discipline.name}}</td>
+                  <td>{{this.studyPlanUtilService.calculateFreeTotalHours(discipline)}}</td>
+                  <td>{{this.studyPlanUtilService.calculateFreeClassroomHours(discipline)}}</td>
+                  <td>{{this.studyPlanUtilService.calculateFreeCreditUnits(discipline)}}</td>
+                </tr>
+              </table>
+
+            </div>
           </div>
-        </div>
-
-      </form>
-    </mat-step>
-  </mat-vertical-stepper>
-
-  <div class="controls-container">
-    <mat-spinner *ngIf="isLoading" diameter="20" mode="indeterminate" color="primary"
-                 class="spinner">
-    </mat-spinner>
-    <button mat-raised-button class="control-button" (click)='isEditCase? edit() : submit()'
-            [disabled]="basicPlanParamsForm.invalid"> {{isEditCase ? 'Сохранить' : 'Создать'}}
-    </button>
-
-    <button mat-raised-button class="control-button" (click)='redirectToPlansPage()'> Отмена
-    </button>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
   </div>
-</div>
+
+  <div class="row" style=" margin-top: 1%; margin-left: 1%; margin-bottom: 1%">
+    <button mat-raised-button (click)="editPlan()" *ngIf="isInDevelopmentStatus()"> Редактировать</button>
+    <button mat-raised-button style="margin-left: 1%" (click)="sendToRegisterStudyPlan()"
+            *ngIf="isInDevelopmentStatus()">
+      Отправить на регистрацию
+    </button>
+    <button mat-raised-button (click)="registerStudyPlan()" *ngIf="isInToRegisterStatus()">
+      Зарегистрировать
+    </button>
+    <button mat-raised-button style="margin-left: 1%;" (click)="goBack()"> Вернуться к планам</button>
+  </div>
+</ng-template>

@@ -28,7 +28,7 @@ export class CycleAddEditComponent implements OnInit {
   editMode: boolean;
   disableTypeChange = false;
 
-  cycleTypes: CycleType[] = [CycleType.BASIC, CycleType.EXTRA, CycleType.COURSE, CycleType.STANDARD,
+  cycleTypes: CycleType[] = [CycleType.EXTRA, CycleType.COURSE, CycleType.STANDARD,
     CycleType.FACULTATIVE, CycleType.FINAL_EXAMINATION, CycleType.PRACTICE, CycleType.DIPLOMA_DESIGN];
 
   ngOnInit(): void {

@@ -1,5 +1,8 @@
+import {ComponentType} from './model/study-plan/structure/component-type';
+
 export class Constants {
   static ADMIN_ID = 'ea7a09ea-ba86-4d24-82f2-1a18174541f3';
+  static THEORETICAL_ACTIVITY_ID = '26da3d4b-f9f8-483f-ad66-294509f042ad';
 
   static mainTabs = [{
     path: '',
@@ -78,5 +81,8 @@ export class Constants {
   static teachersColumns = ['firstName', 'lastName', 'patronymic', 'teacherPosition',
     'academicTitle', 'academicDegree', 'disciplineGroups', 'staffType', 'workTariff', 'hours',
     'additionalInfo', 'icons'];
+
+
+  static basicComponentType = ComponentType.BASIC;
 
 }

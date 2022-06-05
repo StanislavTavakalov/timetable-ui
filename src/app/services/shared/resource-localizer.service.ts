@@ -172,6 +172,8 @@ export class ResourceLocalizerService {
         return 'Базовая (УВО)';
       case DisciplineType.STANDARD:
         return 'Типовая';
+      case DisciplineType.FACULTATIVE:
+        return 'Факультативная';
       case DisciplineType.COURSE_PROJECT:
         return 'Курсовой проект';
       case DisciplineType.COURSE_WORK:

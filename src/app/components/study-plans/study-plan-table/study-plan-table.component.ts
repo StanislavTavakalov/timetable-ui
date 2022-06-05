@@ -14,6 +14,8 @@ import {StudyPlanDeleteComponent} from '../../dialogs/study-plans/study-plan-del
 import {StandardPlanAddDialogComponent} from '../../dialogs/study-plans/standard/standard-plan-add/standard-plan-add-dialog.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {StudyPlanAddComponent} from '../../dialogs/study-plans/study-plan-add/study-plan-add.component';
+import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
+import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
 
 @Component({
   selector: 'app-study-plan-table',
@@ -24,6 +26,7 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
               private activatedRoute: ActivatedRoute,
+              private studyPlanUtilService: StudyPlanUtilService,
               private notifierService: NotifierService,
               private studyPlanService: StudyPlanService,
               private router: Router,
@@ -49,6 +52,7 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   title: string;
 
   openIconTooltip: string;
+  submitIconTooltip: string;
   editIconTooltip: string;
   addIconTooltip: string;
   deleteIconTooltip: string;
@@ -108,7 +112,7 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   }
 
   private openAddStandardPlanDialog(): void {
-    const dialogRef = this.dialog.open(StandardPlanAddDialogComponent, {minWidth: '600px'});
+    const dialogRef = this.dialog.open(StandardPlanAddDialogComponent, {minWidth: '850px'});
     this.addStandardDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
       if (operationResult.isCompleted && operationResult.errorMessage === null) {
         this.router.navigate(['/standard-studyplans/create']);
@@ -151,6 +155,8 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   goToPlan(studyPlan: StudyPlan): void {
     if (this.isStandard) {
       this.router.navigate([`/standard-studyplans/${studyPlan.id}`]);
+    } else {
+      this.router.navigate([`/departments/${this.departmentId}/studyplans/${studyPlan.id}`]);
     }
   }
 
@@ -158,7 +164,32 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
     this.title = this.isStandard ? 'Типовые планы' : 'Учебные планы';
     this.openIconTooltip = this.isStandard ? 'Перейти к типовому плану' : 'Перейти к учебному плану';
     this.addIconTooltip = this.isStandard ? 'Создать типовой план' : 'Создать учебный план';
+    this.submitIconTooltip = this.isStandard ? 'Утвердить типовой план' : 'Утвердить учебный план';
     this.deleteIconTooltip = this.isStandard ? 'Удалить типовой план' : 'Удалить учебный план';
     this.editIconTooltip = this.isStandard ? 'Редактировать типовой план' : 'Редактировать учебный план';
+  }
+
+  submitPlan(studyPlan: StudyPlan): void {
+    this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(studyPlan.cycles);
+    if (this.studyPlanUtilService.isPlanValid(studyPlan)) {
+      this.studyPlanService.submitStudyPlan(studyPlan).subscribe(result => {
+        this.notifierService.notify('success', 'Учебный план был утвержден');
+        studyPlan.status = StudyPlanStatus.SUBMITTED;
+        studyPlan.statusChangeDate = Date.now();
+      }, e => {
+        this.notifierService.notify('error', e);
+      });
+    } else {
+      this.notifierService.notify('error', 'Учебный план невалидный. Перепроверьте часы и структуру.');
+    }
+  }
+
+  isSubmitAvailable(studyPlan): boolean {
+    if (studyPlan.isStandard) {
+      return StudyPlanStatus.IN_DEVELOPMENT === studyPlan.status;
+    }
+    else {
+      return  StudyPlanStatus.REGISTERED === studyPlan.status;
+    }
   }
 }

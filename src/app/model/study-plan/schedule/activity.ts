@@ -1,5 +1,5 @@
 export class Activity {
-  id: number;
+  id: string;
   name: string;
   symbol: string;
   createdWhen: Date;

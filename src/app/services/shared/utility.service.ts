@@ -147,6 +147,21 @@ export class UtilityService {
           }
         }
         targetPlan.cycles.push(cycleCopy);
+
+        if (cycle.disciplines) {
+          for (const discipline of cycle.disciplines) {
+            const disciplineCopy = new Discipline();
+            disciplineCopy.name = discipline.name;
+            disciplineCopy.classroomHours = discipline.classroomHours;
+            disciplineCopy.creditUnits = discipline.creditUnits;
+            disciplineCopy.disciplineGroup = discipline.disciplineGroup;
+            disciplineCopy.totalHours = discipline.totalHours;
+            disciplineCopy.disciplineType = discipline.disciplineType;
+            disciplineCopy.university = discipline.university;
+            disciplineCopy.position = discipline.position;
+            cycleCopy.disciplines.push(disciplineCopy);
+          }
+        }
       }
     }
   }

@@ -2,6 +2,7 @@ import {DisciplineGroup} from './discipline-group';
 import {DisciplineType} from './discipline-type';
 import {DisciplineLoad} from '../study-plan/structure/discipline-load';
 import {DisciplineSemesterLoad} from '../study-plan/structure/discipline-semester-load';
+import {DisciplineHoursUnitsPerSemester} from '../study-plan/structure/discipline-hours-units-per-semester';
 
 export class Discipline {
   id: string;
@@ -17,9 +18,11 @@ export class Discipline {
   description: string;
   createdWhen: Date;
   updatedWhen: Date;
-  loads: DisciplineLoad[] = [];
-  semesterLoads: DisciplineSemesterLoad[] = [];
+  disciplineLoads: DisciplineLoad[] = [];
+  disciplineSemesterLoads: DisciplineSemesterLoad[] = [];
   validTotalHours: boolean;
   validClassroomHours: boolean;
   validCreditUnits: boolean;
+  disciplineHoursUnitsPerSemesters: DisciplineHoursUnitsPerSemester[] = [];
+  courseWorkSemesterNum: number;
 }

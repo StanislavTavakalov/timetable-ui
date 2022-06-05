@@ -28,6 +28,7 @@ import {StandardStudyPlansComponent} from './components/study-plans/standard-stu
 import {StandardPlanAddEditComponent} from './components/study-plans/standard-plan-add-edit/standard-plan-add-edit.component';
 import {StandardStudyPlanComponent} from './components/study-plans/standard-study-plan/standard-study-plan.component';
 import {StudyPlanAddEditComponent} from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
+import {StudyPlanComponent} from './components/study-plans/study-plan/study-plan.component';
 
 const routes: Routes = [
   {path: 'main-page', component: MainPageComponent},
@@ -56,6 +57,7 @@ const routes: Routes = [
   {path: 'departments/:departmentId/studyplans', component: StudyPlansComponent},
   {path: 'departments/:departmentId/studyplans/create', component: StudyPlanAddEditComponent},
   {path: 'departments/:departmentId/studyplans/:id/edit', component: StudyPlanAddEditComponent},
+  {path: 'departments/:departmentId/studyplans/:id', component: StudyPlanComponent},
   {path: 'standard-studyplans', component: StandardStudyPlansComponent},
   {path: 'standard-studyplans/create', component: StandardPlanAddEditComponent},
   {path: 'standard-studyplans/:id/edit', component: StandardPlanAddEditComponent},

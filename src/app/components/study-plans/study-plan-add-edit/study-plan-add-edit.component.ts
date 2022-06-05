@@ -20,7 +20,6 @@ import {Cycle} from '../../../model/study-plan/structure/cycle';
 import {Component as StudyComponent} from '../../../model/study-plan/structure/component';
 import {Discipline} from '../../../model/discipline/discipline';
 import {StudyPlanStatus} from '../../../model/study-plan/study-plan-status';
-import {MatSelectChange} from '@angular/material/select';
 import {CycleAddEditComponent} from '../../dialogs/study-plans/cycle-add-edit/cycle-add-edit.component';
 import {OperationResult} from '../../../model/operation-result';
 import {ComponentDisciplineAddEditComponent} from '../../dialogs/study-plans/component-discipline-add-edit/component-discipline-add-edit.component';
@@ -33,6 +32,12 @@ import {SemesterLoad} from '../../../model/study-plan/structure/semester-load';
 import {Load} from '../../../model/study-plan/structure/load';
 import {DisciplineType} from '../../../model/discipline/discipline-type';
 import {StudyDisciplineAddEditComponent} from '../../dialogs/study-plans/study-discipline-add-edit/study-discipline-add-edit.component';
+import {Constants} from '../../../constants';
+import {Department} from '../../../model/department/department';
+import {DisciplineHoursUnitsPerSemester} from '../../../model/study-plan/structure/discipline-hours-units-per-semester';
+import {SpecificDisciplineAddEditComponent} from '../../dialogs/study-plans/specific-disipline-add-edit/specific-discipline-add-edit.component';
+import {CycleType} from '../../../model/study-plan/structure/cycle-type';
+import {PrinterService} from '../../../services/shared/printer.service';
 
 @Component({
   selector: 'app-study-plan-add-edit',
@@ -76,13 +81,13 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
   displayedLoadColumns: string[] = [];
   displayedSeverityLoadColumns: string[] = [];
 
-  displayedCycleColumns = ['position', 'name', 'totalHours', 'classroomHours', 'selfHours', 'creditUnits', 'icons'];
-  displayedComponentsColumns = ['position-component', 'name-component', 'totalHours-component',
-    'classroomHours-component', 'selfHours-component', 'creditUnits-component', 'icons-component'];
-  displayedDisciplineColumns = ['position-discipline', 'name-discipline', 'totalHours-discipline',
-    'classroomHours-discipline', 'selfHours-discipline', 'creditUnits-discipline', 'icons-discipline'];
-  displayedCycleDisciplineColumns = ['position-cycle-discipline', 'name-cycle-discipline', 'totalHours-cycle-discipline',
-    'classroomHours-cycle-discipline', 'selfHours-cycle-discipline', 'creditUnits-cycle-discipline', 'icons-cycle-discipline'];
+  // displayedCycleColumns = ['position', 'name', 'totalHours', 'classroomHours', 'selfHours', 'creditUnits', 'icons'];
+  // displayedComponentsColumns = ['position', 'name-component', 'totalHours-component',
+  //   'classroomHours-component', 'selfHours-component', 'creditUnits-component', 'icons-component'];
+  // displayedDisciplineColumns = ['position-discipline', 'name-discipline', 'totalHours-discipline',
+  //   'classroomHours-discipline', 'selfHours-discipline', 'creditUnits-discipline', 'icons-discipline'];
+  // displayedCycleDisciplineColumns = ['position-cycle-discipline', 'name-cycle-discipline', 'totalHours-cycle-discipline',
+  //   'classroomHours-cycle-discipline', 'selfHours-cycle-discipline', 'creditUnits-cycle-discipline', 'icons-cycle-discipline'];
 
   cyclesDataSource: MatTableDataSource<Cycle>;
 
@@ -101,11 +106,16 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
   isScheduleLoading = false;
   isLoadLoading = false;
   isSemesterLoadLoading = false;
+  basicComponentType = Constants.basicComponentType;
+  courseCount: number;
+  departmentId: string;
+  department: Department;
 
-  constructor(private localStorage: LocalStorageService,
+  constructor(public localStorage: LocalStorageService,
               private location: Location,
               private router: Router,
               public resourceLocalizerService: ResourceLocalizerService,
+              public printerService: PrinterService,
               private notifierService: NotifierService,
               public utilityService: UtilityService,
               public resourceLocalizer: ResourceLocalizerService,
@@ -121,6 +131,9 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadCommonInfo();
     const planId = this.route.snapshot.paramMap.get('id');
+    this.departmentId = this.route.snapshot.paramMap.get('departmentId');
+    this.utilityService.loadDepartmentWithHeaderTabs(this.departmentId);
+
     if (planId) {
       this.studyPlan = this.localStorage.getEditPlan();
       this.isEditCase = true;
@@ -144,6 +157,7 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
       this.activities = commonInfo.activities;
       this.disciplines = commonInfo.disciplines;
       this.transformSemestersToCourse(this.studyPlan);
+      this.courseCount = this.studyPlan.courses.length;
       this.isScheduleLoading = false;
     });
 
@@ -167,9 +181,7 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
       this.isSemesterLoadLoading = false;
     }, err => {
       this.notifierService.notify('error', err);
-    })
-
-    ;
+    });
   }
 
   private initialize(studyPlan: StudyPlan): void {
@@ -262,10 +274,14 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     if (this.studyPlanServiceSubscription) {
       this.studyPlanServiceSubscription.unsubscribe();
     }
-  }
 
-  removeActivityFromSelectionList(event: MatSelectChange): void {
-    // this.activities = this.activities.filter(a => a.id !== event.value.id);
+    if (this.loadServiceSubscription) {
+      this.loadServiceSubscription.unsubscribe();
+    }
+
+    if (this.semesterLoadServiceSubscription) {
+      this.semesterLoadServiceSubscription.unsubscribe();
+    }
   }
 
   submit(): void {
@@ -304,23 +320,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  // addCycle(): void {
-  //   const dialogRef = this.dialog.open(CycleAddEditComponent, {
-  //     data: {title: 'Создать цикл'}
-  //   });
-  //
-  //   this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
-  //     if (operationResult.isCompleted && operationResult.object && operationResult.errorMessage === null) {
-  //       const addedCycle = operationResult.object;
-  //       addedCycle.position = this.studyPlan.cycles.length + 1;
-  //       this.studyPlan.cycles.push(addedCycle);
-  //       this.refreshCycleTableContent();
-  //     } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
-  //       this.notifierService.notify('error', operationResult.errorMessage);
-  //     }
-  //   });
-  // }
-
   editCycle(cycle): void {
     this.dialog.open(CycleAddEditComponent, {
       data: {title: 'Редактировать цикл', cycle, disableTypeChange: true}
@@ -339,7 +338,7 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       this.localStorage.clearEditPlan();
       this.location.back();
-      // this.router.navigate(['/standard-studyplans']);
+      this.notifierService.notify('success', 'Учебный план был изменен');
     }, () => {
       this.isLoading = false;
       this.notifierService.notify('error', 'Не удалось сохранить изменения в учебном плане.');
@@ -355,23 +354,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
       const departmentId = this.route.snapshot.paramMap.get('departmentId');
       this.router.navigate([`/departments/${departmentId}/studyplans`]);
     }
-  }
-
-  removeCycle(index: number): void {
-    this.studyPlan.cycles.splice(index, 1);
-    for (let i = index; i < this.studyPlan.cycles.length; i++) {
-      this.studyPlan.cycles[i].position = i + 1;
-    }
-    this.refreshCycleTableContent();
-  }
-
-  removeComponent(index: number, cycle: Cycle): void {
-    cycle.components.splice(index, 1);
-    for (let i = index; i < cycle.components.length; i++) {
-      cycle.components[i].position = i + 1;
-    }
-    this.reorderDisciplinesInCycle(cycle);
-    this.refreshCycleTableContent();
   }
 
   private reorderDisciplinesInCycle(cycle: Cycle): void {
@@ -396,25 +378,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     this.reorderDisciplinesInCycle(cycle);
     this.refreshCycleTableContent();
   }
-
-  // private reorderDisciplinesInComponent(component: StudyComponent, cycle: Cycle): void {
-  //   let i = 1;
-  //   const disciplines = [];
-  //   cycle.components.forEach(comp => disciplines.push(comp.disciplines));
-  //   disciplines.push(cycle.disciplines);
-  //
-  //   disciplines.forEach(disc => {
-  //     disc.position = i;
-  //     i = i + 1;
-  //   });
-  // }
-
-  removeDisciplineFromCycle(index: number, cycle: Cycle): void {
-    cycle.disciplines.splice(index, 1);
-    this.reorderDisciplinesInCycle(cycle);
-    this.refreshCycleTableContent();
-  }
-
 
   createDataSource(objects: any[]): MatTableDataSource<any> {
     return new MatTableDataSource(objects);
@@ -441,36 +404,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-
-  // addDisciplineToComponent(component: StudyComponent, cycle: Cycle): void {
-  //   const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInComponent(component, 0);
-  //   const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInComponent(component, 0);
-  //   const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInComponent(component, 0);
-  //   const positionToAdd = this.studyPlanUtilService.calculatePositionToAndInComponent(component, cycle);
-  //   const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-  //     data: {
-  //       title: 'Добавить дисциплину',
-  //       changedComponent: component,
-  //       changedCycle: cycle,
-  //       positionToAdd,
-  //       disciplines: this.disciplines,
-  //       totalHoursFree,
-  //       classroomHoursFree,
-  //       creditUnitsFree
-  //     },
-  //     minWidth: '600px'
-  //   });
-  //
-  //   this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
-  //     if (operationResult.isCompleted && operationResult.errorMessage === null) {
-  //       this.refreshCycleTableContent();
-  //     } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
-  //       this.notifierService.notify('error', operationResult.errorMessage);
-  //     }
-  //   });
-  // }
-
 
   editComponent(component: StudyComponent, cycle): void {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, component.totalHours);
@@ -533,166 +466,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  swapWithUpperCycle(i: number): void {
-    const cycleCount = this.studyPlan.cycles.length;
-    if (cycleCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === 0) {
-      temp = this.studyPlan.cycles[cycleCount - 1];
-      this.studyPlan.cycles[cycleCount - 1] = this.studyPlan.cycles[0];
-      this.studyPlan.cycles[cycleCount - 1].position = cycleCount;
-
-      this.studyPlan.cycles[0] = temp;
-      this.studyPlan.cycles[0].position = 1;
-    } else {
-      temp = this.studyPlan.cycles[i - 1];
-
-      this.studyPlan.cycles[i - 1] = this.studyPlan.cycles[i];
-      this.studyPlan.cycles[i - 1].position = i;
-
-      this.studyPlan.cycles[i] = temp;
-      this.studyPlan.cycles[i].position = i + 1;
-    }
-
-    this.refreshCycleTableContent();
-  }
-
-  swapWithLowerCycle(i: number): void {
-    const cycleCount = this.studyPlan.cycles.length;
-    if (cycleCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === cycleCount - 1) {
-      temp = this.studyPlan.cycles[0];
-      this.studyPlan.cycles[0] = this.studyPlan.cycles[i];
-      this.studyPlan.cycles[0].position = 1;
-
-      this.studyPlan.cycles[i] = temp;
-      this.studyPlan.cycles[i].position = i + 1;
-
-    } else {
-      temp = this.studyPlan.cycles[i + 1];
-      this.studyPlan.cycles[i + 1] = this.studyPlan.cycles[i];
-      this.studyPlan.cycles[i + 1].position = i + 2;
-
-      this.studyPlan.cycles[i] = temp;
-      this.studyPlan.cycles[i].position = i + 1;
-
-    }
-
-    this.refreshCycleTableContent();
-  }
-
-  swapWithUpperComponent(i: number, cycle: Cycle): void {
-    const componentCount = cycle.components.length;
-    if (componentCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === 0) {
-      temp = cycle.components[componentCount - 1];
-      cycle.components[componentCount - 1] = cycle.components[0];
-      cycle.components[componentCount - 1].position = componentCount;
-
-      cycle.components[0] = temp;
-      cycle.components[0].position = 1;
-    } else {
-      temp = cycle.components[i - 1];
-
-      cycle.components[i - 1] = cycle.components[i];
-      cycle.components[i - 1].position = i;
-
-      cycle.components[i] = temp;
-      cycle.components[i].position = i + 1;
-    }
-
-    this.reorderDisciplinesInCycle(cycle);
-    this.refreshCycleTableContent();
-  }
-
-  swapWithLowerComponent(i: number, cycle: Cycle): void {
-    const componentCount = cycle.components.length;
-    if (componentCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === componentCount - 1) {
-      temp = cycle.components[0];
-      cycle.components[0] = cycle.components[i];
-      cycle.components[0].position = 1;
-
-      cycle.components[i] = temp;
-      cycle.components[i].position = i + 1;
-
-    } else {
-      temp = cycle.components[i + 1];
-      cycle.components[i + 1] = cycle.components[i];
-      cycle.components[i + 1].position = i + 2;
-
-      cycle.components[i] = temp;
-      cycle.components[i].position = i + 1;
-    }
-    this.reorderDisciplinesInCycle(cycle);
-    this.refreshCycleTableContent();
-  }
-
-  swapWithUpperComponentDiscipline(i: number, component: StudyComponent): void {
-    const disciplinesCount = component.disciplines.length;
-    if (disciplinesCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === 0) {
-      temp = component.disciplines[disciplinesCount - 1];
-      component.disciplines[disciplinesCount - 1] = component.disciplines[0];
-      component.disciplines[disciplinesCount - 1].position = disciplinesCount;
-
-      component.disciplines[0] = temp;
-      component.disciplines[0].position = 1;
-    } else {
-      temp = component.disciplines[i - 1];
-      component.disciplines[i - 1] = component.disciplines[i];
-      component.disciplines[i - 1].position = i;
-      component.disciplines[i] = temp;
-      component.disciplines[i].position = i + 1;
-    }
-    this.refreshCycleTableContent();
-  }
-
-  swapWithLowerComponentDiscipline(i: number, component: StudyComponent): void {
-    const disciplinesCount = component.disciplines.length;
-    if (disciplinesCount === 1) {
-      return;
-    }
-
-    let temp;
-    if (i === disciplinesCount - 1) {
-      temp = component.disciplines[0];
-      component.disciplines[0] = component.disciplines[i];
-      component.disciplines[0].position = 1;
-      component.disciplines[i] = temp;
-      component.disciplines[i].position = i + 1;
-
-    } else {
-      temp = component.disciplines[i + 1];
-      component.disciplines[i + 1] = component.disciplines[i];
-      component.disciplines[i + 1].position = i + 2;
-
-      component.disciplines[i] = temp;
-      component.disciplines[i].position = i + 1;
-    }
-    this.refreshCycleTableContent();
-  }
-
-
   swapWithUpperCycleDiscipline(i: number, cycle: Cycle): void {
     const disciplinesCount = cycle.disciplines.length;
     if (disciplinesCount === 1) {
@@ -751,25 +524,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  calculateActivityPerCourse(activity: Activity, course: Course): number {
-    let count = 0;
-    for (const week of course.weeks) {
-      if (week.activity && week.activity.id === activity.id) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-  calculateTotalActivitiesPerCourse(course: Course): number {
-    let total = 0;
-    for (const activity of this.activities) {
-      total += this.calculateActivityPerCourse(activity, course);
-    }
-
-    return total;
-  }
-
   onActivityChange(week: Week, course: Course, event): void {
     if (event.target.value === null) {
       week.activity = null;
@@ -779,13 +533,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     console.log(week);
   }
 
-  calculateTotalPlanActivities(): number {
-    let total = 0;
-    for (const totalActivity of this.studyPlan.scheduleTotalActivities) {
-      total += totalActivity.totalWeekCount;
-    }
-    return total;
-  }
 
   private transformCoursesToSemesters(studyPlan: StudyPlan): void {
     for (const course of studyPlan.courses) {
@@ -836,62 +583,6 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  getDisplayedColumnsCycle(): string[] {
-    const finalColumnsToDisplay: string[] = [];
-    finalColumnsToDisplay.push('position');
-    finalColumnsToDisplay.push('name');
-    this.displayedSeverityLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    this.displayedLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    finalColumnsToDisplay.push('totalHours');
-    finalColumnsToDisplay.push('classroomHours');
-    finalColumnsToDisplay.push('selfHours');
-    finalColumnsToDisplay.push('creditUnits');
-    finalColumnsToDisplay.push('icons');
-    return finalColumnsToDisplay;
-  }
-
-
-  getDisplayedColumnsComponent(): string[] {
-    const finalColumnsToDisplay: string[] = [];
-    finalColumnsToDisplay.push('position-component');
-    finalColumnsToDisplay.push('name-component');
-    this.displayedSeverityLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    this.displayedLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    finalColumnsToDisplay.push('totalHours-component');
-    finalColumnsToDisplay.push('classroomHours-component');
-    finalColumnsToDisplay.push('selfHours-component');
-    finalColumnsToDisplay.push('creditUnits-component');
-    finalColumnsToDisplay.push('icons-component');
-    return finalColumnsToDisplay;
-  }
-
-  getDisplayedColumnsDiscipline(): string[] {
-    const finalColumnsToDisplay: string[] = [];
-    finalColumnsToDisplay.push('position-discipline');
-    finalColumnsToDisplay.push('name-discipline');
-    this.displayedSeverityLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    this.displayedLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    finalColumnsToDisplay.push('totalHours-discipline');
-    finalColumnsToDisplay.push('classroomHours-discipline');
-    finalColumnsToDisplay.push('selfHours-discipline');
-    finalColumnsToDisplay.push('creditUnits-discipline');
-    finalColumnsToDisplay.push('icons-discipline');
-    return finalColumnsToDisplay;
-  }
-
-  getDisplayedColumnsCycleDiscipline(): string[] {
-    const finalColumnsToDisplay: string[] = [];
-    finalColumnsToDisplay.push('position-cycle-discipline');
-    finalColumnsToDisplay.push('name-cycle-discipline');
-    this.displayedSeverityLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    this.displayedLoadColumns.forEach(res => finalColumnsToDisplay.push(res));
-    finalColumnsToDisplay.push('totalHours-cycle-discipline');
-    finalColumnsToDisplay.push('classroomHours-cycle-discipline');
-    finalColumnsToDisplay.push('selfHours-cycle-discipline');
-    finalColumnsToDisplay.push('creditUnits-cycle-discipline');
-    finalColumnsToDisplay.push('icons-cycle-discipline');
-    return finalColumnsToDisplay;
-  }
 
   checkSecondSemester(week: Week, secondSemester: Semester): boolean {
     if (!secondSemester) {
@@ -906,50 +597,264 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     return DisciplineType.STANDARD === discipline.disciplineType;
   }
 
-  printLoadHours(load: string, cycle: Cycle): number {
-    let count = 0;
-    for (const disc of cycle.disciplines) {
-      if (disc.loads === undefined || disc.loads === null) {
-        continue;
-      }
-      const lo = disc.loads.find(l => l.load.name === load);
-      if (lo) {
-        count += lo.hours;
-      }
-    }
 
-    for (const c of cycle.components) {
-      for (const disc of c.disciplines) {
-        if (disc.loads === undefined || disc.loads === null) {
-          continue;
-        }
-        const lo = disc.loads.find(l => l.load.name === load);
-        if (lo) {
-          count += lo.hours;
-        }
-      }
-    }
-    if (count > 0) {
-      return count;
-    }
-    return 0;
+  getAllStudyDisciplinesInCurrentPlan(): Discipline[] {
+    return this.studyPlanUtilService.getAllDisciplinesInPlan(this.studyPlan);
   }
 
-  printLoadHoursComponent(load: string, component: StudyComponent): number {
-    let count = 0;
-    for (const disc of component.disciplines) {
-      if (disc.loads === undefined || disc.loads === null) {
-        continue;
-      }
-      const lo = disc.loads.find(l => l.load.name === load);
-      if (lo) {
-        count += lo.hours;
-      }
+  getTheoreticalStudyWeekCountAsString(semester: Semester): any {
+    const weekCount = this.getTheoreticalStudyWeekCountAsNumber(semester);
+    if (weekCount > 0) {
+      return weekCount;
     }
-    if (count > 0) {
-      return count;
-    }
-    return 0;
+    return '-';
   }
 
+  getTheoreticalStudyWeekCountAsNumber(semester: Semester): number {
+    let weekCount = 0;
+    for (const c of this.studyPlan.courses) {
+      if (c.firstSemester.semesterNum === semester.semesterNum) {
+        for (const week of c.weeks) {
+          if (week.position > 26) {
+            break;
+          }
+          if (week.activity && week.activity.id === Constants.THEORETICAL_ACTIVITY_ID) {
+            weekCount++;
+          }
+        }
+      } else if (c.secondSemester && c.secondSemester.semesterNum === semester.semesterNum) {
+        for (const week of c.weeks) {
+          if (week.position < 26) {
+            continue;
+          }
+          if (week.activity && week.activity.id === Constants.THEORETICAL_ACTIVITY_ID) {
+            weekCount++;
+          }
+        }
+      }
+    }
+    return weekCount;
+  }
+
+  public changeTotalDisciplineHoursPerSemester(event: any, discipline: Discipline, semester: Semester): void {
+
+    if (isNaN(event.currentTarget.value)) {
+      return;
+    }
+    let isNeedToCreateNew = true;
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        if (event.currentTarget.value > discipline.totalHours) {
+          dHoursToSemester.totalHours = 0;
+        } else {
+          dHoursToSemester.totalHours = event.currentTarget.value;
+        }
+        isNeedToCreateNew = false;
+      }
+    }
+    if (isNeedToCreateNew) {
+      const disciplineHoursUnitsPerSemester = this.createNewDisciplineHoursUnitsPerSemester(semester);
+      if (event.currentTarget.value > discipline.totalHours) {
+        disciplineHoursUnitsPerSemester.totalHours = 0;
+      } else {
+        disciplineHoursUnitsPerSemester.totalHours = event.currentTarget.value;
+      }
+      discipline.disciplineHoursUnitsPerSemesters.push(disciplineHoursUnitsPerSemester);
+    }
+
+    console.log(discipline.disciplineHoursUnitsPerSemesters);
+
+  }
+
+  public changeClassroomDisciplineHoursPerSemester(event: any, discipline: Discipline, semester: Semester): void {
+    if (isNaN(event.currentTarget.value)) {
+      return;
+    }
+
+    let isNeedToCreateNew = true;
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        if (event.currentTarget.value > discipline.classroomHours) {
+          dHoursToSemester.classroomHours = 0;
+        } else {
+          dHoursToSemester.classroomHours = event.currentTarget.value;
+        }
+        isNeedToCreateNew = false;
+      }
+    }
+
+    if (isNeedToCreateNew) {
+      const disciplineHoursUnitsPerSemester = this.createNewDisciplineHoursUnitsPerSemester(semester);
+      if (event.currentTarget.value > discipline.classroomHours) {
+        disciplineHoursUnitsPerSemester.classroomHours = 0;
+      } else {
+        disciplineHoursUnitsPerSemester.classroomHours = event.currentTarget.value;
+      }
+      discipline.disciplineHoursUnitsPerSemesters.push(disciplineHoursUnitsPerSemester);
+    }
+  }
+
+
+  public changeDisciplineCreditUnitsPerSemester(event: any, discipline: Discipline, semester: Semester): void {
+
+    if (isNaN(event.currentTarget.value)) {
+      return;
+    }
+
+    let isNeedToCreateNew = true;
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        if (event.currentTarget.value > discipline.creditUnits) {
+          dHoursToSemester.creditUnits = 0;
+        } else {
+          dHoursToSemester.creditUnits = event.currentTarget.value;
+        }
+        isNeedToCreateNew = false;
+      }
+    }
+
+    if (isNeedToCreateNew) {
+      const disciplineHoursUnitsPerSemester = this.createNewDisciplineHoursUnitsPerSemester(semester);
+      if (event.currentTarget.value > discipline.creditUnits) {
+        disciplineHoursUnitsPerSemester.creditUnits = 0;
+      } else {
+        disciplineHoursUnitsPerSemester.creditUnits = event.currentTarget.value;
+      }
+      discipline.disciplineHoursUnitsPerSemesters.push(disciplineHoursUnitsPerSemester);
+    }
+  }
+
+
+
+  private createNewDisciplineHoursUnitsPerSemester(semester: Semester): DisciplineHoursUnitsPerSemester {
+    const disciplineHoursUnitsPerSemester = new DisciplineHoursUnitsPerSemester();
+    disciplineHoursUnitsPerSemester.creditUnits = 0;
+    disciplineHoursUnitsPerSemester.totalHours = 0;
+    disciplineHoursUnitsPerSemester.classroomHours = 0;
+    disciplineHoursUnitsPerSemester.semester = semester;
+    return disciplineHoursUnitsPerSemester;
+  }
+
+
+  isRemoveIsAvailable(discipline): boolean {
+    return DisciplineType.BASIC === discipline.disciplineType;
+  }
+
+  addSpecificDiscipline(cycle: Cycle): void {
+    const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, 0);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, 0);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, 0);
+
+    let facultativeDisciplines;
+    let examDisciplines;
+    const title = this.specificDisciplineAddTooltip(cycle);
+
+    if (cycle.cycleType === CycleType.FACULTATIVE) {
+      facultativeDisciplines = this.disciplines.filter(d => d.disciplineType === DisciplineType.FACULTATIVE);
+    }
+    if (cycle.cycleType === CycleType.COURSE) {
+      examDisciplines = this.getAllStudyDisciplinesInCurrentPlan();
+    }
+
+    this.getAllStudyDisciplinesInCurrentPlan();
+
+    const dialogRef = this.dialog.open(SpecificDisciplineAddEditComponent, {
+      data: {
+        title, cycle, totalHoursFree, classroomHoursFree, creditUnitsFree,
+        facultativeDisciplines, examDisciplines, semesters: this.studyPlan.semesters
+      },
+      minWidth: '600px'
+    });
+
+    this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.refreshCycleTableContent();
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
+
+  isSpecificAddIsAvailable(cycle: Cycle): boolean {
+    return CycleType.FACULTATIVE === cycle.cycleType ||
+      CycleType.PRACTICE === cycle.cycleType ||
+      CycleType.COURSE === cycle.cycleType;
+  }
+
+  specificDisciplineAddTooltip(cycle: Cycle): string {
+    switch (cycle.cycleType) {
+      case CycleType.FACULTATIVE :
+        return 'Добавить факультатив';
+      case CycleType.PRACTICE:
+        return 'Добавить практику';
+      case CycleType.COURSE:
+        return 'Добавить курсовой проект/работу';
+    }
+    return '-';
+  }
+
+  specificDisciplineEditTooltip(cycle: Cycle): string {
+    switch (cycle.cycleType) {
+      case CycleType.FACULTATIVE :
+        return 'Редактировать факультатив';
+      case CycleType.PRACTICE:
+        return 'Редактировать практику';
+      case CycleType.COURSE:
+        return 'Редактировать курсовой проект/работу';
+    }
+    return '-';
+  }
+
+
+  removeDisciplineFromCycle(index: number, cycle: Cycle): void {
+    cycle.disciplines.splice(index, 1);
+    this.reorderDisciplinesInCycle(cycle);
+    this.refreshCycleTableContent();
+  }
+
+
+  editSpecificDiscipline(discipline, cycle): void {
+
+    const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, discipline.totalHours);
+    const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, discipline.classroomHours);
+    const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, discipline.creditUnits);
+
+    let facultativeDisciplines;
+    let examDisciplines;
+    const title = this.specificDisciplineEditTooltip(cycle);
+
+    if (cycle.cycleType === CycleType.FACULTATIVE) {
+      facultativeDisciplines = this.disciplines.filter(d => d.disciplineType === DisciplineType.FACULTATIVE);
+    }
+    if (cycle.cycleType === CycleType.COURSE) {
+      examDisciplines = this.getAllStudyDisciplinesInCurrentPlan();
+    }
+
+    this.getAllStudyDisciplinesInCurrentPlan();
+
+    const dialogRef = this.dialog.open(SpecificDisciplineAddEditComponent, {
+      data: {
+        title, discipline, cycle, totalHoursFree, classroomHoursFree, creditUnitsFree,
+        facultativeDisciplines, examDisciplines, semesters: this.studyPlan.semesters
+      },
+      minWidth: '600px'
+    });
+
+    this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        this.refreshCycleTableContent();
+      } else if (operationResult.isCompleted && operationResult.errorMessage !== null) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
+  }
 }

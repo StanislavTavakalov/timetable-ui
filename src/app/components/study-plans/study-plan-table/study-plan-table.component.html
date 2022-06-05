@@ -47,7 +47,10 @@
                 matTooltip="{{openIconTooltip}}" (click)="goToPlan(studyPlan)">
           <mat-icon> open_in_new </mat-icon>
         </button>
-
+        <button mat-icon-button class="material-icons"
+                matTooltip="{{submitIconTooltip}}" (click)="submitPlan(studyPlan)" *ngIf="isSubmitAvailable(studyPlan)">
+          <mat-icon> check_circle_outline </mat-icon>
+        </button>
         <button mat-icon-button (click)="editStudyPlan(studyPlan)"
                 matTooltip="{{editIconTooltip}}">
           <mat-icon> edit</mat-icon>

@@ -27,7 +27,7 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
   }
 
   semesterLoads: SemesterLoad[] = [];
-
+  selectedSemesterLoads: SemesterLoad[];
   semesterDisciplineLoad: DisciplineSemesterLoad;
   selectedSemesters = [];
   allSemesters = [];
@@ -38,9 +38,12 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
   semestersCheckBoxes;
 
   ngOnInit(): void {
-
+    this.selectedSemesterLoads = this.data.selectedSemesterLoads;
     this.semesterLoadService.getSemesterLoads().subscribe(loads => {
       for (const load of loads) {
+        if (this.selectedSemesterLoads.find(l => l.id === load.id)) {
+          continue;
+        }
         this.semesterLoads.push(load);
       }
     }, err => {
@@ -49,6 +52,7 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
 
     this.semesterDisciplineLoad = this.data.semesterLoad;
     this.allSemesters = this.data.semesters;
+    // this.sortSemesters(this.allSemesters);
 
     this.semestersCheckBoxes = this.allSemesters.map(semester => [false, semester]);
 
@@ -58,6 +62,8 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
       this.initializeForm(this.semesterDisciplineLoad);
       this.title = 'Редактировать семестровую нагрузку';
       this.selectedSemesters = JSON.parse(JSON.stringify(this.semesterDisciplineLoad.semesters));
+      this.semesterLoads.push(this.semesterDisciplineLoad.semesterLoad);
+      // this.sortSemesters(this.selectedSemesters);
       for (const entry of this.semestersCheckBoxes) {
         for (const sem of this.selectedSemesters) {
           if (entry[1].semesterNum === sem.semesterNum) {
@@ -109,4 +115,16 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
     // console.log(semToAdd);
     this.dialogRef.close({isCompleted: true, object: this.semesterDisciplineLoad, errorMessage: null});
   }
+
+  // private sortSemesters(allSemesters: Semester[]): Semester[] {
+  //   return allSemesters.sort((s1, s2) => {
+  //     if (s1.semesterNum < s2.semesterNum) {
+  //       return 1;
+  //     } else if (s1.semesterNum > s2.semesterNum) {
+  //       return -1;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  // }
 }

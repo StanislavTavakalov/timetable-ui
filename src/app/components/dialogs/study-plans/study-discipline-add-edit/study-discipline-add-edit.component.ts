@@ -49,8 +49,8 @@ export class StudyDisciplineAddEditComponent implements OnInit {
   dialogSubscription: Subscription;
   discipline: Discipline;
   form: FormGroup;
-  loads: DisciplineLoad[];
-  semesterLoads: DisciplineSemesterLoad[];
+  loads: DisciplineLoad[] = [];
+  semesterLoads: DisciplineSemesterLoad[] = [];
   component: StudyComponent;
   loading = false;
   editMode = false;
@@ -89,8 +89,15 @@ export class StudyDisciplineAddEditComponent implements OnInit {
       this.discipline = new Discipline();
     }
     this.initializeDisciplineForm(this.discipline);
-    this.loads = JSON.parse(JSON.stringify(this.discipline.loads));
-    this.semesterLoads = JSON.parse(JSON.stringify(this.discipline.semesterLoads));
+    if (this.discipline.disciplineLoads) {
+      this.loads = JSON.parse(JSON.stringify(this.discipline.disciplineLoads));
+    }
+
+    if (this.discipline.disciplineSemesterLoads) {
+      this.semesterLoads = JSON.parse(JSON.stringify(this.discipline.disciplineSemesterLoads));
+      this.studyPlanUtils.sortSemesterNums(this.semesterLoads);
+    }
+
 
   }
 
@@ -176,20 +183,13 @@ export class StudyDisciplineAddEditComponent implements OnInit {
     discipline.totalHours = this.totalHours.value;
     discipline.classroomHours = this.classroomHours.value;
     discipline.creditUnits = this.creditUnits.value;
-    discipline.loads = this.loads;
-    discipline.semesterLoads = this.semesterLoads;
+    discipline.disciplineLoads = this.loads;
+    discipline.disciplineSemesterLoads = this.semesterLoads;
 
     if (this.newMode) {
       discipline.disciplineGroup = this.selectedDisciplineTemplate.disciplineGroup;
       discipline.university = this.selectedDisciplineTemplate.university;
     }
-  }
-
-  private calculateDisciplinePosition(cycle: Cycle): number {
-    let position = 1;
-    cycle.components.forEach(component => component.disciplines.forEach(dis => position = position + 1));
-    cycle.disciplines.forEach(dis => position = position + 1);
-    return position;
   }
 
   private filterDisciplineTemplates(): void {
@@ -206,7 +206,8 @@ export class StudyDisciplineAddEditComponent implements OnInit {
   addSemesterLoad(): void {
     const dialogRef = this.dialog.open(DisciplineSemesterLoadAddEditComponent, {
       data: {
-        semesters: this.semesters
+        semesters: this.semesters,
+        selectedSemesterLoads: this.getSelectedSemesterLoads()
       },
       minWidth: '400px'
     });
@@ -214,6 +215,7 @@ export class StudyDisciplineAddEditComponent implements OnInit {
     this.dialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
       if (operationResult.isCompleted && operationResult.errorMessage === null) {
         this.semesterLoads.push(operationResult.object);
+        this.studyPlanUtils.sortSemesterNums(this.semesterLoads);
       }
     });
   }
@@ -238,6 +240,14 @@ export class StudyDisciplineAddEditComponent implements OnInit {
     const loads = [];
     for (const load of this.loads) {
       loads.push(load.load);
+    }
+    return loads;
+  }
+
+  private getSelectedSemesterLoads(): SemesterLoad[] {
+    const loads = [];
+    for (const semesterLoad of this.semesterLoads) {
+      loads.push(semesterLoad.semesterLoad);
     }
     return loads;
   }
@@ -279,6 +289,7 @@ export class StudyDisciplineAddEditComponent implements OnInit {
     const dialogRef = this.dialog.open(DisciplineSemesterLoadAddEditComponent, {
       data: {
         semesterLoad,
+        selectedSemesterLoads: this.getSelectedSemesterLoads(),
         semesters: this.semesters
       },
       minWidth: '400px'

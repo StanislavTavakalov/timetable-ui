@@ -71,6 +71,7 @@ import { StandardStudyPlanComponent } from './components/study-plans/standard-st
 import '@angular/common/locales/global/ru';
 import {getRuPaginatorIntl} from './general/ru-paginator-intl';
 import { StudyPlanAddEditComponent } from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
+import { StudyPlanComponent } from './components/study-plans/study-plan/study-plan.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -129,6 +130,7 @@ import { StudyPlanAddEditComponent } from './components/study-plans/study-plan-a
     StandardPlanAddEditComponent,
     StandardStudyPlanComponent,
     StudyPlanAddEditComponent,
+    StudyPlanComponent,
   ],
   imports: [
     BrowserModule,

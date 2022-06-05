@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Cycle} from '../model/study-plan/structure/cycle';
 import {Component, Component as StudyComponent} from '../model/study-plan/structure/component';
-import {StudyPlan} from '../model/study-plan/study-plan';
+import {Course, StudyPlan} from '../model/study-plan/study-plan';
+import {ComponentType} from '../model/study-plan/structure/component-type';
+import {DisciplineSemesterLoad} from '../model/study-plan/structure/discipline-semester-load';
+import {Discipline} from '../model/discipline/discipline';
+import {DisciplineType} from '../model/discipline/discipline-type';
+import {Activity} from '../model/study-plan/schedule/activity';
+import {ScheduleTotalActivity} from '../model/study-plan/schedule/schedule-total-activity';
+import {Semester} from '../model/study-plan/schedule/semester';
 
 @Injectable({
   providedIn: 'root'
@@ -273,4 +280,229 @@ export class StudyPlanUtilService {
   }
 
 
+  isComponentMatchType(component, componentType: ComponentType): boolean {
+    return componentType === component.componentType;
+  }
+
+  sortSemesterNums(semesterLoads: DisciplineSemesterLoad[]): void {
+    for (const semesterLoad of semesterLoads) {
+      semesterLoad.semesters.sort((s1, s2) => {
+        if (s1.semesterNum > s2.semesterNum) {
+          return 1;
+        } else if (s1.semesterNum < s2.semesterNum) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+  }
+
+  public getAllDisciplinesInPlan(studyPlan: StudyPlan): Discipline[] {
+    const disciplines = [];
+
+    studyPlan.cycles.forEach(cycle => {
+      cycle.components.forEach(component => {
+        component.disciplines.forEach(disc => {
+          if (this.isStudyDiscipline(disc.disciplineType)) {
+            disciplines.push(disc);
+          }
+        });
+      });
+
+      cycle.disciplines.forEach(disc => {
+        if (this.isStudyDiscipline(disc.disciplineType)) {
+          disciplines.push(disc);
+        }
+      });
+    });
+
+    return disciplines;
+  }
+
+  public isStudyDiscipline(discType: DisciplineType): boolean {
+    return DisciplineType.BASIC === discType || DisciplineType.STANDARD === discType || DisciplineType.EXTRA === discType;
+  }
+
+  public calculateDisciplinePosition(cycle: Cycle): number {
+    let position = 1;
+    if (cycle.components) {
+      cycle.components.forEach(component => component.disciplines.forEach(dis => position = position + 1));
+    }
+    if (cycle.disciplines) {
+      cycle.disciplines.forEach(dis => position = position + 1);
+
+    }
+    return position;
+  }
+
+  public getDisplayedColumnsCycle(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = [];
+    finalColumnsToDisplay.push('position');
+    for (const col of this.getCommonColumnsToDisplay(severityLoadColumnNames, loadColumnsNames)) {
+      finalColumnsToDisplay.push(col);
+    }
+    finalColumnsToDisplay.push('icons');
+    return finalColumnsToDisplay;
+  }
+
+  public getDisplayedColumnsCycleWithoutIcons(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = this.getDisplayedColumnsCycle(severityLoadColumnNames, loadColumnsNames);
+    finalColumnsToDisplay.pop();
+    return finalColumnsToDisplay;
+  }
+
+  private getCommonColumnsToDisplay(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const columnsToDisplay: string[] = [];
+    columnsToDisplay.push('name');
+    severityLoadColumnNames.forEach(res => columnsToDisplay.push(res));
+    loadColumnsNames.forEach(res => columnsToDisplay.push(res));
+    columnsToDisplay.push('totalHours');
+    columnsToDisplay.push('classroomHours');
+    columnsToDisplay.push('selfHours');
+    columnsToDisplay.push('creditUnits');
+    return columnsToDisplay;
+  }
+
+  public getDisplayedColumnsComponent(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = [];
+    finalColumnsToDisplay.push('position-component');
+    for (const col of this.getCommonColumnsToDisplay(severityLoadColumnNames, loadColumnsNames)) {
+      finalColumnsToDisplay.push(col);
+    }
+    finalColumnsToDisplay.push('icons');
+    return finalColumnsToDisplay;
+  }
+
+  public getDisplayedColumnsComponentWithoutIcons(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = this.getDisplayedColumnsComponent(severityLoadColumnNames, loadColumnsNames);
+    finalColumnsToDisplay.pop();
+    return finalColumnsToDisplay;
+  }
+
+
+  public getDisplayedColumnsDiscipline(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = [];
+    finalColumnsToDisplay.push('position-discipline');
+    for (const col of this.getCommonColumnsToDisplay(severityLoadColumnNames, loadColumnsNames)) {
+      finalColumnsToDisplay.push(col);
+    }
+    finalColumnsToDisplay.push('icons');
+    return finalColumnsToDisplay;
+  }
+
+  public getDisplayedColumnsDisciplineWithoutIcons(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = this.getDisplayedColumnsDiscipline(severityLoadColumnNames, loadColumnsNames);
+    finalColumnsToDisplay.pop();
+    return finalColumnsToDisplay;
+  }
+
+
+  public getDisplayedColumnsCycleDiscipline(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = [];
+    finalColumnsToDisplay.push('position-cycle-discipline');
+    for (const col of this.getCommonColumnsToDisplay(severityLoadColumnNames, loadColumnsNames)) {
+      finalColumnsToDisplay.push(col);
+    }
+    finalColumnsToDisplay.push('icons');
+    return finalColumnsToDisplay;
+  }
+
+
+  public getDisplayedColumnsCycleDisciplineWithoutIcons(severityLoadColumnNames: string[], loadColumnsNames: string[]): string[] {
+    const finalColumnsToDisplay: string[] = this.getDisplayedColumnsCycleDiscipline(severityLoadColumnNames, loadColumnsNames);
+    finalColumnsToDisplay.pop();
+    return finalColumnsToDisplay;
+  }
+
+  public calculateActivityPerCourse(activity: Activity, course: Course): number {
+    let count = 0;
+    for (const week of course.weeks) {
+      if (week.activity && week.activity.id === activity.id) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  public calculateTotalActivitiesPerCourse(activities: Activity[], course: Course): number {
+    let total = 0;
+    for (const activity of activities) {
+      total += this.calculateActivityPerCourse(activity, course);
+    }
+
+    return total;
+  }
+
+  public calculateTotalPlanActivities(scheduleTotalActivities: ScheduleTotalActivity[]): number {
+    let total = 0;
+    for (const totalActivity of scheduleTotalActivities) {
+      total += totalActivity.totalWeekCount;
+    }
+    return total;
+  }
+
+  public calculateFreeTotalHours(discipline: Discipline): number {
+    let hours = discipline.totalHours;
+    if (discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters.forEach(d =>
+        hours -= d.totalHours);
+    }
+    return hours;
+  }
+
+  public calculateFreeClassroomHours(discipline: Discipline): number {
+    let hours = discipline.classroomHours;
+    if (discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters.forEach(d =>
+        hours -= d.classroomHours);
+    }
+    return hours;
+  }
+
+  public calculateFreeCreditUnits(discipline: Discipline): number {
+    let hours = discipline.creditUnits;
+    if (discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters.forEach(d =>
+        hours -= d.creditUnits);
+    }
+    return hours;
+  }
+
+  getTotalHoursPerSemester(discipline: Discipline, semester: Semester): number {
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        return dHoursToSemester.totalHours;
+      }
+    }
+    return 0;
+  }
+
+  getClassroomHoursPerSemester(discipline: Discipline, semester: Semester): number {
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        return dHoursToSemester.classroomHours;
+      }
+    }
+    return 0;
+  }
+
+
+  getCreditUnitsPerSemester(discipline: Discipline, semester: Semester): number {
+    if (!discipline.disciplineHoursUnitsPerSemesters) {
+      discipline.disciplineHoursUnitsPerSemesters = [];
+    }
+    for (const dHoursToSemester of discipline.disciplineHoursUnitsPerSemesters) {
+      if (dHoursToSemester.semester.id === semester.id) {
+        return dHoursToSemester.creditUnits;
+      }
+    }
+    return 0;
+  }
 }

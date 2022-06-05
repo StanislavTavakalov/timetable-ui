@@ -59,22 +59,28 @@
 
       <div>
         Семестровые нагрузки:
-
-
         <button mat-icon-button (click)="addSemesterLoad()">
           <mat-icon> add_circle</mat-icon>
         </button>
-        <div *ngFor="let load of semesterLoads">
-          {{load.semesterLoad.name}}
-          <div *ngFor="let sem of load.semesters">
-            Семестр: {{sem.semesterNum}}
-          </div>
-          <button mat-icon-button>
-            <mat-icon (click)="editSemesterLoad(load)"> edit</mat-icon>
-          </button>
-          <button mat-icon-button>
-            <mat-icon (click)="removeSemesterLoad(load)"> delete</mat-icon>
-          </button>
+        <div class="row" style="flex-wrap: wrap;">
+          <mat-card *ngFor="let load of semesterLoads" style="width: 40%; margin-right: 1%; margin-top: 1%">
+            <div class="row" style="align-items: center">
+              <span> {{load.semesterLoad.name}} </span>
+              <button mat-icon-button>
+                <mat-icon (click)="editSemesterLoad(load)"> edit</mat-icon>
+              </button>
+              <button mat-icon-button>
+                <mat-icon (click)="removeSemesterLoad(load)"> delete</mat-icon>
+              </button>
+            </div>
+
+            <div class="row" style="align-items: center">
+              <span style="margin-right: 1%"> Семестры: </span>
+              <mat-chip-list>
+                <mat-chip *ngFor="let sem of load.semesters">{{sem.semesterNum}}</mat-chip>
+              </mat-chip-list>
+            </div>
+          </mat-card>
         </div>
       </div>
       <div>
@@ -85,26 +91,52 @@
           <mat-icon> add_circle</mat-icon>
         </button>
 
-        <div *ngFor="let load of loads">
-          {{load.load.name}}: {{load.hours}}
-          <button mat-icon-button (click)="editLoad(load)">
-            <mat-icon> edit</mat-icon>
-          </button>
-          <button mat-icon-button (click)="removeLoad(load)">
-            <mat-icon> delete</mat-icon>
-          </button>
-        </div>
+        <!--        <div *ngFor="let load of loads">-->
+        <!--          {{load.load.name}}: {{load.hours}}-->
+        <!--          <button mat-icon-button (click)="editLoad(load)">-->
+        <!--            <mat-icon> edit</mat-icon>-->
+        <!--          </button>-->
+        <!--          <button mat-icon-button (click)="removeLoad(load)">-->
+        <!--            <mat-icon> delete</mat-icon>-->
+        <!--          </button>-->
+        <!--        </div>-->
 
+
+        <div class="row" style="flex-wrap: wrap;">
+          <mat-card *ngFor="let load of loads" style="width: 40%; margin-right: 1%; margin-top: 1%">
+            <div class="row" style="align-items: center">
+              {{load.load.name}}: {{load.hours}}ч
+              <button mat-icon-button (click)="editLoad(load)">
+                <mat-icon> edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="removeLoad(load)">
+                <mat-icon> delete</mat-icon>
+              </button>
+            </div>
+          </mat-card>
+        </div>
 
       </div>
 
       <div class="column" *ngIf="selectedDisciplineTemplate">
-        <div style="margin-bottom: 2%"> Группа: {{this.selectedDisciplineTemplate?.disciplineGroup?.name}} </div>
-        <div> Университет: {{this.selectedDisciplineTemplate?.university}} </div>
+        <div style="margin-bottom: 2%">
+          Группа:
+          <mat-chip> {{this.selectedDisciplineTemplate?.disciplineGroup?.name}} </mat-chip>
+        </div>
+
+        <div> Университет:
+          <mat-chip> {{this.selectedDisciplineTemplate?.university}} </mat-chip>
+        </div>
       </div>
       <div class="column" *ngIf="editMode && discipline">
-        <div style="margin-bottom: 2%"> Группа: {{this.discipline?.disciplineGroup?.name}} </div>
-        <div> Университет: {{this.discipline?.university}} </div>
+        <div style="margin-bottom: 2%">
+          Группа:
+          <mat-chip> {{this.discipline?.disciplineGroup?.name}} </mat-chip>
+        </div>
+
+        <div> Университет:
+          <mat-chip>{{this.discipline?.university}}</mat-chip>
+        </div>
       </div>
 
     </form>

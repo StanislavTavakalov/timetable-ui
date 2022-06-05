@@ -26,6 +26,8 @@ import {ComponentDisciplineAddEditComponent} from '../../dialogs/study-plans/com
 import {StudyPlanUtilService} from '../../../services/study-plan-util.service';
 import {Location} from '@angular/common';
 import {Semester} from '../../../model/study-plan/schedule/semester';
+import {CycleType} from '../../../model/study-plan/structure/cycle-type';
+import {ComponentType} from '../../../model/study-plan/structure/component-type';
 
 @Component({
   selector: 'app-standard-plan-add',
@@ -292,6 +294,7 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
         studyPlan.semesters.push(sem);
       }
     }
+    console.log(studyPlan.semesters);
   }
 
   private fillSchedule(studyPlan: StudyPlan): void {
@@ -747,4 +750,11 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
   }
 
 
+  isAddComponentOrDisciplineIsAvailable(cycle: Cycle): boolean {
+    return CycleType.STANDARD === cycle.cycleType || CycleType.EXTRA === cycle.cycleType;
+  }
+
+  isDisciplineAddIsAvailable(component: StudyComponent): boolean {
+    return ComponentType.STANDARD === component.componentType;
+  }
 }
