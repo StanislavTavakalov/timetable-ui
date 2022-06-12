@@ -75,7 +75,7 @@
                   <mat-select [compareWith]="utilityService.compareObjects" placeholder="Учебный план: "
                               [formControlName]="'studyPlan'" required>
                     <mat-option *ngFor="let studyPlan of timetableCreateCommonInfo.studyPlans" [value]="studyPlan">
-                      {{printerService.printStudyPlanName(studyPlan)}}
+                      {{printerService.printStudyPlanNameShort(studyPlan)}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
