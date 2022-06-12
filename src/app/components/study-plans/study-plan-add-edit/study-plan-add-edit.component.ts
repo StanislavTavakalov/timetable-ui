@@ -427,8 +427,9 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
     const totalHoursFree = this.studyPlanUtilService.calculateFreeTotalHoursInCycle(cycle, discipline.totalHours);
     const classroomHoursFree = this.studyPlanUtilService.calculateFreeClassroomHoursInCycle(cycle, discipline.classroomHours);
     const creditUnitsFree = this.studyPlanUtilService.calculateFreeCreditUnitsInCycle(cycle, discipline.creditUnits);
-    const dialogRef = this.dialog.open(ComponentDisciplineAddEditComponent, {
-      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree, classroomHoursFree, creditUnitsFree},
+    const dialogRef = this.dialog.open(StudyDisciplineAddEditComponent, {
+      data: {title: 'Редактировать дисциплину', discipline, totalHoursFree,
+        classroomHoursFree, creditUnitsFree,  semesters: this.studyPlan.semesters},
       minWidth: '600px'
     });
 

@@ -55,9 +55,9 @@ export class PrinterService {
   public printStudyPlanName(studyPlan: StudyPlan): string {
 
     return 'Учебный план специальности ' + this.printSpecialityFullCode(studyPlan.speciality) + ' || '
-    + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + ' || '
-    + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + ' || Год разработки: '
-    + studyPlan.developmentYear + '||'  +  ' Регистрационный номер:' + this.printRegisterNumber(studyPlan.registerNumber);
+      + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + ' || '
+      + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + ' || Год разработки: '
+      + studyPlan.developmentYear + '||' + ' Регистрационный номер:' + this.printRegisterNumber(studyPlan.registerNumber);
   }
 
   public printStudyPlanNameShort(studyPlan: StudyPlan): string {
@@ -107,6 +107,21 @@ export class PrinterService {
       if (lo) {
         count += lo.hours;
       }
+    }
+    if (count > 0) {
+      return count.toString() + ' ч.';
+    }
+    return '-';
+  }
+
+  public printLoadHoursDiscipline(load: string, discipline: Discipline): string {
+    let count = 0;
+    if (discipline.disciplineLoads === undefined || discipline.disciplineLoads === null) {
+      return '-';
+    }
+    const lo = discipline.disciplineLoads.find(l => l.load.name === load);
+    if (lo) {
+      count = lo.hours;
     }
     if (count > 0) {
       return count.toString() + ' ч.';
