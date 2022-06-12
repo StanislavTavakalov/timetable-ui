@@ -42,7 +42,7 @@
       <mat-label>Учебный план</mat-label>
       <mat-select [(ngModel)]="studyPlan">
         <mat-option *ngFor="let studyPlan of studyPlans" [value]="studyPlan">
-          {{printerService.printStandardPlanName(studyPlan)}}
+          {{printerService.printStudyPlanName(studyPlan)}}
         </mat-option>
       </mat-select>
     </mat-form-field>

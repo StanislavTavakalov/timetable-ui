@@ -6,6 +6,7 @@ import {HeaderType} from '../model/header-type';
 import {Department} from '../model/department/department';
 import {Deanery} from '../model/deanery/deanery';
 import {StudyPlan} from '../model/study-plan/study-plan';
+import {Timetable} from '../model/timetable/timetable';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class LocalStorageService {
   private SECRET_KEY = 'superSecretKeyBNTU';
   private SELECTED_STANDARD_PLAN = 'selectedStandardPlan';
   private PLAN_FOR_EDIT = 'planForEdit';
+  private TIMETABLE = 'timetable';
 
   subscribableCurrentUser: BehaviorSubject<User>;
   subscribableIsNavBarOpened: BehaviorSubject<boolean>;
@@ -33,27 +35,21 @@ export class LocalStorageService {
   }
 
   public setCurrentUserToken(authToken: string): void {
-    localStorage.setItem(this.USER_TOKEN_KEY, CryptoJS.AES.encrypt(JSON.stringify(authToken), this.SECRET_KEY.trim()).toString());
+    this.store(this.USER_TOKEN_KEY, authToken);
   }
 
   public getCurrentUserToken(): string {
-    if (!localStorage.getItem(this.USER_TOKEN_KEY)) {
-      return '';
-    }
-    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.USER_TOKEN_KEY), this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+    return this.getValueOrEmptyString(this.USER_TOKEN_KEY);
   }
 
   public setCurrentUser(user: User): void {
     console.log(user);
     this.subscribableCurrentUser.next(user);
-    localStorage.setItem(this.CURRENT_USER, CryptoJS.AES.encrypt(JSON.stringify(user), this.SECRET_KEY.trim()).toString());
+    this.store(this.CURRENT_USER, user);
   }
 
   public getCurrentUser(): User {
-    if (!localStorage.getItem(this.CURRENT_USER)) {
-      return null;
-    }
-    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.CURRENT_USER), this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+    return this.getValueOrNull(this.CURRENT_USER);
   }
 
   public clearUser(): void {
@@ -76,15 +72,11 @@ export class LocalStorageService {
   }
 
   public getSelectedStandardPlan(): any {
-    if (!localStorage.getItem(this.SELECTED_STANDARD_PLAN)) {
-      return null;
-    }
-    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.SELECTED_STANDARD_PLAN),
-      this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+    return this.getValueOrNull(this.SELECTED_STANDARD_PLAN);
   }
 
   public putSelectedStandardPlan(studyPlan: StudyPlan): void {
-    localStorage.setItem(this.SELECTED_STANDARD_PLAN, CryptoJS.AES.encrypt(JSON.stringify(studyPlan), this.SECRET_KEY.trim()).toString());
+    this.store(this.SELECTED_STANDARD_PLAN, studyPlan);
   }
 
   public clearSelectedStandardPlan(): void {
@@ -93,19 +85,45 @@ export class LocalStorageService {
 
   // TODO: probably all usages could be replaced by simple reloading from DB
   public getEditPlan(): any {
-    if (!localStorage.getItem(this.PLAN_FOR_EDIT)) {
-      return null;
-    }
-    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(this.PLAN_FOR_EDIT),
-      this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+    return this.getValueOrNull(this.PLAN_FOR_EDIT);
   }
 
   public putEditPlan(studyPlan: StudyPlan): void {
-    localStorage.setItem(this.PLAN_FOR_EDIT, CryptoJS.AES.encrypt(JSON.stringify(studyPlan), this.SECRET_KEY.trim()).toString());
+    this.store(this.PLAN_FOR_EDIT, studyPlan);
   }
 
   public clearEditPlan(): void {
     localStorage.removeItem(this.PLAN_FOR_EDIT);
+  }
+
+  public putTimetable(timetable: Timetable): void {
+    this.store(this.TIMETABLE, timetable);
+  }
+
+  public getTimetable(): any {
+    return this.getValueOrNull(this.TIMETABLE);
+  }
+
+  public clearTimetable(): void {
+    localStorage.removeItem(this.TIMETABLE);
+  }
+
+  private store(key: string, value: any): void {
+    localStorage.setItem(key, CryptoJS.AES.encrypt(JSON.stringify(value), this.SECRET_KEY.trim()).toString());
+  }
+
+  private getValueOrNull(key: string): any {
+    if (!localStorage.getItem(key)) {
+      return null;
+    }
+    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(key), this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
+  }
+
+  private getValueOrEmptyString(key: string): any {
+    if (!localStorage.getItem(key)) {
+      return '';
+    }
+    return JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem(key), this.SECRET_KEY.trim()).toString(CryptoJS.enc.Utf8));
   }
 
 }

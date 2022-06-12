@@ -115,16 +115,4 @@ export class DisciplineSemesterLoadAddEditComponent implements OnInit {
     // console.log(semToAdd);
     this.dialogRef.close({isCompleted: true, object: this.semesterDisciplineLoad, errorMessage: null});
   }
-
-  // private sortSemesters(allSemesters: Semester[]): Semester[] {
-  //   return allSemesters.sort((s1, s2) => {
-  //     if (s1.semesterNum < s2.semesterNum) {
-  //       return 1;
-  //     } else if (s1.semesterNum > s2.semesterNum) {
-  //       return -1;
-  //     } else {
-  //       return 0;
-  //     }
-  //   });
-  // }
 }

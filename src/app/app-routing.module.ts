@@ -29,9 +29,11 @@ import {StandardPlanAddEditComponent} from './components/study-plans/standard-pl
 import {StandardStudyPlanComponent} from './components/study-plans/standard-study-plan/standard-study-plan.component';
 import {StudyPlanAddEditComponent} from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
 import {StudyPlanComponent} from './components/study-plans/study-plan/study-plan.component';
+import {TimetablesComponent} from './components/timetables/timetables.component';
+import {TimetableAddEditComponent} from './components/timetables/timetable-add-edit/timetable-add-edit.component';
 
 const routes: Routes = [
-  {path: 'main-page', component: MainPageComponent},
+  {path: 'main-page', component: TimetablesComponent},
   {path: 'users', component: UsersComponent},
   {path: 'roles', component: RolesComponent},
   {path: 'positions', component: TeacherPositionComponent},
@@ -49,6 +51,8 @@ const routes: Routes = [
   {path: 'deaneries/:id/classrooms', component: ClassroomsComponent},
   {path: 'deaneries/:id/groups', component: GroupsComponent},
   {path: 'deaneries/:id/flows', component: FlowsComponent},
+  {path: 'deaneries/:id/timetables', component: TimetablesComponent},
+  {path: 'deaneries/:id/timetables/create', component: TimetableAddEditComponent},
   {path: 'departments/:departmentId', component: SpecialitiesComponent},
   {path: 'departments/:departmentId/specialities', component: SpecialitiesComponent},
   {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},

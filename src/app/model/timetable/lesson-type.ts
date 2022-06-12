@@ -1,0 +1,5 @@
+export enum LessonType {
+  LECTURE = 'LECTURE',
+  PRACTICAL = 'PRACTICAL',
+  LABORATORY = 'LABORATORY'
+}

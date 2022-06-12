@@ -8,6 +8,9 @@ import {StudyPlanStatus} from '../../model/study-plan/study-plan-status';
 import {Cycle} from '../../model/study-plan/structure/cycle';
 import {CycleType} from '../../model/study-plan/structure/cycle-type';
 import {ComponentType} from '../../model/study-plan/structure/component-type';
+import {StudentType} from '../../model/timetable/student-type';
+import {TimetableStatus} from '../../model/timetable/timetable-status';
+import {LessonType} from '../../model/timetable/lesson-type';
 
 @Injectable({
   providedIn: 'root'
@@ -245,6 +248,38 @@ export class ResourceLocalizerService {
         return 'Государственный';
       case ComponentType.BASIC:
         return 'УВО';
+    }
+    return '';
+  }
+
+  localizedStudentType(studentType: StudentType): string {
+    switch (studentType) {
+      case StudentType.STUDENT:
+        return 'Студенты';
+      case StudentType.UNDERGRADUATE:
+        return 'Магистранты';
+    }
+    return '';
+  }
+
+  localizedTimetableStatus(timetableStatus: TimetableStatus): string {
+    switch (timetableStatus) {
+      case TimetableStatus.SUBMITTED:
+        return 'Утверждено';
+      case TimetableStatus.IN_DEVELOPMENT:
+        return 'В разработке';
+    }
+    return '';
+  }
+
+  localizedLessonType(lessonType: LessonType): string{
+    switch (lessonType) {
+      case LessonType.LECTURE:
+        return 'Лекция';
+      case LessonType.PRACTICAL:
+        return 'Практика';
+      case LessonType.LABORATORY:
+        return 'Лабораторная';
     }
     return '';
   }

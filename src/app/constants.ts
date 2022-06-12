@@ -31,10 +31,6 @@ export class Constants {
     label: 'Потоки',
     isActive: true
   }, {
-    path: '/study-plans',
-    label: 'Учебные планы',
-    isActive: true
-  }, {
     path: '/timetables',
     label: 'Расписания занятий',
     isActive: true
@@ -61,10 +57,6 @@ export class Constants {
     path: '/studyplans',
     label: 'Учебные планы',
     isActive: true
-  }, {
-    path: '/timetables',
-    label: 'Расписания',
-    isActive: true
   }
   ];
 
@@ -84,5 +76,24 @@ export class Constants {
 
 
   static basicComponentType = ComponentType.BASIC;
+
+  static lessonColors: any = {
+    lecture: {
+      primary: 'rgb(167, 235, 186)',
+      secondary: 'black',
+    },
+    practical: {
+      primary: 'rgba(199, 0, 0, 0.5)',
+      secondary: 'black',
+    },
+    laboratory: {
+      primary: 'rgb(165, 192, 232)',
+      secondary: 'black',
+    },
+    default: {
+      primary: 'white',
+      secondary: 'black',
+    }
+  };
 
 }

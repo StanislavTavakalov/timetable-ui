@@ -72,6 +72,12 @@ import '@angular/common/locales/global/ru';
 import {getRuPaginatorIntl} from './general/ru-paginator-intl';
 import { StudyPlanAddEditComponent } from './components/study-plans/study-plan-add-edit/study-plan-add-edit.component';
 import { StudyPlanComponent } from './components/study-plans/study-plan/study-plan.component';
+import { TimetablesComponent } from './components/timetables/timetables.component';
+import { TimetableTableComponent } from './components/timetables/timetable-table/timetable-table.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { TimetableAddEditComponent } from './components/timetables/timetable-add-edit/timetable-add-edit.component';
+import {DatePipe} from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -131,6 +137,9 @@ import { StudyPlanComponent } from './components/study-plans/study-plan/study-pl
     StandardStudyPlanComponent,
     StudyPlanAddEditComponent,
     StudyPlanComponent,
+    TimetablesComponent,
+    TimetableTableComponent,
+    TimetableAddEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -145,12 +154,14 @@ import { StudyPlanComponent } from './components/study-plans/study-plan/study-pl
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    ColorPickerModule
+    ColorPickerModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: MatPaginatorIntl,  useValue: getRuPaginatorIntl() }
+    { provide: MatPaginatorIntl,  useValue: getRuPaginatorIntl() },
+    DatePipe
 
   ],
   bootstrap: [AppComponent]

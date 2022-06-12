@@ -10,7 +10,7 @@ import {Activity} from './schedule/activity';
 
 
 export class StudyPlan {
-  id: number;
+  id: string;
   standardPlan: boolean;
   registerNumber: string;
   developmentYear: number;

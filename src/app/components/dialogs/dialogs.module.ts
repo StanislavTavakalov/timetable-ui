@@ -51,6 +51,9 @@ import {DisciplineLoadAddEditComponent} from './study-plans/discipline-load-add-
 import {DisciplineSemesterLoadAddEditComponent} from './study-plans/discipline-semester-load-add-edit/discipline-semester-load-add-edit.component';
 import {SpecificDisciplineAddEditComponent} from './study-plans/specific-disipline-add-edit/specific-discipline-add-edit.component';
 import { RegisterNumberPopupComponent } from './study-plans/register-number-popup/register-number-popup.component';
+import { TimetableCreateDialogComponent } from './timetables/timetable-create-dialog/timetable-create-dialog.component';
+import { LessonAddEditComponent } from './timetables/lesson-add-edit/lesson-add-edit.component';
+import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/lesson-group-add-edit.component';
 
 @NgModule({
   imports: [
@@ -108,7 +111,10 @@ import { RegisterNumberPopupComponent } from './study-plans/register-number-popu
     DisciplineLoadAddEditComponent,
     DisciplineSemesterLoadAddEditComponent,
     SpecificDisciplineAddEditComponent,
-    RegisterNumberPopupComponent
+    RegisterNumberPopupComponent,
+    TimetableCreateDialogComponent,
+    LessonAddEditComponent,
+    LessonGroupAddEditComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -121,7 +127,8 @@ import { RegisterNumberPopupComponent } from './study-plans/register-number-popu
     TeacherPositionAddEditComponent, TeacherPositionDeleteComponent, WorkTariffAddEditComponent, WorkTariffDeleteComponent,
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
     StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
-    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent
+    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent, TimetableCreateDialogComponent,
+    LessonAddEditComponent, LessonGroupAddEditComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -134,7 +141,8 @@ import { RegisterNumberPopupComponent } from './study-plans/register-number-popu
     TeacherPositionAddEditComponent, TeacherPositionDeleteComponent, WorkTariffAddEditComponent, WorkTariffDeleteComponent,
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
     StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
-    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent
+    SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent, TimetableCreateDialogComponent,
+    LessonAddEditComponent, LessonGroupAddEditComponent
   ]
 })
 export class DialogsModule {

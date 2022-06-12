@@ -1,0 +1,125 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="form" class="column">
+
+    День: {{lessonDayName}}
+
+    <mat-form-field style="margin-top: 15px">
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Дисциплина: "
+                  [formControlName]="'discipline'" required>
+        <mat-option *ngFor="let discipline of disciplines" [value]="discipline">
+          {{discipline.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-size">
+      <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип занятия: "
+                  [formControlName]="'lessonType'" [disabled]="!this.discipline.value" required>
+        <mat-option *ngFor="let lessonType of lessonTypes" [value]="lessonType">
+          {{resourceLocalizerService.localizedLessonType(lessonType)}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="lessonType.hasError('required')"> Поле должно быть заполнено</mat-error>
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field style="width: 48%; margin-right: 4%">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Корпус: "
+                    [formControlName]="'building'" (valueChange)="clearClassroom()" required>
+          <mat-option *ngFor="let building of buildings" [value]="building">
+            {{building.number}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field style="width: 48%">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Аудитория: "
+                    [formControlName]="'classroom'" [disabled]="!this.building.value" required>
+          <mat-option *ngFor="let classroom of classrooms" [value]="classroom">
+            {{classroom.number}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Преподаватель: "
+                  [formControlName]="'teacher'" [disabled]="!this.discipline.value" required>
+        <mat-option *ngFor="let teacher of teachers" [value]="teacher">
+          {{teacher.firstName}} {{teacher.lastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Время проведения: "
+                  [formControlName]="'timeline'" required>
+        <mat-option *ngFor="let timeline of timelines" [value]="timeline">
+          {{this.lessonUtils.timeShortFormat(timeline.startTime)}}
+          - {{this.lessonUtils.timeShortFormat(timeline.endTime)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox style="margin-top: 2%" [formControlName]="'onceInTwoWeek'"> Раз в неделю</mat-checkbox>
+
+    <div class="row" style="margin-top: 2%">
+      <div style="width: 50%">
+        Группы:
+        <button mat-icon-button class="material-icons"
+                matTooltip="Добавить группу" (click)="addGroup()">
+          <mat-icon> add_circle</mat-icon>
+        </button>
+        <div class="column" *ngFor="let group of lesson.groups">
+          {{group.number}}
+        </div>
+      </div>
+
+      <div style="width: 50%">
+        Подгруппы:
+        <button mat-icon-button class="material-icons"
+                matTooltip="Добавить подгруппу" (click)="addSubgroup()">
+          <mat-icon> add_circle</mat-icon>
+        </button>
+        <div class="column" *ngFor="let group of lesson.subgroups">
+          {{this.getGroupNumberBySubId(group.id)}}-{{group.number}}
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 3%; display:flex; justify-items: center; flex-direction: column"
+         *ngIf="this.classroom.value">
+      <div [ngStyle]="calculateTotalStudentCountByGroup()>classroom.value?.capacity?
+      {'color': 'red'} :
+      {'color': 'black'}"><span
+        style="color: black"> Занятость аудитории: </span> {{calculateTotalStudentCountByGroup()}}
+        /
+        {{classroom.value?.capacity}} чел.
+      </div>
+      <div style="color: red" *ngIf="calculateTotalStudentCountByGroup()>classroom.value?.capacity"> Превышена
+        вместимость аудитории!
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="controls">
+  <ng-container *ngIf="!editMode">
+    <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="form.invalid">
+      Добавить
+    </button>
+    <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+  </ng-container>
+  <ng-container *ngIf="editMode" style="display: flex; flex-direction: row; justify-items: flex-start ">
+    <div style="width: 80%">
+      <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="form.invalid">
+        Подтвердить
+      </button>
+      <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+    </div>
+    <div style="width: 20%">
+      <button mat-button color="warn" (click)=onDeleteClick()> Удалить</button>
+    </div>
+  </ng-container>
+</mat-dialog-actions>
+

@@ -6,6 +6,9 @@ import {Cycle} from '../../model/study-plan/structure/cycle';
 import {Component as StudyComponent} from '../../model/study-plan/structure/component';
 import {Discipline} from '../../model/discipline/discipline';
 import {DisciplineType} from '../../model/discipline/discipline-type';
+import {Timetable} from '../../model/timetable/timetable';
+import {StudentType} from '../../model/timetable/student-type';
+import {EducationForm} from '../../model/study-plan/structure/education-form';
 
 @Injectable({
   providedIn: 'root'
@@ -50,13 +53,16 @@ export class PrinterService {
   }
 
   public printStudyPlanName(studyPlan: StudyPlan): string {
-    return 'Регистрационный номер:' + this.printRegisterNumber(studyPlan.registerNumber)
-      + this.printSpecialityFullCode(studyPlan.speciality) + '||'
-      + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + '||'
-      + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + '||'
-      + studyPlan.developmentYear;
+
+    return 'Учебный план специальности ' + this.printSpecialityFullCode(studyPlan.speciality) + ' || '
+    + this.resourceLocalizerService.localizeEducationForm(studyPlan.educationForm) + ' || '
+    + this.resourceLocalizerService.localizeStudyPlanStatus(studyPlan.status) + ' || Год разработки: '
+    + studyPlan.developmentYear + '||'  +  ' Регистрационный номер:' + this.printRegisterNumber(studyPlan.registerNumber);
   }
 
+  public printStudyPlanNameShort(studyPlan: StudyPlan): string {
+    return 'Учебный план специальности ' + this.printSpecialityFullCode(studyPlan.speciality) + ` Регистрационный номер: ${studyPlan.registerNumber ? studyPlan.registerNumber : 'не указан'} (${studyPlan.developmentYear}г.)`;
+  }
 
   public printRegisterNumber(registerNumber: string): string {
     return registerNumber === null ? 'не указан' : registerNumber;
@@ -134,4 +140,32 @@ export class PrinterService {
     return 'n';
   }
 
+  printTimetableLabelName(timetable: Timetable): string {
+    let studentType;
+    let educationType;
+    let semesterPart;
+    let studyYear = timetable.year;
+    let courseNumber;
+    courseNumber = Math.round(timetable.semester / 2 + 0.1);
+
+    if (timetable.semester % 2 === 1) {
+      semesterPart = 'осенний';
+    } else if (timetable.semester % 2 === 2) {
+      semesterPart = 'весенний';
+    }
+
+    if (timetable.educationForm === EducationForm.EXTRAMURAL) {
+      educationType = 'заочной';
+    } else if (timetable.educationForm === EducationForm.FULLTIME) {
+      educationType = 'дневной';
+    }
+
+    if (StudentType.STUDENT === timetable.studentType) {
+      studentType = 'студентов';
+    } else if (StudentType.UNDERGRADUATE === timetable.studentType) {
+      studentType = 'магистрантов';
+    }
+    return `Расписания занятий ${studentType} ${courseNumber} курса ${educationType} формы обучения на ${semesterPart} семестр ${studyYear} учебного года`;
+
+  }
 }

@@ -1,0 +1,104 @@
+<h1 mat-dialog-title> Создать расписание </h1>
+
+
+<mat-spinner *ngIf="isLoading;else mainContent" diameter="150" mode="indeterminate" color="primary"
+             class="spinner">
+</mat-spinner>
+<ng-template #mainContent>
+  <div *ngIf="timetableCreateCommonInfo; else errorTemplate">
+    <mat-dialog-content>
+
+      <form [formGroup]="timetableForm" class="column">
+
+        <mat-form-field>
+          <mat-select [compareWith]="utilityService.compareObjects" placeholder="Форма обучения: "
+                      [formControlName]="'educationForm'" required>
+            <mat-option *ngFor="let educationForm of educationForms" [value]="educationForm">
+              {{resourceLocalizer.localizeEducationForm(educationForm)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип обучаемых: "
+                      [formControlName]="'studentType'" required>
+            <mat-option *ngFor="let studentType of studentTypes" [value]="studentType">
+              {{resourceLocalizer.localizedStudentType(studentType)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Смена: "
+                      [formControlName]="'shift'" required>
+            <mat-option *ngFor="let shift of timetableCreateCommonInfo.shifts" [value]="shift">
+              {{shift.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input type="number" matInput placeholder="Семестр: " [formControlName]="'semester'" required>
+          <mat-error *ngIf="semester.hasError('required')"> Поле должно быть заполнено</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input type="number" matInput placeholder="Учебный год: " [formControlName]="'year'" required>
+          <mat-error *ngIf="year.hasError('required')"> Поле должно быть заполнено</mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-select [compareWith]="utilityService.compareObjects" placeholder="Поток: "
+                      [formControlName]="'flow'" required>
+            <mat-option *ngFor="let flow of timetableCreateCommonInfo.flows"
+                        [value]="flow" (onSelectionChange)="fillGroups($event)">
+              {{flow.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="this.flow.value">
+          Группы:
+        </div>
+        <div formArrayName="groups"
+             *ngFor="let group of timetableForm.get('groups')['controls']; let groupIndex = index;">
+          <div [formGroupName]="groupIndex" class="column">
+            <div style="display: flex; flex-direction: row; width: 100%">
+
+              <div style="display: flex; align-items: center; width: 16%">
+                {{groupIndex + 1}}. {{group.get('group').value.number}}
+              </div>
+
+              <div style="margin-left: 5px; width: 84%">
+                <mat-form-field>
+                  <mat-select [compareWith]="utilityService.compareObjects" placeholder="Учебный план: "
+                              [formControlName]="'studyPlan'" required>
+                    <mat-option *ngFor="let studyPlan of timetableCreateCommonInfo.studyPlans" [value]="studyPlan">
+                      {{printerService.printStudyPlanName(studyPlan)}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions class="controls">
+      <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="this.timetableForm.invalid">
+        Создать
+      </button>
+      <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+
+<ng-template #errorTemplate>
+  Ошибка на сервере.
+  <button mat-button color="warn" (click)=onCancelClick()> Закрыть</button>
+</ng-template>
