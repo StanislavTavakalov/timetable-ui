@@ -149,38 +149,71 @@
 
 
   <div style="width: 30%; background-color: white; margin-left: 10px">
-<!--    <div style="margin-top: 50px">Список общих дисциплин</div>-->
-<!--    <div *ngFor="let disc of commonDisciplinesForLesson">-->
-<!--      1. {{disc.name}}-->
-<!--    </div>-->
+    <!--    <div style="margin-top: 50px">Список общих дисциплин</div>-->
+    <!--    <div *ngFor="let disc of commonDisciplinesForLesson">-->
+    <!--      1. {{disc.name}}-->
+    <!--    </div>-->
 
-<!--    <div style="margin-top: 50px"></div>-->
-<!--    <div *ngFor="let group of timetable.groupsToStudyPlans; let i = index">-->
-<!--      <div style="margin-top: 50px"> Учебный план: {{printerService.printStudyPlanName(group.studyPlan)}} </div>-->
-<!--      <div style="margin-top: 10px"> {{group.group.number}} кол-во уч: {{group.group.studentCount}} </div>-->
-<!--      <div *ngFor="let subgroup of group.group.subgroups; let sub_i = index" style="margin-left: 10px">-->
-<!--        {{sub_i + 1}}. {{group.group.number}}-{{subgroup.number}} кол-во уч: {{subgroup.studentCount}} чел.-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--    <div style="margin-top: 50px"></div>-->
+    <!--    <div *ngFor="let group of timetable.groupsToStudyPlans; let i = index">-->
+    <!--      <div style="margin-top: 50px"> Учебный план: {{printerService.printStudyPlanName(group.studyPlan)}} </div>-->
+    <!--      <div style="margin-top: 10px"> {{group.group.number}} кол-во уч: {{group.group.studentCount}} </div>-->
+    <!--      <div *ngFor="let subgroup of group.group.subgroups; let sub_i = index" style="margin-left: 10px">-->
+    <!--        {{sub_i + 1}}. {{group.group.number}}-{{subgroup.number}} кол-во уч: {{subgroup.studentCount}} чел.-->
+    <!--      </div>-->
+    <!--    </div>-->
 
-    <div *ngFor="let s2g of studyPlanToGroupsOrSubgroups | keyvalue; let i = index" style="margin-top: 2%">
-      {{printerService.printStudyPlanNameShort(s2g.key)}}
-      Доступно недель для распределения: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key.id)}}
-      <div *ngFor="let discipline of getDisciplinesForStudyPlan(s2g.key.id)"  style="margin-top: 2%">
-        {{discipline.name}} (к распределению:
-        {{getTotalHoursByPlan(discipline)}}ч.)
-        <div *ngFor="let g of s2g.value">
-          {{printerParentGroupNumberIfSubgroup(g.id)}}-{{g.number}} : Распределено {{this.calculatedDistributedHoursForDiscipline(s2g.key.id, g.id, discipline.id)}}ч.
-        </div>
+    <!--    <div *ngFor="let s2g of studyPlanToGroupsOrSubgroups | keyvalue; let i = index" style="margin-top: 2%">-->
+    <!--      {{printerService.printStudyPlanNameShort(s2g.key)}}-->
+    <!--      Доступно недель для распределения: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key.id)}}-->
+    <!--      <div *ngFor="let discipline of getDisciplinesForStudyPlan(s2g.key.id)"  style="margin-top: 2%">-->
+    <!--        {{discipline.name}} (к распределению:-->
+    <!--        {{getTotalHoursByPlan(discipline)}}ч.)-->
+    <!--        <div *ngFor="let g of s2g.value">-->
+    <!--          {{printerParentGroupNumberIfSubgroup(g.id)}}-{{g.number}} : Распределено {{this.calculatedDistributedHoursForDiscipline(s2g.key.id, g.id, discipline.id)}}ч.-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <div *ngFor="let s2g of studyPlanId2GroupsOrSubgroups | keyvalue; let i = index" [ngStyle]="{'margin-top': i === 0 ? '0%' : '4%' }">
+
+      <!--      Доступно недель для распределения: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}}-->
+      <div style="overflow: auto">
+        <table class="timetable">
+
+          <tr>
+            <td
+              [attr.colspan]="s2g.value.length + 1"> {{printerService.printStudyPlanNameShort(this.studyPlanIdToStudyPlan.get(s2g.key))}}
+              . Недель в семестре: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}} </td>
+          </tr>
+
+          <tr>
+            <td [attr.rowspan]="2">Дисциплина</td>
+            <td [attr.colspan]="s2g.value.length"> Группы и подгруппы </td>
+          </tr>
+
+          <tr>
+            <td *ngFor="let g of s2g.value"> {{printerParentGroupNumberIfSubgroup(g.id)}}{{g.number}} </td>
+          </tr>
+
+          <tr *ngFor="let discipline of getDisciplinesForStudyPlan(s2g.key)">
+            <td>{{discipline.name}}</td>
+            <td *ngFor="let g of s2g.value">
+              {{this.calculatedDistributedHoursForDiscipline(s2g.key, g.id, discipline.id)}}
+              ч. / {{getTotalHoursByPlan(discipline)}}ч.
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 
+    <div style="display: flex; margin-top: 2%; justify-content: flex-end">
+      <button mat-raised-button style="margin-right: 2%"> Сохранить</button>
+      <button mat-raised-button style="margin-right: 2%"> Отменить</button>
+    </div>
 
   </div>
 
 
 </div>
-<div>
-  <button mat-raised-button> Сохранить</button>
-  <button mat-raised-button> Отменить</button>
-</div>
+

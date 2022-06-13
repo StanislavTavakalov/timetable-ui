@@ -58,7 +58,8 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   buildings: Building[];
   teachers: Teacher[];
   subgroupToGroupMap: Map<string, string>;
-  studyPlanToGroupsOrSubgroups: Map<StudyPlan, any>;
+  studyPlanId2GroupsOrSubgroups: Map<string, any>;
+  studyPlanIdToStudyPlan = new Map<string, StudyPlan>();
   disciplineId2DisciplinePerSemester = new Map<string, DisciplineHoursUnitsPerSemester>();
   studyPlanId2Disciplines: Map<string, Discipline[]>;
   studyPlanId2TotalClassroomWeeksInSemester = new Map<string, number>();
@@ -78,6 +79,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
     this.timetable = this.localStorageService.getTimetable();
     this.timetableTitle = this.printerService.printTimetableLabelName(this.timetable);
 
+    this.fillStudyPlanId2StudyPlan(this.timetable.groupsToStudyPlans);
     this.fillStudyPlanToGroupRelations(this.timetable.groupsToStudyPlans);
     this.fillStudyPlanToDisciplineRelations(this.timetable);
     this.fillCommonDisciplines(this.timetable);
@@ -91,6 +93,8 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
     });
 
     this.subgroupToGroupMap = this.lessonUtils.getSubgroupToGroupMap(this.timetable.groupsToStudyPlans.map(g2Sp => g2Sp.group));
+
+    console.log(this.studyPlanId2GroupsOrSubgroups);
 
   }
 
@@ -206,19 +210,19 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   }
 
   private fillStudyPlanToGroupRelations(groupsToStudyPlans: GroupToStudyPlan[]): void {
-    this.studyPlanToGroupsOrSubgroups = new Map<StudyPlan, any>();
+    this.studyPlanId2GroupsOrSubgroups = new Map<string, any>();
     for (const g2Sp of groupsToStudyPlans) {
-      if (!this.studyPlanToGroupsOrSubgroups.has(g2Sp.studyPlan)) {
+      if (!this.studyPlanId2GroupsOrSubgroups.has(g2Sp.studyPlan.id)) {
         const groupList = [];
-        if (g2Sp.group.subgroups) {
+        if (g2Sp.group.subgroups && g2Sp.group.subgroups.length > 0) {
           g2Sp.group.subgroups.forEach(sub => groupList.push(sub));
         } else {
           groupList.push(g2Sp.group);
         }
-        this.studyPlanToGroupsOrSubgroups.set(g2Sp.studyPlan, groupList);
+        this.studyPlanId2GroupsOrSubgroups.set(g2Sp.studyPlan.id, groupList);
       } else {
-        const existedGroupList = this.studyPlanToGroupsOrSubgroups.get(g2Sp.studyPlan);
-        if (g2Sp.group.subgroups) {
+        const existedGroupList = this.studyPlanId2GroupsOrSubgroups.get(g2Sp.studyPlan.id);
+        if (g2Sp.group.subgroups && g2Sp.group.subgroups.length > 0) {
           g2Sp.group.subgroups.forEach(sub => existedGroupList.push(sub));
         } else {
           existedGroupList.push(g2Sp.group);
@@ -300,7 +304,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
 
   printerParentGroupNumberIfSubgroup(id): string {
     if (this.subgroupToGroupMap.has(id)) {
-      return this.subgroupToGroupMap.get(id);
+      return this.subgroupToGroupMap.get(id) + '-';
     }
     return '';
   }
@@ -374,5 +378,14 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
         map.set(discipline.name, discipline.id);
       }
     }
+  }
+
+  private fillStudyPlanId2StudyPlan(groupsToStudyPlans: GroupToStudyPlan[]): void {
+    const studypPlans = groupsToStudyPlans.map(g2Sp => g2Sp.studyPlan);
+    studypPlans.forEach(sp => {
+      if (!this.studyPlanIdToStudyPlan.has(sp.id)) {
+        this.studyPlanIdToStudyPlan.set(sp.id, sp);
+      }
+    });
   }
 }
