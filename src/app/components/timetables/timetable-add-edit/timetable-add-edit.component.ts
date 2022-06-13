@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Injectable, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {CalendarEvent} from 'angular-calendar';
+import {CalendarDateFormatter, CalendarEvent} from 'angular-calendar';
 
 import {fromEvent, Subject, Subscription} from 'rxjs';
 
@@ -24,7 +24,7 @@ import {Discipline} from '../../../model/discipline/discipline';
 import {DisciplineHoursUnitsPerSemester} from '../../../model/study-plan/structure/discipline-hours-units-per-semester';
 import {Semester} from '../../../model/study-plan/schedule/semester';
 import {Constants} from '../../../constants';
-
+import {CustomerDateFormatterService} from '../../../services/customer-date-formatter.service';
 
 export interface UiDiscipline {
   name: string;
@@ -41,6 +41,12 @@ interface SimpleDiscipline {
   selector: 'app-timetable-add-edit',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './timetable-add-edit.component.html',
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomerDateFormatterService,
+    },
+  ],
   styleUrls: ['./timetable-add-edit.component.css']
 })
 export class TimetableAddEditComponent implements OnInit, OnDestroy {
@@ -54,6 +60,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   timetable: Timetable;
   timetableTitle: string;
   commonDisciplinesForLesson = [];
+  locale: string;
 
   buildings: Building[];
   teachers: Teacher[];
@@ -78,6 +85,8 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.timetable = this.localStorageService.getTimetable();
     this.timetableTitle = this.printerService.printTimetableLabelName(this.timetable);
+
+    // this.locale = this.translatePipe.transform('text.schedule.locale.ru', 'ru');
 
     this.fillStudyPlanId2StudyPlan(this.timetable.groupsToStudyPlans);
     this.fillStudyPlanToGroupRelations(this.timetable.groupsToStudyPlans);
