@@ -83,7 +83,7 @@ export class Constants {
       secondary: 'black',
     },
     practical: {
-      primary: 'rgba(199, 0, 0, 0.5)',
+      primary: 'rgba(210, 0, 0, 0.6)',
       secondary: 'black',
     },
     laboratory: {

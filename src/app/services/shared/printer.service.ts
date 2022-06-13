@@ -180,7 +180,7 @@ export class PrinterService {
     } else if (StudentType.UNDERGRADUATE === timetable.studentType) {
       studentType = 'магистрантов';
     }
-    return `Расписания занятий ${studentType} ${courseNumber} курса ${educationType} формы обучения на ${semesterPart} семестр ${studyYear} учебного года`;
+    return `Расписание занятий ${studentType} ${courseNumber} курса ${educationType} формы обучения на ${semesterPart} семестр ${studyYear} учебного года`;
 
   }
 }
