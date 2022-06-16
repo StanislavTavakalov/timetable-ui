@@ -148,3 +148,4 @@ import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/
 export class DialogsModule {
 
 }
+

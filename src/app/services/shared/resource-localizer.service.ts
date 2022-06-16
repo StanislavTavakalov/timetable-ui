@@ -172,7 +172,7 @@ export class ResourceLocalizerService {
       case DisciplineType.EXTRA:
         return 'Дополнительная';
       case DisciplineType.BASIC:
-        return 'Базовая (УВО)';
+        return 'УВО';
       case DisciplineType.STANDARD:
         return 'Типовая';
       case DisciplineType.FACULTATIVE:

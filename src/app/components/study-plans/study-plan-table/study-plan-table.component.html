@@ -12,7 +12,7 @@
       <th mat-header-cell *matHeaderCellDef> Название</th>
       <td mat-cell *matCellDef="let studyPlan">
         <div (click)="goToPlan(studyPlan)" style="cursor: pointer">
-          {{printerService.printStudyPlanName(studyPlan)}}
+          {{this.isStandard ? printerService.printStandardPlanName(studyPlan) : printerService.printStudyPlanName(studyPlan)}}
         </div>
       </td>
     </ng-container>
@@ -41,15 +41,14 @@
       </th>
 
 
-
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let studyPlan">
         <button mat-icon-button class="material-icons"
                 matTooltip="{{openIconTooltip}}" (click)="goToPlan(studyPlan)">
-          <mat-icon> open_in_new </mat-icon>
+          <mat-icon> open_in_new</mat-icon>
         </button>
         <button mat-icon-button class="material-icons"
                 matTooltip="{{submitIconTooltip}}" (click)="submitPlan(studyPlan)" *ngIf="isSubmitAvailable(studyPlan)">
-          <mat-icon> check_circle_outline </mat-icon>
+          <mat-icon> check_circle_outline</mat-icon>
         </button>
         <button mat-icon-button (click)="editStudyPlan(studyPlan)"
                 matTooltip="{{editIconTooltip}}">

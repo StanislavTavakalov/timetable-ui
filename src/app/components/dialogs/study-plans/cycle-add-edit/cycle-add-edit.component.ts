@@ -52,8 +52,8 @@ export class CycleAddEditComponent implements OnInit {
       name: [cycle.name],
       cycleType: [cycle.cycleType, [Validators.required]],
       totalHours: [cycle.totalHours, [Validators.required, Validators.min(1)]],
-      classroomHours: [cycle.classroomHours, [Validators.required, Validators.min(1)]],
-      creditUnits: [cycle.creditUnits, [Validators.required, Validators.min(0.1)]]
+      classroomHours: [cycle.classroomHours],
+      creditUnits: [cycle.creditUnits]
     }, {validators: checkTotalAndClassroomHours('totalHours', 'classroomHours')});
   }
 
