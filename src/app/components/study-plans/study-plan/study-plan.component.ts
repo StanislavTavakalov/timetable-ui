@@ -17,8 +17,8 @@ import {HeaderType} from '../../../model/header-type';
 import {Activity} from '../../../model/study-plan/schedule/activity';
 import {Load} from '../../../model/study-plan/structure/load';
 import {SemesterLoad} from '../../../model/study-plan/structure/semester-load';
-import {LoadService} from '../../../services/load.service';
-import {SemesterLoadService} from '../../../services/semester-load.service';
+import {LoadService} from '../../../services/additional/load.service';
+import {SemesterLoadService} from '../../../services/additional/semester-load.service';
 import {PrinterService} from '../../../services/shared/printer.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Semester} from '../../../model/study-plan/schedule/semester';
@@ -225,7 +225,6 @@ export class StudyPlanComponent implements OnInit, OnDestroy {
 
   sendToRegisterStudyPlan(): void {
     this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(this.cyclesDataSource.data);
-    if (this.studyPlanUtilService.isPlanValid(this.studyPlan)) {
       this.studyPlanService.sendToRegisterStudyPlan(this.studyPlan).subscribe(result => {
         this.notifierService.notify('success', 'Учебный план был подан на регистрацию');
         this.studyPlan.status = StudyPlanStatus.TO_REGISTER;
@@ -233,9 +232,6 @@ export class StudyPlanComponent implements OnInit, OnDestroy {
       }, e => {
         this.notifierService.notify('error', e);
       });
-    } else {
-      this.notifierService.notify('error', 'Учебный план невалидный. Перепроверьте часы и структуру.');
-    }
   }
 
   registerStudyPlan(): void {

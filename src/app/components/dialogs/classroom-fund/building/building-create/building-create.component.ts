@@ -2,8 +2,9 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {BuildingService} from '../../../../../services/dispatcher/building.service';
+
 import {Building} from '../../../../../model/dispatcher/building';
+import {BuildingService} from '../../../../../services/classroom-fund/building.service';
 
 @Component({
   selector: 'app-building-create',

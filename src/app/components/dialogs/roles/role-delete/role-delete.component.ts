@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {RoleService} from '../../../../services/role.service';
+import {RoleService} from '../../../../services/auth/role.service';
 
 @Component({
   selector: 'app-role-delete',

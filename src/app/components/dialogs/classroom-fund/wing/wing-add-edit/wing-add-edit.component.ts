@@ -2,8 +2,9 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
-import {WingService} from '../../../../../services/dispatcher/wing.service';
+
 import {Wing} from '../../../../../model/dispatcher/wing';
+import {WingService} from '../../../../../services/classroom-fund/wing.service';
 
 @Component({
   selector: 'app-wing-add-edit',

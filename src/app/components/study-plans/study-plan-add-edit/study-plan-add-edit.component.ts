@@ -26,8 +26,8 @@ import {ComponentDisciplineAddEditComponent} from '../../dialogs/study-plans/com
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Semester} from '../../../model/study-plan/schedule/semester';
 import {ScheduleActivity} from '../../../model/study-plan/schedule/schedule-activity';
-import {LoadService} from '../../../services/load.service';
-import {SemesterLoadService} from '../../../services/semester-load.service';
+import {LoadService} from '../../../services/additional/load.service';
+import {SemesterLoadService} from '../../../services/additional/semester-load.service';
 import {SemesterLoad} from '../../../model/study-plan/structure/semester-load';
 import {Load} from '../../../model/study-plan/structure/load';
 import {DisciplineType} from '../../../model/discipline/discipline-type';

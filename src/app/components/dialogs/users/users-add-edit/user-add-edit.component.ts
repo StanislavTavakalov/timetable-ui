@@ -1,11 +1,11 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {UserService} from '../../../../services/user.service';
+import {UserService} from '../../../../services/auth/user.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {User} from '../../../../model/users/user';
 import {Subscription} from 'rxjs';
 import {Role} from '../../../../model/users/role';
-import {AuthenticationService} from '../../../../services/authentication.service';
+import {AuthenticationService} from '../../../../services/auth/authentication.service';
 import {Department} from '../../../../model/department/department';
 import {Deanery} from '../../../../model/deanery/deanery';
 import {RoleCategory} from '../../../../model/users/role-category';

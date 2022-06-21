@@ -4,20 +4,20 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from './material.module';
-import {HeaderComponent} from './components/header/header.component';
-import {FooterComponent} from './components/footer/footer.component';
+import {HeaderComponent} from './components/ui/header/header.component';
+import {FooterComponent} from './components/ui/footer/footer.component';
 import {DialogsModule} from './components/dialogs/dialogs.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotifierModule} from 'angular-notifier';
 import {customNotifierOptions} from './notifier-options';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
-import {UsersComponent} from './components/users/users.component';
-import {UsersDatatableComponent} from './components/users/users-datatable/users-datatable.component';
-import {UserSidenavComponent} from './components/user-sidenav/user-sidenav.component';
+import {UsersComponent} from './components/auth/users/users.component';
+import {UsersDatatableComponent} from './components/auth/users/users-datatable/users-datatable.component';
+import {UserSidenavComponent} from './components/ui/user-sidenav/user-sidenav.component';
 import {MainPageComponent} from './components/main-page/main-page.component';
-import {RolesComponent} from './components/roles/roles.component';
-import {RolesDatatableComponent} from './components/roles/roles-datatable/roles-datatable.component';
+import {RolesComponent} from './components/auth/roles/roles.component';
+import {RolesDatatableComponent} from './components/auth/roles/roles-datatable/roles-datatable.component';
 import {DeaneriesComponent} from './components/deaneries/deaneries.component';
 import {DepartmentsComponent} from './components/departments/departments.component';
 import {DepartmentsTableComponent} from './components/departments/departments-table/departments-table.component';
@@ -37,14 +37,14 @@ import {GroupsComponent} from './components/groups/groups.component';
 import {GroupsTableComponent} from './components/groups/groups-table/groups-table.component';
 import {SpecialitiesComponent} from './components/specialities/specialities.component';
 import {SpecialitiesTableComponent} from './components/specialities/specialities-table/specialities-table.component';
-import {WorkTariffComponent} from './components/work-tariff/work-tariff.component';
-import {AcademicDegreeComponent} from './components/academic-degree/academic-degree.component';
-import {AcademicTitleComponent} from './components/academic-title/academic-title.component';
-import {TeacherPositionComponent} from './components/teacher-position/teacher-position.component';
-import {TeacherPositionDatatableComponent} from './components/teacher-position/teacher-position-datatable/teacher-position-datatable.component';
-import {WorkTariffDatatableComponent} from './components/work-tariff/work-tariff-datatable/work-tariff-datatable.component';
-import {AcademicTitleDatatableComponent} from './components/academic-title/academic-title-datatable/academic-title-datatable.component';
-import {AcademicDegreeDatatableComponent} from './components/academic-degree/academic-degree-datatable/academic-degree-datatable.component';
+import {WorkTariffComponent} from './components/additional/work-tariff/work-tariff.component';
+import {AcademicDegreeComponent} from './components/additional/academic-degree/academic-degree.component';
+import {AcademicTitleComponent} from './components/additional/academic-title/academic-title.component';
+import {TeacherPositionComponent} from './components/additional/teacher-position/teacher-position.component';
+import {TeacherPositionDatatableComponent} from './components/additional/teacher-position/teacher-position-datatable/teacher-position-datatable.component';
+import {WorkTariffDatatableComponent} from './components/additional/work-tariff/work-tariff-datatable/work-tariff-datatable.component';
+import {AcademicTitleDatatableComponent} from './components/additional/academic-title/academic-title-datatable/academic-title-datatable.component';
+import {AcademicDegreeDatatableComponent} from './components/additional/academic-degree/academic-degree-datatable/academic-degree-datatable.component';
 import {FlowsComponent} from './components/flows/flows.component';
 import {FlowsTableComponent} from './components/flows/flows-table/flows-table.component';
 import {TeachersComponent} from './components/teachers/teachers.component';
@@ -52,16 +52,16 @@ import {TeachersTableComponent} from './components/teachers/teachers-table/teach
 import {GroupsAndFlowsComponent} from './components/groups-and-flows/groups-and-flows.component';
 import {DisciplinesComponent} from './components/disciplines/disciplines.component';
 import {DisciplinesTableComponent} from './components/disciplines/disciplines-table/disciplines-table.component';
-import { UniversitiesComponent } from './components/universities/universities.component';
-import { UniversitiesDatatableComponent } from './components/universities/universities-datatable/universities-datatable.component';
-import { UniversityAddEditComponent } from './components/dialogs/universities/university-add-edit/university-add-edit.component';
-import { UniversityDeleteComponent } from './components/dialogs/universities/university-delete/university-delete.component';
-import { LoadsComponent } from './components/loads/loads.component';
-import { LoadsDatatableComponent } from './components/loads/loads-datatable/loads-datatable.component';
-import { SemesterLoadsComponent } from './components/semester-loads/semester-loads.component';
-import { SemesterLoadsDatatableComponent } from './components/semester-loads/semester-loads-datatable/semester-loads-datatable.component';
-import { DisciplineGroupsComponent } from './components/discipline-groups/discipline-groups.component';
-import { DisciplineGroupsDatatableComponent } from './components/discipline-groups/discipline-groups-datatable/discipline-groups-datatable.component';
+import { UniversitiesComponent } from './components/additional/universities/universities.component';
+import { UniversitiesDatatableComponent } from './components/additional/universities/universities-datatable/universities-datatable.component';
+import { UniversityAddEditComponent } from './components/dialogs/additional-dialogs/universities/university-add-edit/university-add-edit.component';
+import { UniversityDeleteComponent } from './components/dialogs/additional-dialogs/universities/university-delete/university-delete.component';
+import { LoadsComponent } from './components/additional/loads/loads.component';
+import { LoadsDatatableComponent } from './components/additional/loads/loads-datatable/loads-datatable.component';
+import { SemesterLoadsComponent } from './components/additional/semester-loads/semester-loads.component';
+import { SemesterLoadsDatatableComponent } from './components/additional/semester-loads/semester-loads-datatable/semester-loads-datatable.component';
+import { DisciplineGroupsComponent } from './components/additional/discipline-groups/discipline-groups.component';
+import { DisciplineGroupsDatatableComponent } from './components/additional/discipline-groups/discipline-groups-datatable/discipline-groups-datatable.component';
 import { StudyPlansComponent } from './components/study-plans/study-plans.component';
 import { StudyPlanTableComponent } from './components/study-plans/study-plan-table/study-plan-table.component';
 import { StandardStudyPlansComponent } from './components/study-plans/standard-study-plans/standard-study-plans.component';
@@ -78,6 +78,8 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TimetableAddEditComponent } from './components/timetables/timetable-add-edit/timetable-add-edit.component';
 import {DatePipe} from '@angular/common';
+import { ActivitiesComponent } from './components/additional/activities/activities.component';
+import { ActivityTableComponent } from './components/additional/activities/activity-table/activity-table.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -140,6 +142,8 @@ import {DatePipe} from '@angular/common';
     TimetablesComponent,
     TimetableTableComponent,
     TimetableAddEditComponent,
+    ActivitiesComponent,
+    ActivityTableComponent,
   ],
   imports: [
     BrowserModule,

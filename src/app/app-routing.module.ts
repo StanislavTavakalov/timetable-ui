@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {MainPageComponent} from './components/main-page/main-page.component';
-import {UsersComponent} from './components/users/users.component';
-import {RolesComponent} from './components/roles/roles.component';
+import {UsersComponent} from './components/auth/users/users.component';
+import {RolesComponent} from './components/auth/roles/roles.component';
 import {DepartmentsComponent} from './components/departments/departments.component';
 import {DeaneriesComponent} from './components/deaneries/deaneries.component';
 import {ClassroomFundComponent} from './components/classroom-fund/classroom-fund.component';
@@ -10,19 +10,19 @@ import {BuildingComponent} from './components/classroom-fund/building/building.c
 import {ClassroomTypeColorPaletteComponent} from './components/classroom-fund/classroom-type-color-palette/classroom-type-color-palette.component';
 import {ClassroomsComponent} from './components/classroom-fund/classrooms/classrooms.component';
 import {SpecialitiesComponent} from './components/specialities/specialities.component';
-import {TeacherPositionComponent} from './components/teacher-position/teacher-position.component';
-import {AcademicDegreeComponent} from './components/academic-degree/academic-degree.component';
-import {AcademicTitleComponent} from './components/academic-title/academic-title.component';
-import {WorkTariffComponent} from './components/work-tariff/work-tariff.component';
+import {TeacherPositionComponent} from './components/additional/teacher-position/teacher-position.component';
+import {AcademicDegreeComponent} from './components/additional/academic-degree/academic-degree.component';
+import {AcademicTitleComponent} from './components/additional/academic-title/academic-title.component';
+import {WorkTariffComponent} from './components/additional/work-tariff/work-tariff.component';
 import {GroupsComponent} from './components/groups/groups.component';
 import {FlowsComponent} from './components/flows/flows.component';
 import {TeachersComponent} from './components/teachers/teachers.component';
 import {GroupsAndFlowsComponent} from './components/groups-and-flows/groups-and-flows.component';
 import {DisciplinesComponent} from './components/disciplines/disciplines.component';
-import {UniversitiesComponent} from './components/universities/universities.component';
-import {LoadsComponent} from './components/loads/loads.component';
-import {SemesterLoadsComponent} from './components/semester-loads/semester-loads.component';
-import {DisciplineGroupsComponent} from './components/discipline-groups/discipline-groups.component';
+import {UniversitiesComponent} from './components/additional/universities/universities.component';
+import {LoadsComponent} from './components/additional/loads/loads.component';
+import {SemesterLoadsComponent} from './components/additional/semester-loads/semester-loads.component';
+import {DisciplineGroupsComponent} from './components/additional/discipline-groups/discipline-groups.component';
 import {StudyPlansComponent} from './components/study-plans/study-plans.component';
 import {StandardStudyPlansComponent} from './components/study-plans/standard-study-plans/standard-study-plans.component';
 import {StandardPlanAddEditComponent} from './components/study-plans/standard-plan-add-edit/standard-plan-add-edit.component';
@@ -33,7 +33,7 @@ import {TimetablesComponent} from './components/timetables/timetables.component'
 import {TimetableAddEditComponent} from './components/timetables/timetable-add-edit/timetable-add-edit.component';
 
 const routes: Routes = [
-  {path: 'main-page', component: TimetablesComponent},
+  {path: 'main-page', component: MainPageComponent},
   {path: 'users', component: UsersComponent},
   {path: 'roles', component: RolesComponent},
   {path: 'positions', component: TeacherPositionComponent},

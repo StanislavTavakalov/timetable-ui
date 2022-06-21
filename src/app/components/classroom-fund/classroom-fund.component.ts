@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ClassroomService} from '../../services/dispatcher/classroom.service';
-import {BuildingService} from '../../services/dispatcher/building.service';
+
 import {Building} from '../../model/dispatcher/building';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
 import {BuildingCreateComponent} from '../dialogs/classroom-fund/building/building-create/building-create.component';
 import {OperationResult} from '../../model/operation-result';
 import {MatDialog} from '@angular/material/dialog';
+import {ClassroomService} from '../../services/classroom-fund/classroom.service';
+import {BuildingService} from '../../services/classroom-fund/building.service';
 
 @Component({
   selector: 'app-classroom-fund',

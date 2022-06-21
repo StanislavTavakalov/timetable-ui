@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BuildingService} from '../../../services/dispatcher/building.service';
+
 import {NotifierService} from 'angular-notifier';
 import {Building} from '../../../model/dispatcher/building';
 import {OperationResult} from '../../../model/operation-result';
@@ -13,6 +13,7 @@ import {Floor} from '../../../model/dispatcher/floor';
 import {WingAddEditComponent} from '../../dialogs/classroom-fund/wing/wing-add-edit/wing-add-edit.component';
 import {Wing} from '../../../model/dispatcher/wing';
 import {Classroom} from '../../../model/dispatcher/classroom';
+import {BuildingService} from '../../../services/classroom-fund/building.service';
 
 
 @Component({

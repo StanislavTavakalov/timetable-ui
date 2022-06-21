@@ -4,7 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
 import {Role} from '../../../../model/users/role';
 import {RoleCategory} from '../../../../model/users/role-category';
-import {RoleService} from '../../../../services/role.service';
+import {RoleService} from '../../../../services/auth/role.service';
 import {Permission} from '../../../../model/users/permission';
 import {map, startWith} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';

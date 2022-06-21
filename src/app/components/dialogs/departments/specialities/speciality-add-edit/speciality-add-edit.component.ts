@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AuthenticationService} from '../../../../../services/authentication.service';
+import {AuthenticationService} from '../../../../../services/auth/authentication.service';
 import {Subscription} from 'rxjs';
 import {Department} from '../../../../../model/department/department';
 import {Speciality} from '../../../../../model/department/speciality';

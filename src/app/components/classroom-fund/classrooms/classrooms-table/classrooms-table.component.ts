@@ -7,10 +7,11 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Classroom} from '../../../../model/dispatcher/classroom';
 import {Subscription} from 'rxjs';
 import {WingAddEditComponent} from '../../../dialogs/classroom-fund/wing/wing-add-edit/wing-add-edit.component';
-import {WingService} from '../../../../services/dispatcher/wing.service';
+
 import {ResourceLocalizerService} from '../../../../services/shared/resource-localizer.service';
 import {LocalStorageService} from '../../../../services/local-storage.service';
 import {Constants} from '../../../../constants';
+import {WingService} from '../../../../services/classroom-fund/wing.service';
 
 @Component({
   selector: 'app-classrooms-table',

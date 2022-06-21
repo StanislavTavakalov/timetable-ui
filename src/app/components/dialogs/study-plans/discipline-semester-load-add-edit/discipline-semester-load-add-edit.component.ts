@@ -4,7 +4,7 @@ import {NotifierService} from 'angular-notifier';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UtilityService} from '../../../../services/shared/utility.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SemesterLoadService} from '../../../../services/semester-load.service';
+import {SemesterLoadService} from '../../../../services/additional/semester-load.service';
 
 import {SemesterLoad} from '../../../../model/study-plan/structure/semester-load';
 import {DisciplineSemesterLoad} from '../../../../model/study-plan/structure/discipline-semester-load';

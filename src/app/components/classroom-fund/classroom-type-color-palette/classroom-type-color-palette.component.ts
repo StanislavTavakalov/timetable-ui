@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NotifierService} from 'angular-notifier';
 import {Subscription} from 'rxjs';
-import {ClassroomService} from '../../../services/dispatcher/classroom.service';
+import {ClassroomService} from '../../../services/classroom-fund/classroom.service';
 import {ClassroomType} from '../../../model/dispatcher/classroom';
 
 @Component({

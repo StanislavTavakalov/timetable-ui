@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {AuthenticationService} from '../../../services/auth/authentication.service';
 import {NotifierService} from 'angular-notifier';
 import {LocalStorageService} from '../../../services/local-storage.service';
 

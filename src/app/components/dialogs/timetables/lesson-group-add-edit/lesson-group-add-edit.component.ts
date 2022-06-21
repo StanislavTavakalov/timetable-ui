@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {SemesterLoadService} from '../../../../services/semester-load.service';
+import {SemesterLoadService} from '../../../../services/additional/semester-load.service';
 import {NotifierService} from 'angular-notifier';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UtilityService} from '../../../../services/shared/utility.service';

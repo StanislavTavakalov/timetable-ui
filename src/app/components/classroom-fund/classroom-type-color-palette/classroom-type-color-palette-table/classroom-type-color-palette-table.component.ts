@@ -8,8 +8,8 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 import {Subscription} from 'rxjs';
 
-import {ClassroomService} from '../../../../services/dispatcher/classroom.service';
 import {ClassroomType} from '../../../../model/dispatcher/classroom';
+import {ClassroomService} from '../../../../services/classroom-fund/classroom.service';
 
 @Component({
   selector: 'app-classroom-type-color-palette-table',

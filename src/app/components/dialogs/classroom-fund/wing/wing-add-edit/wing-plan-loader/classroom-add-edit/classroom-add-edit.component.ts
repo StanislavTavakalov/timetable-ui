@@ -9,7 +9,7 @@ import {
   ClassroomStatus,
   ClassroomType
 } from '../../../../../../../model/dispatcher/classroom';
-import {ClassroomService} from '../../../../../../../services/dispatcher/classroom.service';
+import {ClassroomService} from '../../../../../../../services/classroom-fund/classroom.service';
 import {ResourceLocalizerService} from '../../../../../../../services/shared/resource-localizer.service';
 import {UtilityService} from '../../../../../../../services/shared/utility.service';
 
