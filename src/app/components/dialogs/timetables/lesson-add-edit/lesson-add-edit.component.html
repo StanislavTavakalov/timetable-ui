@@ -6,7 +6,7 @@
 
     <mat-form-field style="margin-top: 15px">
       <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Дисциплина: "
-                  [formControlName]="'discipline'" required>
+                  [formControlName]="'discipline'" (selectionChange)="filterTeachers($event.value)" required>
         <mat-option *ngFor="let discipline of disciplines" [value]="discipline">
           {{discipline.name}}
         </mat-option>
@@ -46,7 +46,7 @@
     <mat-form-field>
       <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Преподаватель: "
                   [formControlName]="'teacher'" [disabled]="!this.discipline.value" required>
-        <mat-option *ngFor="let teacher of teachers" [value]="teacher">
+        <mat-option *ngFor="let teacher of filteredTeachers" [value]="teacher">
           {{teacher.firstName}} {{teacher.lastName}}
         </mat-option>
       </mat-select>
@@ -62,7 +62,14 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox style="margin-top: 2%" [formControlName]="'onceInTwoWeek'"> Раз в 2 недели</mat-checkbox>
+    <div class="row" style="justify-items: center; align-items: center">
+      <mat-checkbox style="margin-top: 2%; margin-right: 5%" [color]="'primary'" [formControlName]="'onceInTwoWeek'"> Раз в 2 недели</mat-checkbox>
+      <mat-radio-group aria-label="Неделя:" [formControlName]="'weekNum'" [disabled]="!this.onceInTwoWeek.value">
+        <mat-radio-button style="margin-right: 2%" [color]="'primary'" [value]='1'>Первая неделя</mat-radio-button>
+        <mat-radio-button [color]="'primary'" [value]='2'>Вторая неделя</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
 
     <div class="row" style="margin-top: 2%">
       <div style="width: 50%">

@@ -17,6 +17,8 @@ import {Timeline} from '../../../../model/timetable/timeline';
 import {LessonUtilsService} from '../../../../services/lesson-utils.service';
 import {LessonGroupAddEditComponent} from '../lesson-group-add-edit/lesson-group-add-edit.component';
 import {group} from '@angular/animations';
+import {Discipline} from '../../../../model/discipline/discipline';
+import {UiDiscipline} from '../../../timetables/timetable-add-edit/timetable-add-edit.component';
 
 @Component({
   selector: 'app-lesson-add-edit',
@@ -49,6 +51,7 @@ export class LessonAddEditComponent implements OnInit {
   groups: Group[];
   subgroups: Subgroup[];
   teachers: Teacher[];
+  filteredTeachers: Teacher[];
   buildings: Building[];
   classrooms: Classroom[];
   timelines: Timeline[];
@@ -70,6 +73,7 @@ export class LessonAddEditComponent implements OnInit {
 
     this.title = this.data.title;
     this.teachers = this.data.teachers;
+    this.filteredTeachers = this.teachers;
     this.buildings = this.data.buildings;
     this.groups = this.data.groups;
     this.timelines = this.data.timelines;
@@ -95,6 +99,7 @@ export class LessonAddEditComponent implements OnInit {
       lessonType: [lesson.lessonType, [Validators.required]],
       building: [lesson.building, [Validators.required]],
       onceInTwoWeek: [lesson.onceInTwoWeek],
+      weekNum: [lesson.weekNum],
       classroom: [lesson.classroom, [Validators.required]],
       timeline: [lesson.timeline, [Validators.required]],
       discipline: [lesson.discipline, [Validators.required]],
@@ -149,6 +154,10 @@ export class LessonAddEditComponent implements OnInit {
     return this.form.get('timeline') as FormControl;
   }
 
+  get weekNum(): FormControl {
+    return this.form.get('weekNum') as FormControl;
+  }
+
   private setValuesFromForm(lesson: Lesson): void {
     lesson.lessonType = this.lessonType.value;
     lesson.building = this.building.value;
@@ -157,7 +166,11 @@ export class LessonAddEditComponent implements OnInit {
     lesson.discipline = this.discipline.value;
     lesson.teacher = this.teacher.value;
     lesson.timeline = this.timeline.value;
+    if (lesson.onceInTwoWeek) {
+      lesson.weekNum = this.weekNum.value;
+    }
     lesson.day = this.lessonDayNum;
+    lesson.name = this.discipline.value.name;
   }
 
 
@@ -245,5 +258,18 @@ export class LessonAddEditComponent implements OnInit {
 
   onDeleteClick(): any {
     this.dialogRef.close('remove');
+  }
+
+  filterTeachers(discipline: UiDiscipline): void {
+    const filteredTeacher = [];
+    if (!discipline) {
+      return;
+    }
+    for (const teacher of this.teachers) {
+      if (teacher.disciplineGroups.find(dG => dG.id === discipline.disciplineGroup.id)) {
+        filteredTeacher.push(teacher);
+      }
+    }
+    this.filteredTeachers = filteredTeacher;
   }
 }

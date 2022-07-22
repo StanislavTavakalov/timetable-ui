@@ -25,6 +25,11 @@ import {DisciplineHoursUnitsPerSemester} from '../../../model/study-plan/structu
 import {Semester} from '../../../model/study-plan/schedule/semester';
 import {Constants} from '../../../constants';
 import {CustomerDateFormatterService} from '../../../services/customer-date-formatter.service';
+import {Location} from '@angular/common';
+import {MatSliderChange} from '@angular/material/slider';
+import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {Subgroup} from '../../../model/deanery/subgroup';
 
 export interface UiDiscipline {
   name: string;
@@ -35,6 +40,17 @@ export interface UiDiscipline {
 interface SimpleDiscipline {
   id: string;
   name: string;
+}
+
+interface CheckedGroup {
+  group: Group;
+  subgroups: CheckedSubgroup[];
+  checked: boolean;
+}
+
+interface CheckedSubgroup {
+  subgroup: Subgroup;
+  checked: boolean;
 }
 
 @Component({
@@ -52,30 +68,39 @@ interface SimpleDiscipline {
 export class TimetableAddEditComponent implements OnInit, OnDestroy {
 
 
+  currentDayNum = new Date().getDay();
   viewDate = new Date();
   events: CalendarEvent[] = [];
+  filteredEvents: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
   lessonPopupSubscription: Subscription;
   dialogRef;
   timetable: Timetable;
   timetableTitle: string;
-  commonDisciplinesForLesson = [];
+  commonDisciplinesForLesson: UiDiscipline[] = [];
   locale: string;
+  weekToggle = false;
 
   buildings: Building[];
   teachers: Teacher[];
   subgroupToGroupMap: Map<string, string>;
   studyPlanId2GroupsOrSubgroups: Map<string, any>;
+  filteredStudyPlanId2GroupsOrSubgroups: Map<string, any> = new Map<string, any>();
   studyPlanIdToStudyPlan = new Map<string, StudyPlan>();
   disciplineId2DisciplinePerSemester = new Map<string, DisciplineHoursUnitsPerSemester>();
   studyPlanId2Disciplines: Map<string, Discipline[]>;
   studyPlanId2TotalClassroomWeeksInSemester = new Map<string, number>();
   studyPlanId2DisciplineNameId2DisciplineId = new Map<string, Map<string, string>>();
 
+  checkedGroups: CheckedGroup[] = [];
+  groups: Group[] = [];
+
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
               public printerService: PrinterService,
               private lessonUtils: LessonUtilsService,
+              private fb: FormBuilder,
+              private location: Location,
               public studyPlanUtilService: StudyPlanUtilService,
               private timetableService: TimetableService,
               private localStorageService: LocalStorageService,
@@ -86,15 +111,23 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
     this.timetable = this.localStorageService.getTimetable();
     this.timetableTitle = this.printerService.printTimetableLabelName(this.timetable);
 
-    // this.locale = this.translatePipe.transform('text.schedule.locale.ru', 'ru');
 
+    // this.locale = this.translatePipe.transform('text.schedule.locale.ru', 'ru');
     this.fillStudyPlanId2StudyPlan(this.timetable.groupsToStudyPlans);
+
     this.fillStudyPlanToGroupRelations(this.timetable.groupsToStudyPlans);
     this.fillStudyPlanToDisciplineRelations(this.timetable);
     this.fillCommonDisciplines(this.timetable);
     this.fillStudyPlanToTotalWeekCountInSemester(this.timetable);
     this.fillStudyPlanDisciplinesIdToNames(this.timetable);
+    this.fillLessons(this.timetable);
+    this.fillGroupsAndSortSubgroups(this.timetable.groupsToStudyPlans);
+    this.fillFilteredGroup();
 
+    // validate Sunday to update week
+    if (this.viewDate.getDay() === 0) {
+      this.viewDate.setDate(this.viewDate.getDate() + 1);
+    }
 
     this.timetableService.getTimetableAddEditCommonInfo().subscribe(result => {
       this.buildings = result.buildings;
@@ -103,10 +136,17 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
 
     this.subgroupToGroupMap = this.lessonUtils.getSubgroupToGroupMap(this.timetable.groupsToStudyPlans.map(g2Sp => g2Sp.group));
 
-    console.log(this.studyPlanId2GroupsOrSubgroups);
 
   }
 
+  fillFilteredGroup(): void {
+    this.filteredStudyPlanId2GroupsOrSubgroups = new Map<string, any>();
+    for (const key of this.studyPlanId2GroupsOrSubgroups.keys()) {
+      this.filteredStudyPlanId2GroupsOrSubgroups.set(key, this.studyPlanId2GroupsOrSubgroups.get(key));
+    }
+
+
+  }
 
   onSegmentClick($event: { date: Date; sourceEvent: MouseEvent }): void {
 
@@ -150,6 +190,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
         },
         meta: lesson
       });
+      this.filterLessonsByWeek(null);
 
       this.refresh.next();
     });
@@ -193,7 +234,8 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
         $event.event.color = this.lessonUtils.getColorByLessonType(result.lessonType);
       }
 
-
+      console.log(result);
+      this.filterLessons(null);
       this.refresh.next();
     });
   }
@@ -259,7 +301,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
     let isPresent = false;
     if (discipline.disciplineHoursUnitsPerSemesters) {
       for (const dh2s of discipline.disciplineHoursUnitsPerSemesters) {
-        if (dh2s.semester.semesterNum === semester) {
+        if (dh2s.semester.semesterNum === semester && dh2s.classroomHours && dh2s.classroomHours > 0) {
           isPresent = true;
           this.disciplineId2DisciplinePerSemester.set(discipline.id, dh2s);
         }
@@ -396,5 +438,271 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
         this.studyPlanIdToStudyPlan.set(sp.id, sp);
       }
     });
+  }
+
+  save(): void {
+    this.fillTimetable();
+  }
+
+  private fillTimetable(): void {
+    this.timetable.lessons = this.events.map(event => event.meta);
+    console.log(this.timetable);
+    this.timetableService.createTimetable(this.timetable).subscribe(result => {
+      this.notifierService.notify('success', 'Успешно сохранен');
+      this.location.back();
+    }, error => {
+      this.notifierService.notify('error', 'Ошибка при сохранении');
+    });
+  }
+
+  cancel(): void {
+    this.location.back();
+  }
+
+  private fillLessons(timetable: Timetable): void {
+    if (timetable.lessons) {
+      timetable.lessons.forEach(lesson => {
+        const event = this.convertLessonToEvent(lesson);
+        this.events.push(event);
+      });
+    }
+    this.filteredEvents = this.events;
+  }
+
+  private convertLessonToEvent(lesson: Lesson): CalendarEvent<any> {
+    let calculatedDate;
+    let startTime;
+    let endTime;
+    console.log(lesson.day);
+    console.log(this.currentDayNum);
+    if (this.currentDayNum <= lesson.day) {
+      const d = new Date();
+      calculatedDate = d.setDate(d.getDate() - (this.currentDayNum - lesson.day));
+
+      startTime = new Date(JSON.parse(JSON.stringify(calculatedDate)));
+      startTime.setHours(this.lessonUtils.parseHours(lesson.timeline.startTime));
+      startTime.setMinutes(this.lessonUtils.parseMinutes(lesson.timeline.startTime));
+
+      endTime = new Date(JSON.parse(JSON.stringify(calculatedDate)));
+      endTime.setHours(this.lessonUtils.parseHours(lesson.timeline.endTime));
+      endTime.setMinutes(this.lessonUtils.parseMinutes(lesson.timeline.endTime));
+      console.log('Calculated date: ' + d);
+    } else {
+      const d = new Date();
+      calculatedDate = d.setDate(d.getDate() + (lesson.day - this.currentDayNum));
+
+      startTime = new Date(JSON.parse(JSON.stringify(calculatedDate)));
+      startTime.setHours(this.lessonUtils.parseHours(lesson.timeline.startTime));
+      startTime.setMinutes(this.lessonUtils.parseMinutes(lesson.timeline.startTime));
+
+      endTime = new Date(JSON.parse(JSON.stringify(calculatedDate)));
+      endTime.setHours(this.lessonUtils.parseHours(lesson.timeline.endTime));
+      endTime.setMinutes(this.lessonUtils.parseMinutes(lesson.timeline.endTime));
+      console.log('Calculated date: ' + d);
+    }
+    let event: CalendarEvent<any>;
+    lesson.discipline = this.commonDisciplinesForLesson.filter(disc => disc.name === lesson.name)[0];
+    event = {
+      id: lesson.id,
+      title: lesson?.name,
+      start: startTime,
+      end: endTime,
+      meta: lesson,
+      color: this.lessonUtils.getColorByLessonType(lesson.lessonType),
+      resizable: {
+        beforeStart: false,
+        afterEnd: false,
+      }
+    };
+
+    return event;
+  }
+
+  filterLessons(event): void {
+    this.filterLessonsByWeek(event);
+    this.filterLessonsByGroups();
+    this.filterStudyPlans();
+  }
+
+  filterLessonsByWeek($event: MatSlideToggleChange): void {
+    if ($event) {
+      this.filteredEvents = this.events.filter(e => $event.checked ?
+        !e.meta.onceInTwoWeek || e.meta.onceInTwoWeek && e.meta.weekNum === 2 :
+        !e.meta.onceInTwoWeek || e.meta.onceInTwoWeek && e.meta.weekNum === 1);
+    } else {
+      this.filteredEvents = this.events.filter(e => this.weekToggle ?
+        !e.meta.onceInTwoWeek || e.meta.onceInTwoWeek && e.meta.weekNum === 2 :
+        !e.meta.onceInTwoWeek || e.meta.onceInTwoWeek && e.meta.weekNum === 1);
+    }
+  }
+
+  allSubgroupsChecked(group: Group): boolean {
+    const affectedGroup = this.checkedGroups.filter(gr => gr.group.id === group.id)[0];
+    for (const subgroup of affectedGroup.subgroups) {
+      if (!subgroup.checked) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  someSubgroupsChecked(group: Group): boolean {
+    let someCheck = false;
+    let someUncheck = false;
+    const affectedGroup = this.checkedGroups.filter(gr => gr.group.id === group.id)[0];
+    for (const subgroup of affectedGroup.subgroups) {
+      if (subgroup.checked) {
+        someCheck = true;
+      } else {
+        someUncheck = true;
+      }
+      if (someCheck && someUncheck) {
+        break;
+      }
+    }
+    return someCheck && someUncheck;
+  }
+
+  onGroupCheck(group: Group, checked: boolean): void {
+    const affectedGroup = this.checkedGroups.filter(gr => gr.group.id === group.id)[0];
+    affectedGroup.checked = checked;
+    affectedGroup.subgroups.forEach(sub => sub.checked = checked);
+    this.filterLessons(null);
+  }
+
+  onSubgroupCheck(group: Group, subgroup: Subgroup, checked: boolean): void {
+    const affectedGroup = this.checkedGroups
+      .filter(gr => gr.group.id === group.id)[0];
+    const sub = affectedGroup.subgroups.filter(s => s.subgroup.id === subgroup.id)[0];
+    sub.checked = checked;
+    this.filterLessons(null);
+  }
+
+  private fillGroupsAndSortSubgroups(groupsToStudyPlans: GroupToStudyPlan[]): void {
+    for (const g2Sp of groupsToStudyPlans) {
+      const gr = g2Sp.group;
+      gr.subgroups.sort((g1, g2) => {
+        if (parseInt(g1.number, 10) > parseInt(g2.number, 10)) {
+          return 1;
+        } else if (parseInt(g1.number, 10) < parseInt(g2.number, 10)) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      this.groups.push(gr);
+    }
+
+    this.fillCheckedGroups();
+  }
+
+  private fillCheckedGroups(): void {
+    for (const g of this.groups) {
+      const checkedSubgroups: CheckedSubgroup[] = [];
+      g.subgroups.forEach(sub => checkedSubgroups.push({subgroup: sub, checked: false}));
+      this.checkedGroups.push({group: g, subgroups: checkedSubgroups, checked: false});
+    }
+  }
+
+  isParentGroupChecked(group: Group, subgroup: Subgroup): boolean {
+    const affectedGroup = this.checkedGroups
+      .filter(gr => gr.group.id === group.id)[0];
+    return affectedGroup.checked || affectedGroup.subgroups.filter(s => s.subgroup.id === subgroup.id)[0].checked;
+  }
+
+  private filterLessonsByGroups(): void {
+    if (this.isIgnoreFiltering()) {
+      return;
+    }
+    this.filteredEvents = this.filteredEvents.filter(ev => {
+      let isMatch = false;
+
+      for (const g of ev.meta.groups) {
+        isMatch = this.checkedGroups.filter(checkedGroup => checkedGroup.group.id === g.id && checkedGroup.checked).length > 0;
+        if (isMatch) {
+          return true;
+        }
+      }
+      if (!isMatch) {
+        for (const sub of ev.meta.subgroups) {
+          for (const g of this.checkedGroups) {
+            isMatch = g.subgroups.filter(su => su.subgroup.id === sub.id && su.checked).length > 0;
+            if (isMatch) {
+              return true;
+            }
+          }
+        }
+      }
+      if (!isMatch) {
+        for (const group of ev.meta.groups) {
+          for (const g of this.checkedGroups) {
+            if (g.group.id === group.id) {
+              isMatch = g.subgroups.filter(sub => sub.checked).length > 0;
+              if (isMatch) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return isMatch;
+    });
+
+  }
+
+  private isIgnoreFiltering(): boolean {
+    for (const g of this.checkedGroups) {
+      for (const sub of g.subgroups) {
+        if (sub.checked) {
+          return false;
+        }
+      }
+      if (g.checked) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private filterStudyPlans(): void {
+    this.fillFilteredGroup();
+    if (this.isIgnoreFiltering()) {
+      return;
+    }
+    this.copyStudyPlanId2GroupsOrSubgroups(this.studyPlanId2GroupsOrSubgroups, this.filteredStudyPlanId2GroupsOrSubgroups);
+    const affectedGroupsOrSubgroups = [];
+
+    for (const group of this.checkedGroups) {
+      for (const subgroup of group.subgroups) {
+        if (subgroup.checked) {
+          affectedGroupsOrSubgroups.push(subgroup.subgroup);
+        }
+      }
+      if (group.checked) {
+        affectedGroupsOrSubgroups.push(group.group);
+      }
+    }
+
+    for (const key of this.studyPlanId2GroupsOrSubgroups.keys()) {
+      this.filteredStudyPlanId2GroupsOrSubgroups.set(key, this.studyPlanId2GroupsOrSubgroups.get(key)
+        .filter(v => affectedGroupsOrSubgroups.includes(v)));
+    }
+
+    for (const key of this.studyPlanId2GroupsOrSubgroups.keys()) {
+      if (this.filteredStudyPlanId2GroupsOrSubgroups.get(key).length === 0) {
+        this.filteredStudyPlanId2GroupsOrSubgroups.delete(key);
+      }
+    }
+
+
+  }
+
+  private copyStudyPlanId2GroupsOrSubgroups(sourceStudyPlanId2GroupsOrSubgroups: Map<string, any>,
+                                            targetStudyPlanId2GroupsOrSubgroups: Map<string, any>): void {
+    for (const key of sourceStudyPlanId2GroupsOrSubgroups.keys()) {
+      targetStudyPlanId2GroupsOrSubgroups.set(JSON.parse(JSON.stringify(key)),
+        JSON.parse(JSON.stringify(this.studyPlanId2GroupsOrSubgroups.get(key))));
+    }
+
   }
 }

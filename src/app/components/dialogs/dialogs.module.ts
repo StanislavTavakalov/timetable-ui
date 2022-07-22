@@ -54,6 +54,7 @@ import { RegisterNumberPopupComponent } from './study-plans/register-number-popu
 import { TimetableCreateDialogComponent } from './timetables/timetable-create-dialog/timetable-create-dialog.component';
 import { LessonAddEditComponent } from './timetables/lesson-add-edit/lesson-add-edit.component';
 import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/lesson-group-add-edit.component';
+import { TimetableDeleteDialogComponent } from './timetables/timetable-delete-dialog/timetable-delete-dialog.component';
 
 @NgModule({
   imports: [
@@ -114,7 +115,8 @@ import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/
     RegisterNumberPopupComponent,
     TimetableCreateDialogComponent,
     LessonAddEditComponent,
-    LessonGroupAddEditComponent
+    LessonGroupAddEditComponent,
+    TimetableDeleteDialogComponent
   ],
   exports: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -128,7 +130,7 @@ import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
     StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
     SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent, TimetableCreateDialogComponent,
-    LessonAddEditComponent, LessonGroupAddEditComponent
+    LessonAddEditComponent, LessonGroupAddEditComponent, TimetableDeleteDialogComponent
   ],
   entryComponents: [SinginComponent, UsersDeleteComponent, UserAddEditComponent, RoleDeleteComponent,
     RoleAddEditComponent, DeaneryAddEditComponent, DeaneryDeleteComponent,
@@ -142,7 +144,7 @@ import { LessonGroupAddEditComponent } from './timetables/lesson-group-add-edit/
     StudyPlanDeleteComponent, CycleAddEditComponent, ComponentDisciplineAddEditComponent, StudyPlanAddComponent,
     StudyDisciplineAddEditComponent, DisciplineLoadAddEditComponent, DisciplineSemesterLoadAddEditComponent,
     SpecificDisciplineAddEditComponent, RegisterNumberPopupComponent, TimetableCreateDialogComponent,
-    LessonAddEditComponent, LessonGroupAddEditComponent
+    LessonAddEditComponent, LessonGroupAddEditComponent, TimetableDeleteDialogComponent
   ]
 })
 export class DialogsModule {

@@ -7,10 +7,12 @@ import {Building} from '../dispatcher/building';
 import {Classroom} from '../dispatcher/classroom';
 import {Teacher} from '../department/teacher';
 import {LessonType} from './lesson-type';
+import {UiDiscipline} from '../../components/timetables/timetable-add-edit/timetable-add-edit.component';
 
 export class Lesson {
   id: string;
-  discipline: Discipline;
+  discipline: UiDiscipline;
+  name: string;
   groups: Group[];
   subgroups: Subgroup[];
   timeline: Timeline;
@@ -20,5 +22,6 @@ export class Lesson {
   teacher: Teacher;
   lessonType: LessonType;
   onceInTwoWeek: boolean;
+  weekNum: number;
   day: number;
 }

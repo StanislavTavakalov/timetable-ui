@@ -17,6 +17,7 @@ import {StudentType} from '../../../../model/timetable/student-type';
 import {PrinterService} from '../../../../services/shared/printer.service';
 import {MatOptionSelectionChange} from '@angular/material/core';
 import {GroupToStudyPlan} from '../../../../model/timetable/group-to-study-plan';
+import {StudyPlan} from '../../../../model/study-plan/study-plan';
 
 @Component({
   selector: 'app-timetable-create-dialog',
@@ -156,4 +157,13 @@ export class TimetableCreateDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  getFilteredStudyPlanListByGroup(studyPlans: StudyPlan[], group: Group): StudyPlan[] {
+    const filteredStudyPlans = [];
+    for (const st of studyPlans) {
+      if (st.speciality.id === group.speciality.id && st.registerNumber) {
+        filteredStudyPlans.push(st);
+      }
+    }
+    return filteredStudyPlans;
+  }
 }

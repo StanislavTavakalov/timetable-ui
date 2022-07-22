@@ -17,5 +17,7 @@ export class Timetable {
   shift: Shift;
   year: number;
   lessons: Lesson[];
+  createdWhen: number;
+  updatedWhen: number;
 }
 

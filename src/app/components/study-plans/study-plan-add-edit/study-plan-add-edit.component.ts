@@ -553,7 +553,7 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
           if (course.secondSemester === undefined || course.secondSemester === null) {
             break;
           }
-          let schActivity = course.secondSemester.scheduleActivities.find(schAct => schAct.activity === week.activity);
+          let schActivity = course.secondSemester.scheduleActivities.find(schAct => schAct.activity.id === week.activity.id);
           if (schActivity) {
             schActivity.weekNumbers.push(week.position - 26);
           } else {
@@ -563,7 +563,7 @@ export class StudyPlanAddEditComponent implements OnInit, OnDestroy {
             course.secondSemester.scheduleActivities.push(schActivity);
           }
         } else {
-          let schActivity = course.firstSemester.scheduleActivities.find(schAct => schAct.activity === week.activity);
+          let schActivity = course.firstSemester.scheduleActivities.find(schAct => schAct.activity.id === week.activity.id);
           if (schActivity) {
             schActivity.weekNumbers.push(week.position);
           } else {

@@ -1,6 +1,10 @@
 <div class="row" *ngIf="timetable">
-  <div class="col-md-6 text-right" style="text-align: center; width: 100%">
-    <h3 style="font-size: 24px; width: 70%"> {{timetableTitle}} </h3>
+  <div class="col-md-6 text-right" style="text-align: center; width: 90%">
+    <h3 style="font-size: 24px;"> {{timetableTitle}} </h3>
+  </div>
+  <div class="col-md-6 text-right" style="text-align: end; width: 10%">
+    <mat-slide-toggle color="primary" [(ngModel)]="weekToggle" style="font-size: 16px;"
+                      (change)="filterLessons($event)">{{weekToggle ? 'Вторая неделя' : 'Первая неделя'}}</mat-slide-toggle>
   </div>
 </div>
 
@@ -67,7 +71,7 @@
   <div style="width: 70%;">
     <mwl-calendar-week-view
       [viewDate]="viewDate"
-      [events]="events"
+      [events]="filteredEvents"
       [locale]="'ru'"
       [dayStartHour]="8"
       [dayEndHour]="22"
@@ -145,6 +149,10 @@
         </div>
       </div>
 
+      <div *ngIf="event.meta.onceInTwoWeek">
+        {{event.meta.weekNum === 1 ? 'Первая неделя' : 'Вторая неделя'}}
+      </div>
+
     </div>
   </ng-template>
 
@@ -186,57 +194,80 @@
     height: 20px;
     background:  repeating-linear-gradient(-45deg, black,
      black  1px, white 5px, white  10px); border: 1px solid black;  margin-right: 5px">
+        </div>
+        <span style="margin-right: 5px"> - </span>
+        <div style="margin-right: 5px"> Раз в 2 недели</div>
       </div>
-      <span style="margin-right: 5px"> - </span>
-      <div style="margin-right: 5px"> Раз в 2 недели</div>
+
+
     </div>
 
 
-  </div>
-
-
-  <div class="col-md-6 text-right" style="text-align: center; width: 100%">
-    <h3 style="font-size: 24px;"> Учебные планы </h3>
-  </div>
-  <div *ngFor="let s2g of studyPlanId2GroupsOrSubgroups | keyvalue; let i = index"
-       [ngStyle]="{'margin-top': i === 0 ? '0%' : '4%' }">
-
-    <!--      Доступно недель для распределения: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}}-->
-    <div style="overflow: auto">
-      <table class="timetable">
-
-        <tr>
-          <td
-            [attr.colspan]="s2g.value.length + 1"> {{printerService.printStudyPlanNameShort(this.studyPlanIdToStudyPlan.get(s2g.key))}}. Недель в семестре: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}} </td>
-        </tr>
-
-        <tr>
-          <td [attr.rowspan]="2">Дисциплина</td>
-          <td [attr.colspan]="s2g.value.length"> Группы и подгруппы</td>
-        </tr>
-
-        <tr>
-          <td *ngFor="let g of s2g.value"> {{printerParentGroupNumberIfSubgroup(g.id)}}{{g.number}} </td>
-        </tr>
-
-        <tr *ngFor="let discipline of getDisciplinesForStudyPlan(s2g.key)">
-          <td>{{discipline.name}}</td>
-          <td *ngFor="let g of s2g.value">
-            {{this.calculatedDistributedHoursForDiscipline(s2g.key, g.id, discipline.id)}}
-            ч. / {{getTotalHoursByPlan(discipline)}}ч.
-          </td>
-        </tr>
-      </table>
+    <div class="col-md-6 text-right" style="text-align: center; width: 100%">
+      <h3 style="font-size: 24px;"> Фильтрация по группам </h3>
     </div>
-  </div>
 
-  <div style="display: flex; margin-top: 2%; justify-content: flex-end">
-    <button mat-raised-button style="margin-right: 2%"> Проверить часы </button>
-    <button mat-raised-button style="margin-right: 2%"> Сохранить</button>
-    <button mat-raised-button style="margin-right: 2%"> Отменить</button>
-  </div>
+    <div class="row" style="flex-wrap: wrap;">
+      <div *ngFor="let gr2sp of this.timetable.groupsToStudyPlans" style="width:33%">
+        <mat-checkbox [checked]="allSubgroupsChecked(gr2sp.group)"
+                      [indeterminate]="someSubgroupsChecked(gr2sp.group)"
+                      [color]="'primary'"
+                      (change)="onGroupCheck(gr2sp.group, $event.checked)">{{gr2sp.group.number}}</mat-checkbox>
+        <ul>
+          <li *ngFor="let subgroup of gr2sp.group.subgroups">
+            <mat-checkbox [checked]="isParentGroupChecked(gr2sp.group, subgroup)"
+                          [color]="'primary'"
+                          (change)="onSubgroupCheck(gr2sp.group, subgroup, $event.checked)">
+              {{gr2sp.group.number}}-{{subgroup.number}}
+            </mat-checkbox>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-</div>
+    <div class="col-md-6 text-right" style="text-align: center; width: 100%">
+      <h3 style="font-size: 24px;"> Учебные планы </h3>
+    </div>
+    <div *ngFor="let s2g of filteredStudyPlanId2GroupsOrSubgroups | keyvalue; let i = index"
+         [ngStyle]="{'margin-top': i === 0 ? '0%' : '4%' }">
+
+      <!--      Доступно недель для распределения: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}}-->
+      <div style="overflow: auto">
+        <table class="timetable">
+
+          <tr>
+            <td
+              [attr.colspan]="s2g.value.length + 1"> {{printerService.printStudyPlanNameShort(this.studyPlanIdToStudyPlan.get(s2g.key))}}
+              . Недель в семестре: {{this.studyPlanId2TotalClassroomWeeksInSemester.get(s2g.key)}} </td>
+          </tr>
+
+          <tr>
+            <td [attr.rowspan]="2">Дисциплина</td>
+            <td [attr.colspan]="s2g.value.length"> Группы и подгруппы</td>
+          </tr>
+
+          <tr>
+            <td *ngFor="let g of s2g.value"> {{printerParentGroupNumberIfSubgroup(g.id)}}{{g.number}} </td>
+          </tr>
+
+          <tr *ngFor="let discipline of getDisciplinesForStudyPlan(s2g.key)">
+            <td style="display: flex; text-align: start">{{discipline.name}}</td>
+            <td *ngFor="let g of s2g.value">
+              {{this.calculatedDistributedHoursForDiscipline(s2g.key, g.id, discipline.id)}}
+              ч. / {{getTotalHoursByPlan(discipline)}}ч.
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div style="display: flex; margin-top: 2%; justify-content: flex-end">
+      <!--    <button mat-raised-button style="margin-right: 2%"> Проверить часы </button>-->
+      <button mat-raised-button style="margin-right: 2%" (click)="save()" [color]="'primary'"> Сохранить</button>
+      <button mat-raised-button style="margin-right: 2%" (click)="cancel()"> Отменить</button>
+    </div>
+
+  </div>
 
 
 </div>

@@ -269,7 +269,7 @@ export class ResourceLocalizerService {
       case TimetableStatus.IN_DEVELOPMENT:
         return 'В разработке';
     }
-    return '';
+    return 'В разработке';
   }
 
   localizedLessonType(lessonType: LessonType): string{

@@ -13,6 +13,9 @@ import {Subscription} from 'rxjs';
 import {TimetableUtilService} from '../../../services/timetable-util.service';
 import {Timetable} from '../../../model/timetable/timetable';
 import {TimetableCreateDialogComponent} from '../../dialogs/timetables/timetable-create-dialog/timetable-create-dialog.component';
+import {TimetableService} from '../../../services/timetable.service';
+import {TimetableDeleteDialogComponent} from '../../dialogs/timetables/timetable-delete-dialog/timetable-delete-dialog.component';
+import {OperationResult} from '../../../model/operation-result';
 
 @Component({
   selector: 'app-timetable-table',
@@ -24,6 +27,7 @@ export class TimetableTableComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog,
               private activatedRoute: ActivatedRoute,
               private timetableUtilService: TimetableUtilService,
+              private timetableService: TimetableService,
               private notifierService: NotifierService,
               private studyPlanService: StudyPlanService,
               private router: Router,
@@ -37,7 +41,7 @@ export class TimetableTableComponent implements OnInit, OnDestroy {
   @ViewChild('timetablesTable', {static: false}) studyPlansTable: MatTable<Timetable>;
 
   @Input() timetables: Timetable[];
-  displayedColumns: string[] = ['name', 'icons'];
+  displayedColumns: string[] = ['name', 'createdWhen', 'updatedWhen',  'icons'];
   dataSource: MatTableDataSource<Timetable>;
 
   editDialogSubscription: Subscription;
@@ -60,11 +64,28 @@ export class TimetableTableComponent implements OnInit, OnDestroy {
   }
 
   public deleteTimetable(timetable: Timetable): void {
+    const dialogRef = this.dialog.open(TimetableDeleteDialogComponent, {
+      data: timetable.id,
+      disableClose: true
+    });
 
+    this.deleteDialogSubscription = dialogRef.afterClosed().subscribe((operationResult: OperationResult) => {
+      if (operationResult.isCompleted && operationResult.errorMessage === null) {
+        const index = this.timetables.indexOf(timetable, 0);
+        if (index > -1) {
+          this.timetables.splice(index, 1);
+        }
+        this.refreshDataTableContent();
+        this.notifierService.notify('success', 'Расписание было удалено');
+      } else if (operationResult.isCompleted) {
+        this.notifierService.notify('error', operationResult.errorMessage);
+      }
+    });
   }
 
   public editTimetable(timetable: Timetable): void {
-
+    this.localStorageService.putTimetable(timetable);
+    this.router.navigate([`deaneries/${this.localStorageService.subscribableDeanery.getValue().id}/timetables/create`]);
   }
 
   public addTimetable(): void {

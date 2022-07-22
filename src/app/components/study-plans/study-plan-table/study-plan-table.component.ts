@@ -187,8 +187,7 @@ export class StudyPlanTableComponent implements OnInit, OnDestroy {
   isSubmitAvailable(studyPlan): boolean {
     if (studyPlan.isStandard) {
       return StudyPlanStatus.IN_DEVELOPMENT === studyPlan.status;
-    }
-    else {
+    } else {
       return  StudyPlanStatus.REGISTERED === studyPlan.status;
     }
   }
