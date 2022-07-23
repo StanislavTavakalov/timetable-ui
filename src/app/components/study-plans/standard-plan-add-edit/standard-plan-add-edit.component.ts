@@ -131,10 +131,10 @@ export class StandardPlanAddEditComponent implements OnInit, OnDestroy {
 
   private initBasicPlanParamsFrom(studyPlan: StudyPlan): void {
     this.basicPlanParamsForm = this.fb.group({
-      developmentYear: [studyPlan.developmentYear],
+      developmentYear: [studyPlan.developmentYear ? studyPlan.developmentYear : 2022],
       qualification: [studyPlan.qualification],
       speciality: [studyPlan.speciality],
-      semestersCount: [studyPlan.semesters.length],
+      semestersCount: [studyPlan.semesters.length ? studyPlan.semesters.length : 4],
       educationForm: [studyPlan.educationForm],
       status: [studyPlan.status],
     });

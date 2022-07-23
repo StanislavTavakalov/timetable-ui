@@ -1,6 +1,7 @@
 <h1 mat-dialog-title>{{title}}</h1>
-<mat-dialog-content>
-  <form [formGroup]="userForm" class="column">
+<form [formGroup]="userForm" class="column">
+  <mat-dialog-content>
+
 
     <mat-form-field>
       <input matInput placeholder="Почта:" [formControlName]="'email'" required>
@@ -31,7 +32,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Роль: " [formControlName]="'role'" required>
+      <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Роль: " [formControlName]="'role'"
+                  required>
         <mat-option *ngFor="let role of roleList" [value]="role">
           {{getRoleName(role)}}
         </mat-option>
@@ -40,7 +42,8 @@
 
     <ng-container *ngIf="showDeaneryField(role.value)">
       <mat-form-field>
-        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Деканат: " [formControlName]="'deanery'" [required]="showDeaneryField(role.value)">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Деканат: "
+                    [formControlName]="'deanery'" [required]="showDeaneryField(role.value)">
           <mat-option *ngFor="let deanery of deaneryList" [value]="deanery">
             {{getDeaneryOrDepartmentName(deanery)}}
           </mat-option>
@@ -50,7 +53,8 @@
     </ng-container>
     <ng-container *ngIf="showDepartmentField(role.value)">
       <mat-form-field>
-        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Кафедра: " [formControlName]="'department'" [required]="showDepartmentField(role.value)">
+        <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Кафедра: "
+                    [formControlName]="'department'" [required]="showDepartmentField(role.value)">
           <mat-option *ngFor="let department of departmentList" [value]="department">
             {{getDeaneryOrDepartmentName(department)}}
           </mat-option>
@@ -58,14 +62,15 @@
       </mat-form-field>
     </ng-container>
 
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions class="controls">
-  <mat-spinner *ngIf="loading" diameter="40" color="primary">
-  </mat-spinner>
-  <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="userForm.invalid">
-    Подтвердить
-  </button>
-  <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
-</mat-dialog-actions>
 
+  </mat-dialog-content>
+  <mat-dialog-actions class="controls">
+    <mat-spinner *ngIf="loading" diameter="40" color="primary">
+    </mat-spinner>
+    <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="userForm.invalid">
+      Подтвердить
+    </button>
+    <button mat-button color="warn" (click)=onCancelClick()> Отмена</button>
+  </mat-dialog-actions>
+
+</form>

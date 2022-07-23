@@ -8,10 +8,6 @@ export class Constants {
     path: '',
     label: 'Расписание занятий',
     isActive: true
-  }, {
-    path: '',
-    label: 'Расписания преподавателей',
-    isActive: true
   }];
 
   static deaneryTabs = [{

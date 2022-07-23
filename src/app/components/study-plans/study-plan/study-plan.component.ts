@@ -225,13 +225,15 @@ export class StudyPlanComponent implements OnInit, OnDestroy {
 
   sendToRegisterStudyPlan(): void {
     this.studyPlanUtilService.validateHoursInCyclesHierarchyForStandard(this.cyclesDataSource.data);
-      this.studyPlanService.sendToRegisterStudyPlan(this.studyPlan).subscribe(result => {
-        this.notifierService.notify('success', 'Учебный план был подан на регистрацию');
-        this.studyPlan.status = StudyPlanStatus.TO_REGISTER;
-        this.studyPlan.statusChangeDate = Date.now();
-      }, e => {
-        this.notifierService.notify('error', e);
-      });
+    this.studyPlanService.sendToRegisterStudyPlan(this.studyPlan).subscribe(result => {
+      this.notifierService.notify('success', 'Учебный план был подан на регистрацию');
+      // this.studyPlan.status = StudyPlanStatus.TO_REGISTER;
+      // this.studyPlan.statusChangeDate = Date.now();
+      this.studyPlan = result;
+      // this.router.navigate([`/departments/${this.departmentId}/studyplans/${this.studyPlan.id}`]);
+    }, e => {
+      this.notifierService.notify('error', e);
+    });
   }
 
   registerStudyPlan(): void {

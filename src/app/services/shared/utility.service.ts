@@ -48,7 +48,7 @@ export class UtilityService {
   }
 
   public loadMainTabs(): void {
-    this.localStorageService.changeHeaderType(null);
+    this.localStorageService.changeHeaderType(HeaderType.MAIN);
   }
 
   public compareObjectsByIds(o1: any, o2: any): boolean {
