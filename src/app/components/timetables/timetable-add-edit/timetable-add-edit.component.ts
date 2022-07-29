@@ -94,6 +94,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
 
   checkedGroups: CheckedGroup[] = [];
   groups: Group[] = [];
+  readOnly: boolean;
 
   constructor(private cdr: ChangeDetectorRef,
               private dialog: MatDialog,
@@ -111,7 +112,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
     this.timetable = this.localStorageService.getTimetable();
     this.timetableTitle = this.printerService.printTimetableLabelName(this.timetable);
 
-
+    this.readOnly = this.timetable.isReadOnly;
     // this.locale = this.translatePipe.transform('text.schedule.locale.ru', 'ru');
     this.fillStudyPlanId2StudyPlan(this.timetable.groupsToStudyPlans);
 
@@ -136,6 +137,8 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
 
     this.subgroupToGroupMap = this.lessonUtils.getSubgroupToGroupMap(this.timetable.groupsToStudyPlans.map(g2Sp => g2Sp.group));
 
+    this.filterLessons(null);
+
 
   }
 
@@ -149,7 +152,9 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   }
 
   onSegmentClick($event: { date: Date; sourceEvent: MouseEvent }): void {
-
+    if (this.readOnly) {
+      return;
+    }
     const dialogRef = this.dialog.open(LessonAddEditComponent, {
 
       width: '600px',
@@ -210,6 +215,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
         teachers: this.teachers,
         buildings: this.buildings,
         disciplines: this.commonDisciplinesForLesson,
+        readOnly: this.readOnly
 
       },
     });
@@ -456,6 +462,7 @@ export class TimetableAddEditComponent implements OnInit, OnDestroy {
   }
 
   cancel(): void {
+    this.localStorageService.clearTimetable();
     this.location.back();
   }
 

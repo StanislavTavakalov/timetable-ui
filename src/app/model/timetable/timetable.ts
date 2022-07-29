@@ -19,5 +19,6 @@ export class Timetable {
   lessons: Lesson[];
   createdWhen: number;
   updatedWhen: number;
+  isReadOnly: boolean;
 }
 

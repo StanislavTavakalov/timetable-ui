@@ -60,8 +60,12 @@ export class LessonAddEditComponent implements OnInit {
   lessonGroups: Group[];
   lessonSubgroups: Subgroup[];
   subgroupToGroupMap: Map<string, string>;
+  readOnly = false;
 
   ngOnInit(): void {
+    if (this.data.readOnly) {
+      this.readOnly = this.data.readOnly;
+    }
     this.lesson = this.data.lesson;
     if (!this.lesson) {
       this.lessonDayNum = this.data.date.getDay();
@@ -168,6 +172,8 @@ export class LessonAddEditComponent implements OnInit {
     lesson.timeline = this.timeline.value;
     if (lesson.onceInTwoWeek) {
       lesson.weekNum = this.weekNum.value;
+    } else {
+      lesson.weekNum = null;
     }
     lesson.day = this.lessonDayNum;
     lesson.name = this.discipline.value.name;

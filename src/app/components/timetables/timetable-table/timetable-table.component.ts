@@ -85,7 +85,7 @@ export class TimetableTableComponent implements OnInit, OnDestroy {
 
   public editTimetable(timetable: Timetable): void {
     this.localStorageService.putTimetable(timetable);
-    this.router.navigate([`deaneries/${this.localStorageService.subscribableDeanery.getValue().id}/timetables/create`]);
+    this.router.navigate([`deaneries/${this.localStorageService.subscribableDeanery.getValue().id}/timetables/${timetable.id}/edit`]);
   }
 
   public addTimetable(): void {
@@ -113,5 +113,11 @@ export class TimetableTableComponent implements OnInit, OnDestroy {
     if (this.addStandardDialogSubscription) {
       this.addStandardDialogSubscription.unsubscribe();
     }
+  }
+
+  goToTimetable(timetable: Timetable): void {
+    timetable.isReadOnly = true;
+    this.localStorageService.putTimetable(timetable);
+    this.router.navigate([`deaneries/${this.localStorageService.subscribableDeanery.getValue().id}/timetables/${timetable.id}`]);
   }
 }

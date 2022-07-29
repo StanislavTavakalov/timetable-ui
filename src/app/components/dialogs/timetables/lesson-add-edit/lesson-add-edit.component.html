@@ -6,7 +6,7 @@
 
     <mat-form-field style="margin-top: 15px">
       <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Дисциплина: "
-                  [formControlName]="'discipline'" (selectionChange)="filterTeachers($event.value)" required>
+                  [formControlName]="'discipline'" (selectionChange)="filterTeachers($event.value)" [disabled]="readOnly" required>
         <mat-option *ngFor="let discipline of disciplines" [value]="discipline">
           {{discipline.name}}
         </mat-option>
@@ -15,7 +15,7 @@
 
     <mat-form-field class="full-size">
       <mat-select [compareWith]="utilityService.compareObjects" placeholder="Тип занятия: "
-                  [formControlName]="'lessonType'" [disabled]="!this.discipline.value" required>
+                  [formControlName]="'lessonType'" [disabled]="!this.discipline.value" [disabled]="readOnly" required>
         <mat-option *ngFor="let lessonType of lessonTypes" [value]="lessonType">
           {{resourceLocalizerService.localizedLessonType(lessonType)}}
         </mat-option>
@@ -26,7 +26,7 @@
     <div class="row">
       <mat-form-field style="width: 48%; margin-right: 4%">
         <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Корпус: "
-                    [formControlName]="'building'" (valueChange)="clearClassroom()" required>
+                    [formControlName]="'building'" (valueChange)="clearClassroom()" [disabled]="readOnly" required>
           <mat-option *ngFor="let building of buildings" [value]="building">
             {{building.number}}
           </mat-option>
@@ -35,7 +35,7 @@
 
       <mat-form-field style="width: 48%">
         <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Аудитория: "
-                    [formControlName]="'classroom'" [disabled]="!this.building.value" required>
+                    [formControlName]="'classroom'" [disabled]="!this.building.value && !readOnly || readOnly" required>
           <mat-option *ngFor="let classroom of classrooms" [value]="classroom">
             {{classroom.number}}
           </mat-option>
@@ -45,7 +45,7 @@
 
     <mat-form-field>
       <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Преподаватель: "
-                  [formControlName]="'teacher'" [disabled]="!this.discipline.value" required>
+                  [formControlName]="'teacher'" [disabled]="!this.discipline.value && !readOnly || readOnly" required>
         <mat-option *ngFor="let teacher of filteredTeachers" [value]="teacher">
           {{teacher.firstName}} {{teacher.lastName}}
         </mat-option>
@@ -54,7 +54,7 @@
 
     <mat-form-field>
       <mat-select [compareWith]="utilityService.compareObjectsByIds" placeholder="Время проведения: "
-                  [formControlName]="'timeline'" required>
+                  [formControlName]="'timeline'" [disabled]="readOnly" required>
         <mat-option *ngFor="let timeline of timelines" [value]="timeline">
           {{this.lessonUtils.timeShortFormat(timeline.startTime)}}
           - {{this.lessonUtils.timeShortFormat(timeline.endTime)}}
@@ -63,8 +63,8 @@
     </mat-form-field>
 
     <div class="row" style="justify-items: center; align-items: center">
-      <mat-checkbox style="margin-top: 2%; margin-right: 5%" [color]="'primary'" [formControlName]="'onceInTwoWeek'"> Раз в 2 недели</mat-checkbox>
-      <mat-radio-group aria-label="Неделя:" [formControlName]="'weekNum'" [disabled]="!this.onceInTwoWeek.value">
+      <mat-checkbox style="margin-top: 2%; margin-right: 5%" [color]="'primary'" [formControlName]="'onceInTwoWeek'" [disabled]="readOnly"> Раз в 2 недели</mat-checkbox>
+      <mat-radio-group aria-label="Неделя:" [formControlName]="'weekNum'" [disabled]="!this.onceInTwoWeek.value && !readOnly || readOnly">
         <mat-radio-button style="margin-right: 2%" [color]="'primary'" [value]='1'>Первая неделя</mat-radio-button>
         <mat-radio-button [color]="'primary'" [value]='2'>Вторая неделя</mat-radio-button>
       </mat-radio-group>
@@ -75,7 +75,7 @@
       <div style="width: 50%">
         Группы:
         <button mat-icon-button class="material-icons"
-                matTooltip="Добавить группу" (click)="addGroup()">
+                matTooltip="Добавить группу" (click)="addGroup()" [disabled]="readOnly">
           <mat-icon> add_circle</mat-icon>
         </button>
         <div class="column" *ngFor="let group of lesson.groups">
@@ -86,7 +86,7 @@
       <div style="width: 50%">
         Подгруппы:
         <button mat-icon-button class="material-icons"
-                matTooltip="Добавить подгруппу" (click)="addSubgroup()">
+                matTooltip="Добавить подгруппу" (click)="addSubgroup()" [disabled]="readOnly">
           <mat-icon> add_circle</mat-icon>
         </button>
         <div class="column" *ngFor="let group of lesson.subgroups">
@@ -110,7 +110,7 @@
     </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions class="controls">
+<mat-dialog-actions class="controls" *ngIf="!readOnly">
   <ng-container *ngIf="!editMode">
     <button mat-button color="primary" (click)="onConfirmClick()" [disabled]="form.invalid">
       Добавить
@@ -126,6 +126,13 @@
     </div>
     <div style="width: 20%">
       <button mat-button color="warn" (click)=onDeleteClick()> Удалить</button>
+    </div>
+  </ng-container>
+</mat-dialog-actions>
+<mat-dialog-actions class="controls" *ngIf="readOnly">
+  <ng-container style="display: flex; flex-direction: row; justify-items: flex-start ">
+    <div>
+      <button mat-button color="warn" (click)=onCancelClick()> Закрыть</button>
     </div>
   </ng-container>
 </mat-dialog-actions>

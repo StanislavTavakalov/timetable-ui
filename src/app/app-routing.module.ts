@@ -53,6 +53,8 @@ const routes: Routes = [
   {path: 'deaneries/:id/flows', component: FlowsComponent},
   {path: 'deaneries/:id/timetables', component: TimetablesComponent},
   {path: 'deaneries/:id/timetables/create', component: TimetableAddEditComponent},
+  {path: 'deaneries/:id/timetables/:id/edit', component: TimetableAddEditComponent},
+  {path: 'deaneries/:id/timetables/:id', component: TimetableAddEditComponent},
   {path: 'departments/:departmentId', component: SpecialitiesComponent},
   {path: 'departments/:departmentId/specialities', component: SpecialitiesComponent},
   {path: 'departments/:departmentId/classrooms', component: ClassroomsComponent},

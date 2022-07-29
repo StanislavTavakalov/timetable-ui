@@ -50,9 +50,9 @@
 
 
       <td style="text-align: end; width: 10%" mat-cell class="icons" *matCellDef="let timetable">
-<!--        <button mat-icon-button class="material-icons" matTooltip="Открыть расписание">-->
-<!--          <mat-icon> open_in_new</mat-icon>-->
-<!--        </button>-->
+        <button mat-icon-button class="material-icons" matTooltip="Открыть расписание" (click)="goToTimetable(timetable)">
+          <mat-icon> open_in_new</mat-icon>
+        </button>
         <button mat-icon-button (click)="editTimetable(timetable)" matTooltip="Редактировать расписание">
           <mat-icon> edit</mat-icon>
         </button>

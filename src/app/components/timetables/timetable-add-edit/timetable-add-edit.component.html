@@ -261,10 +261,14 @@
       </div>
     </div>
 
-    <div style="display: flex; margin-top: 2%; justify-content: flex-end">
+    <div style="display: flex; margin-top: 2%; justify-content: flex-end" *ngIf="!readOnly">
       <!--    <button mat-raised-button style="margin-right: 2%"> Проверить часы </button>-->
       <button mat-raised-button style="margin-right: 2%" (click)="save()" [color]="'primary'"> Сохранить</button>
       <button mat-raised-button style="margin-right: 2%" (click)="cancel()"> Отменить</button>
+    </div>
+
+    <div style="display: flex; margin-top: 2%; justify-content: flex-end" *ngIf="readOnly">
+      <button mat-raised-button style="margin-right: 2%" (click)="cancel()"> Назад </button>
     </div>
 
   </div>
